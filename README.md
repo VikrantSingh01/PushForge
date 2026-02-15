@@ -93,21 +93,107 @@ Switch between platforms with a single segmented picker. PushForge handles all t
 - **Keyboard Shortcuts** — `Cmd+Enter` to send
 - **Lightweight** — Native SwiftUI, no Electron, no runtime dependencies
 
+## Push Payload Formats — iOS vs Android vs Web
+
+Push notification payloads are **fundamentally different** across platforms. PushForge handles all three:
+
+<table>
+<tr><th>Feature</th><th>iOS (APNs)</th><th>Android (FCM)</th><th>Web Push</th></tr>
+<tr><td><strong>Root key</strong></td><td><code>aps</code></td><td><code>notification</code> / <code>data</code></td><td>Top-level</td></tr>
+<tr><td><strong>Title</strong></td><td><code>aps.alert.title</code></td><td><code>notification.title</code></td><td><code>title</code></td></tr>
+<tr><td><strong>Body</strong></td><td><code>aps.alert.body</code></td><td><code>notification.body</code></td><td><code>body</code></td></tr>
+<tr><td><strong>Badge</strong></td><td><code>aps.badge</code> (number)</td><td><code>notification_count</code></td><td><code>badge</code> (icon URL)</td></tr>
+<tr><td><strong>Sound</strong></td><td><code>aps.sound</code></td><td><code>notification.sound</code></td><td>N/A (OS default)</td></tr>
+<tr><td><strong>Image</strong></td><td><code>mutable-content</code> + Service Extension</td><td><code>notification.image</code> (URL)</td><td><code>image</code> (URL)</td></tr>
+<tr><td><strong>Actions</strong></td><td><code>category</code> (registered in app)</td><td><code>click_action</code></td><td><code>actions[]</code> array</td></tr>
+<tr><td><strong>Grouping</strong></td><td><code>thread-id</code></td><td><code>tag</code> + <code>channel_id</code></td><td><code>tag</code></td></tr>
+<tr><td><strong>Priority</strong></td><td><code>interruption-level</code></td><td><code>android.priority</code></td><td><code>requireInteraction</code></td></tr>
+<tr><td><strong>Silent/Data</strong></td><td><code>content-available: 1</code></td><td><code>data</code> (no <code>notification</code>)</td><td>N/A</td></tr>
+<tr><td><strong>Channel</strong></td><td>N/A</td><td><code>channel_id</code></td><td>N/A</td></tr>
+</table>
+
+**Example — same notification across platforms:**
+
+<details>
+<summary><strong>iOS (APNs)</strong></summary>
+
+```json
+{
+  "aps": {
+    "alert": {
+      "title": "New Message",
+      "body": "You have a new message waiting."
+    },
+    "badge": 3,
+    "sound": "default"
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Android (FCM)</strong></summary>
+
+```json
+{
+  "notification": {
+    "title": "New Message",
+    "body": "You have a new message waiting.",
+    "sound": "default",
+    "notification_count": 3,
+    "channel_id": "messages"
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Web Push</strong></summary>
+
+```json
+{
+  "title": "New Message",
+  "body": "You have a new message waiting.",
+  "icon": "/icons/app-icon-192.png",
+  "badge": "/icons/badge-72.png",
+  "tag": "new-message"
+}
+```
+</details>
+
 ## Templates
 
-PushForge ships with **16 ready-to-use templates** organized by category:
+PushForge ships with **24 ready-to-use templates** loaded from external JSON files:
 
-| Category | Templates | Key Features |
+| Category | Count | Templates |
 |---|---|---|
-| **Basic** | Basic Alert | `alert.title`, `alert.body`, `alert.subtitle` |
-| **Badge** | Badge + Sound | `badge`, `sound` |
-| **Silent** | Silent Push, Background Sync | `content-available`, multi-collection sync data |
-| **Rich** | Rich Media, Actionable | `mutable-content`, `category` action buttons |
-| **Advanced** | Long Payload, Grouped Thread, Critical Alert, Live Activity, Time Sensitive | `thread-id`, `interruption-level`, `content-state`, `relevance-score` |
-| **Android** | Android Basic, Android Data, Android Rich | `notification`, `data`, `channel_id`, `click_action` |
-| **Web/Desktop** | Web Basic, Web Actions | `title`, `body`, `actions`, `requireInteraction` |
+| **Basic** | 1 | Basic Alert |
+| **Badge** | 1 | Badge + Sound |
+| **Silent** | 2 | Silent Push, Background Sync |
+| **Rich** | 2 | Rich Media, Actionable |
+| **Advanced** | 5 | Long Payload, Grouped Thread, Critical Alert, Live Activity, Time Sensitive |
+| **Android** | 11 | Basic, Data, Rich, Badge+Sound, Silent, Actionable, Long Payload, Grouped, High Priority, Time Sensitive, Image |
+| **Web/Desktop** | 2 | Web Basic, Web Actions |
 
-Every template is valid JSON — edit it or use it as-is.
+**Android now has full parity with iOS** — every iOS template type has an Android equivalent.
+
+### Custom Templates
+
+Drop a `.json` file into `~/Library/Application Support/PushForge/Templates/` and it appears in the app instantly:
+
+```json
+{
+  "id": "my_custom",
+  "name": "My Custom Template",
+  "description": "Custom notification payload",
+  "category": "alert",
+  "payload": {
+    "aps": { "alert": { "title": "Custom", "body": "Hello!" } }
+  }
+}
+```
+
+User templates override bundled ones with the same ID. Organize by subdirectory (`ios/`, `android/`, `web/`) or put them loose in the root.
 
 ## Quick Start
 
