@@ -4,12 +4,14 @@ struct ContentView: View {
     @State private var payloadText: String = ""
     @State private var bundleIdentifier: String = ""
     @State private var showHistory = false
+    @AppStorage("editorFontSize") private var editorFontSize: Double = 13
 
     var body: some View {
         HSplitView {
             PayloadComposerView(
                 payloadText: $payloadText,
-                bundleIdentifier: $bundleIdentifier
+                bundleIdentifier: $bundleIdentifier,
+                editorFontSize: $editorFontSize
             )
             .frame(minWidth: 400, idealWidth: 500)
 

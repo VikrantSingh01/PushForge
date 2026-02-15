@@ -3,6 +3,7 @@ import SwiftUI
 struct PayloadComposerView: View {
     @Binding var payloadText: String
     @Binding var bundleIdentifier: String
+    @Binding var editorFontSize: Double
     @State private var viewModel = PayloadComposerViewModel()
 
     var body: some View {
@@ -53,7 +54,7 @@ struct PayloadComposerView: View {
 
             // Middle: TextEditor fills remaining space
             TextEditor(text: $payloadText)
-                .font(.system(.body, design: .monospaced))
+                .font(.system(size: editorFontSize, design: .monospaced))
                 .scrollContentBackground(.hidden)
                 .padding(4)
                 .background(Color(nsColor: .textBackgroundColor))
