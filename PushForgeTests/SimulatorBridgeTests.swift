@@ -15,11 +15,16 @@ struct SimulatorBridgeTests {
         #expect(result.stdout.trimmingCharacters(in: .whitespacesAndNewlines) == "hello")
     }
 
-    @Test("SimulatorBridge can list simulators without crashing")
+    @Test("SimulatorBridge lists available simulators")
     func listSimulators() async throws {
         let bridge = SimulatorBridge()
-        // This should not throw — it may return an empty list if no sims are booted
-        let simulators = try await bridge.listBootedSimulators()
-        #expect(simulators is [BootedSimulator])
+        let simulators = try await bridge.listAvailableSimulators()
+        // Should find at least one simulator on a Mac with Xcode installed
+        #expect(!simulators.isEmpty)
+        // Booted simulators should appear before shutdown ones
+        if let firstBooted = simulators.firstIndex(where: \.isBooted),
+           let firstShutdown = simulators.firstIndex(where: { !$0.isBooted }) {
+            #expect(firstBooted < firstShutdown)
+        }
     }
 }

@@ -10,15 +10,24 @@ enum SendStatus: Equatable {
 
 @Observable
 class DeviceManagerViewModel {
-    var bootedSimulators: [BootedSimulator] = []
-    var selectedSimulator: BootedSimulator?
+    var allSimulators: [SimulatorDevice] = []
+    var selectedSimulator: SimulatorDevice?
     var isRefreshing = false
+    var isBooting = false
     var lastSendStatus: SendStatus = .idle
 
     private let bridge = SimulatorBridge()
 
+    var bootedSimulators: [SimulatorDevice] {
+        allSimulators.filter(\.isBooted)
+    }
+
+    var availableSimulators: [SimulatorDevice] {
+        allSimulators.filter { !$0.isBooted }
+    }
+
     var canSend: Bool {
-        selectedSimulator != nil && lastSendStatus != .sending
+        selectedSimulator?.isBooted == true && lastSendStatus != .sending
     }
 
     func refreshSimulators() async {
@@ -26,15 +35,27 @@ class DeviceManagerViewModel {
         defer { isRefreshing = false }
 
         do {
-            let sims = try await bridge.listBootedSimulators()
-            bootedSimulators = sims
-            // Auto-select first if none selected or current selection is gone
+            let sims = try await bridge.listAvailableSimulators()
+            allSimulators = sims
             if selectedSimulator == nil || !sims.contains(where: { $0.id == selectedSimulator?.id }) {
-                selectedSimulator = sims.first
+                selectedSimulator = sims.first(where: \.isBooted) ?? sims.first
             }
         } catch {
-            bootedSimulators = []
+            allSimulators = []
             selectedSimulator = nil
+        }
+    }
+
+    func bootSimulator(_ simulator: SimulatorDevice) async {
+        isBooting = true
+        defer { isBooting = false }
+
+        do {
+            try await bridge.bootSimulator(udid: simulator.id)
+            await refreshSimulators()
+            selectedSimulator = allSimulators.first(where: { $0.id == simulator.id })
+        } catch {
+            lastSendStatus = .failure(error.localizedDescription)
         }
     }
 

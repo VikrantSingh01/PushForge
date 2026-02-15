@@ -1,21 +1,32 @@
 import Foundation
 
-struct BootedSimulator: Identifiable, Hashable, Sendable {
+struct SimulatorDevice: Identifiable, Hashable, Sendable {
     let id: String       // UDID
     let name: String     // e.g. "iPhone 17 Pro"
     let runtime: String  // e.g. "iOS 26.2"
+    let state: State
+
+    enum State: String, Sendable {
+        case booted = "Booted"
+        case shutdown = "Shutdown"
+        case other
+    }
+
+    var isBooted: Bool { state == .booted }
 }
 
 enum SimulatorError: LocalizedError {
     case listFailed(String)
     case parseError(String)
     case invalidPayload(String)
+    case bootFailed(String)
 
     var errorDescription: String? {
         switch self {
         case .listFailed(let msg): "Failed to list simulators: \(msg)"
         case .parseError(let msg): "Failed to parse simulator data: \(msg)"
         case .invalidPayload(let msg): "Invalid payload: \(msg)"
+        case .bootFailed(let msg): "Failed to boot simulator: \(msg)"
         }
     }
 }
@@ -23,11 +34,11 @@ enum SimulatorError: LocalizedError {
 actor SimulatorBridge {
     private let shell = ShellExecutor()
 
-    // MARK: - List Booted Simulators
+    // MARK: - List All Available Simulators
 
-    func listBootedSimulators() async throws -> [BootedSimulator] {
+    func listAvailableSimulators() async throws -> [SimulatorDevice] {
         let result = try await shell.run(
-            arguments: ["simctl", "list", "devices", "booted", "--json"]
+            arguments: ["simctl", "list", "devices", "available", "--json"]
         )
 
         guard result.succeeded else {
@@ -43,20 +54,44 @@ actor SimulatorBridge {
             throw SimulatorError.parseError("Missing 'devices' key")
         }
 
-        var simulators: [BootedSimulator] = []
+        var simulators: [SimulatorDevice] = []
         for (runtimeKey, deviceList) in devicesMap {
             let runtimeName = Self.humanReadableRuntime(runtimeKey)
             for device in deviceList {
                 guard let udid = device["udid"] as? String,
                       let name = device["name"] as? String,
-                      let state = device["state"] as? String,
-                      state == "Booted" else { continue }
-                simulators.append(BootedSimulator(
-                    id: udid, name: name, runtime: runtimeName
+                      let stateStr = device["state"] as? String,
+                      let isAvailable = device["isAvailable"] as? Bool,
+                      isAvailable else { continue }
+
+                let state: SimulatorDevice.State
+                switch stateStr {
+                case "Booted": state = .booted
+                case "Shutdown": state = .shutdown
+                default: state = .other
+                }
+
+                simulators.append(SimulatorDevice(
+                    id: udid, name: name, runtime: runtimeName, state: state
                 ))
             }
         }
-        return simulators
+        // Booted first, then shutdown, sorted by name within each group
+        return simulators.sorted { lhs, rhs in
+            if lhs.isBooted != rhs.isBooted { return lhs.isBooted }
+            return lhs.name < rhs.name
+        }
+    }
+
+    // MARK: - Boot Simulator
+
+    func bootSimulator(udid: String) async throws {
+        let result = try await shell.run(
+            arguments: ["simctl", "boot", udid]
+        )
+        guard result.succeeded else {
+            throw SimulatorError.bootFailed(result.stderr.trimmingCharacters(in: .whitespacesAndNewlines))
+        }
     }
 
     // MARK: - Send Push Notification

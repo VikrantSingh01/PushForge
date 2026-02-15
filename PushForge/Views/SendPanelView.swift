@@ -33,10 +33,16 @@ struct SendPanelView: View {
                     }
 
                     SimulatorPickerView(
-                        simulators: viewModel.bootedSimulators,
+                        bootedSimulators: viewModel.bootedSimulators,
+                        availableSimulators: viewModel.availableSimulators,
                         selected: $viewModel.selectedSimulator,
-                        isRefreshing: viewModel.isRefreshing
-                    )
+                        isRefreshing: viewModel.isRefreshing,
+                        isBooting: viewModel.isBooting
+                    ) { sim in
+                        Task {
+                            await viewModel.bootSimulator(sim)
+                        }
+                    }
                 }
             }
             .task {
