@@ -18,6 +18,7 @@ struct TemplatePickerView: View {
         .rich: "Rich",
         .advanced: "Advanced",
         .android: "Android",
+        .web: "Web/Desktop",
     ]
 
     var body: some View {

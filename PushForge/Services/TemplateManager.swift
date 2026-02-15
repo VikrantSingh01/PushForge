@@ -305,6 +305,48 @@ enum TemplateManager {
                 }
                 """
             ),
+
+            // MARK: - Web / Desktop
+
+            PayloadTemplate(
+                id: "web_basic",
+                name: "Web Basic",
+                description: "Simple web push notification",
+                category: .web,
+                payload: """
+                {
+                  "title": "New Update Available",
+                  "body": "Version 2.0 is ready — click to learn more.",
+                  "icon": "/icons/app-icon-192.png",
+                  "badge": "/icons/badge-72.png",
+                  "tag": "update-v2"
+                }
+                """
+            ),
+            PayloadTemplate(
+                id: "web_action",
+                name: "Web Actions",
+                description: "Web push with action buttons and image",
+                category: .web,
+                payload: """
+                {
+                  "title": "Flash Sale Ending Soon",
+                  "body": "50% off all items — only 2 hours left!",
+                  "icon": "/icons/sale-icon.png",
+                  "image": "/images/sale-banner.jpg",
+                  "tag": "flash-sale",
+                  "requireInteraction": true,
+                  "actions": [
+                    {"action": "shop", "title": "Shop Now"},
+                    {"action": "dismiss", "title": "Maybe Later"}
+                  ],
+                  "data": {
+                    "url": "/sale",
+                    "campaign": "flash-sale-feb"
+                  }
+                }
+                """
+            ),
         ]
     }
 }

@@ -31,46 +31,64 @@ struct SendPanelView: View {
                     }
 
                     // Device picker (platform-specific)
-                    GroupBox {
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text(viewModel.targetPlatform == .iOSSimulator ? "Target Simulator" : "Target Emulator")
-                                    .font(.headline)
-                                Spacer()
-                                Button {
-                                    Task { await viewModel.refreshDevices() }
-                                } label: {
-                                    Label("Refresh", systemImage: "arrow.clockwise")
+                    if viewModel.targetPlatform == .desktop {
+                        GroupBox {
+                            HStack(spacing: 8) {
+                                Image(systemName: "desktopcomputer")
+                                    .font(.title2)
+                                    .foregroundStyle(.secondary)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("macOS Notification Center")
+                                        .font(.headline)
+                                    Text("Notification will appear on this Mac — same as web push")
                                         .font(.caption)
+                                        .foregroundStyle(.secondary)
                                 }
-                                .buttonStyle(.borderless)
-                                .disabled(viewModel.isRefreshing)
                             }
-
-                            switch viewModel.targetPlatform {
-                            case .iOSSimulator:
-                                SimulatorPickerView(
-                                    bootedSimulators: viewModel.bootedSimulators,
-                                    availableSimulators: viewModel.availableSimulators,
-                                    selected: $viewModel.selectedSimulator,
-                                    isRefreshing: viewModel.isRefreshing,
-                                    isBooting: viewModel.isBooting
-                                ) { sim in
-                                    Task { await viewModel.bootSimulator(sim) }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    } else {
+                        GroupBox {
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Text(viewModel.targetPlatform == .iOSSimulator ? "Target Simulator" : "Target Emulator")
+                                        .font(.headline)
+                                    Spacer()
+                                    Button {
+                                        Task { await viewModel.refreshDevices() }
+                                    } label: {
+                                        Label("Refresh", systemImage: "arrow.clockwise")
+                                            .font(.caption)
+                                    }
+                                    .buttonStyle(.borderless)
+                                    .disabled(viewModel.isRefreshing)
                                 }
 
-                            case .androidEmulator:
-                                AndroidEmulatorPickerView(
-                                    emulators: viewModel.onlineAndroidEmulators,
-                                    selected: $viewModel.selectedAndroidEmulator,
-                                    isRefreshing: viewModel.isRefreshing,
-                                    adbAvailable: viewModel.adbAvailable
-                                )
+                                switch viewModel.targetPlatform {
+                                case .iOSSimulator:
+                                    SimulatorPickerView(
+                                        bootedSimulators: viewModel.bootedSimulators,
+                                        availableSimulators: viewModel.availableSimulators,
+                                        selected: $viewModel.selectedSimulator,
+                                        isRefreshing: viewModel.isRefreshing,
+                                        isBooting: viewModel.isBooting
+                                    ) { sim in
+                                        Task { await viewModel.bootSimulator(sim) }
+                                    }
+
+                                case .androidEmulator:
+                                    AndroidEmulatorPickerView(
+                                        emulators: viewModel.onlineAndroidEmulators,
+                                        selected: $viewModel.selectedAndroidEmulator,
+                                        isRefreshing: viewModel.isRefreshing,
+                                        adbAvailable: viewModel.adbAvailable
+                                    )
+
+                                case .desktop:
+                                    EmptyView()
+                                }
                             }
                         }
-                    }
-                    .task {
-                        await viewModel.refreshDevices()
                     }
 
                     // Saved devices (iOS only for now)
@@ -118,6 +136,9 @@ struct SendPanelView: View {
                     }
                 }
                 .padding()
+            }
+            .task {
+                await viewModel.refreshDevices()
             }
 
             // Pinned bottom: Status + Send button

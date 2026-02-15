@@ -38,10 +38,28 @@ struct BundleIDPickerView: View {
         ("Calculator", "com.google.android.calculator"),
     ]
 
+    private static let desktopApps: [(name: String, bundleID: String)] = [
+        ("Safari", "com.apple.Safari"),
+        ("Mail", "com.apple.mail"),
+        ("Messages", "com.apple.MobileSMS"),
+        ("Calendar", "com.apple.iCal"),
+        ("Notes", "com.apple.Notes"),
+        ("Reminders", "com.apple.reminders"),
+        ("Maps", "com.apple.Maps"),
+        ("Finder", "com.apple.finder"),
+        ("Music", "com.apple.Music"),
+        ("News", "com.apple.news"),
+        ("Slack", "com.tinyspeck.slackmacgap"),
+        ("Chrome", "com.google.Chrome"),
+        ("Firefox", "org.mozilla.firefox"),
+        ("VS Code", "com.microsoft.VSCode"),
+    ]
+
     private var apps: [(name: String, bundleID: String)] {
         switch targetPlatform {
         case .iOSSimulator: Self.iosApps
         case .androidEmulator: Self.androidApps
+        case .desktop: Self.desktopApps
         }
     }
 
@@ -49,6 +67,7 @@ struct BundleIDPickerView: View {
         switch targetPlatform {
         case .iOSSimulator: "com.example.myapp"
         case .androidEmulator: "com.example.myapp"
+        case .desktop: "com.example.webapp"
         }
     }
 
@@ -56,6 +75,7 @@ struct BundleIDPickerView: View {
         switch targetPlatform {
         case .iOSSimulator: "Bundle ID"
         case .androidEmulator: "Package"
+        case .desktop: "App ID"
         }
     }
 

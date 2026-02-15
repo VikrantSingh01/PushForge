@@ -8,7 +8,7 @@ struct TemplateManagerTests {
     @Test("Built-in templates load successfully")
     func loadTemplates() {
         let templates = TemplateManager.loadBuiltInTemplates()
-        #expect(templates.count == 14)
+        #expect(templates.count == 16)
     }
 
     @Test("Templates have unique IDs")
@@ -21,7 +21,7 @@ struct TemplateManagerTests {
     @Test("All APNs templates contain valid JSON with aps key")
     func validAPNsJSON() {
         let templates = TemplateManager.loadBuiltInTemplates()
-            .filter { $0.category != .android }
+            .filter { $0.category != .android && $0.category != .web }
         for template in templates {
             let result = PayloadValidator.validate(template.payload)
             #expect(result.isValid, "Template '\(template.name)' has invalid payload")

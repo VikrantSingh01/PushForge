@@ -11,6 +11,7 @@ enum SendStatus: Equatable {
 enum TargetPlatform: String, CaseIterable {
     case iOSSimulator = "iOS Simulator"
     case androidEmulator = "Android Emulator"
+    case desktop = "Desktop/Web"
 }
 
 @Observable
@@ -34,6 +35,7 @@ class DeviceManagerViewModel {
 
     private let simulatorBridge = SimulatorBridge()
     private let adbBridge = ADBBridge()
+    private let desktopBridge = DesktopNotificationBridge()
 
     var bootedSimulators: [SimulatorDevice] {
         allSimulators.filter(\.isBooted)
@@ -54,6 +56,8 @@ class DeviceManagerViewModel {
             return selectedSimulator?.isBooted == true
         case .androidEmulator:
             return selectedAndroidEmulator?.isOnline == true
+        case .desktop:
+            return true // Always available — sends to macOS Notification Center
         }
     }
 
@@ -68,6 +72,8 @@ class DeviceManagerViewModel {
             await refreshSimulators()
         case .androidEmulator:
             await refreshAndroidEmulators()
+        case .desktop:
+            break // No devices to refresh — always available
         }
     }
 
@@ -133,6 +139,8 @@ class DeviceManagerViewModel {
             await sendToSimulator(payload: payload, bundleID: bundleID, modelContext: modelContext)
         case .androidEmulator:
             await sendToAndroid(payload: payload, bundleID: bundleID, modelContext: modelContext)
+        case .desktop:
+            await sendToDesktop(payload: payload, bundleID: bundleID, modelContext: modelContext)
         }
     }
 
@@ -214,6 +222,45 @@ class DeviceManagerViewModel {
                 bundleIdentifier: bundleID,
                 deviceLabel: "\(emulator.name) (Android)",
                 deviceIdentifier: emulator.id,
+                success: false,
+                errorMessage: error.localizedDescription
+            )
+            modelContext.insert(record)
+        }
+    }
+
+    private func sendToDesktop(
+        payload: String,
+        bundleID: String,
+        modelContext: ModelContext
+    ) async {
+        let extracted = DesktopNotificationBridge.extractContent(from: payload)
+        let title = extracted?.title ?? "PushForge"
+        let subtitle = extracted?.subtitle
+        let body = extracted?.body ?? payload.prefix(200).description
+
+        do {
+            try await desktopBridge.sendNotification(
+                title: title,
+                subtitle: subtitle,
+                body: body
+            )
+            lastSendStatus = .success
+            let record = NotificationRecord(
+                payload: payload,
+                bundleIdentifier: bundleID,
+                deviceLabel: "macOS Desktop",
+                deviceIdentifier: "desktop",
+                success: true
+            )
+            modelContext.insert(record)
+        } catch {
+            lastSendStatus = .failure(error.localizedDescription)
+            let record = NotificationRecord(
+                payload: payload,
+                bundleIdentifier: bundleID,
+                deviceLabel: "macOS Desktop",
+                deviceIdentifier: "desktop",
                 success: false,
                 errorMessage: error.localizedDescription
             )
