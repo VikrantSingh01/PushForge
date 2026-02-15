@@ -186,7 +186,11 @@ MIT License. See [LICENSE](LICENSE) for details.
 ---
 
 <p align="center">
-  <strong>If PushForge saves you time, give it a star!</strong><br/>
+  <strong>If PushForge saves you time, give it a &#11088;!</strong><br/><br/>
+  <a href="https://github.com/VikrantSingh01/PushForge">
+    <img src="https://img.shields.io/badge/%E2%AD%90_Star_PushForge-on_GitHub-blue?style=for-the-badge&logo=github" alt="Star PushForge on GitHub"/>
+  </a>
+  <br/><br/>
   <a href="https://github.com/VikrantSingh01/PushForge/stargazers">
     <img src="https://img.shields.io/github/stars/VikrantSingh01/PushForge?style=social" alt="GitHub Stars"/>
   </a>
