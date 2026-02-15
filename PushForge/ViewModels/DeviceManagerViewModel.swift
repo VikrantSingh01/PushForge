@@ -142,6 +142,11 @@ class DeviceManagerViewModel {
         case .desktop:
             await sendToDesktop(payload: payload, bundleID: bundleID, modelContext: modelContext)
         }
+
+        // Safety: if status is still .sending after all paths, reset
+        if lastSendStatus == .sending {
+            lastSendStatus = .failure("Send did not complete")
+        }
     }
 
     private func sendToSimulator(
@@ -149,7 +154,10 @@ class DeviceManagerViewModel {
         bundleID: String,
         modelContext: ModelContext
     ) async {
-        guard let simulator = selectedSimulator else { return }
+        guard let simulator = selectedSimulator else {
+            lastSendStatus = .failure("No simulator selected")
+            return
+        }
 
         do {
             let result = try await simulatorBridge.sendPush(
@@ -192,7 +200,10 @@ class DeviceManagerViewModel {
         bundleID: String,
         modelContext: ModelContext
     ) async {
-        guard let emulator = selectedAndroidEmulator else { return }
+        guard let emulator = selectedAndroidEmulator else {
+            lastSendStatus = .failure("No Android emulator selected")
+            return
+        }
 
         // Extract title/body from the JSON payload
         let extracted = ADBBridge.extractTitleBody(from: payload)
