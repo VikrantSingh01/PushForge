@@ -36,31 +36,36 @@ struct SimulatorPickerView: View {
 
             if !availableSimulators.isEmpty {
                 DisclosureGroup(bootedSimulators.isEmpty ? "Available Simulators" : "Boot Another Simulator") {
-                    ForEach(availableSimulators) { sim in
-                        HStack {
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text(sim.name)
-                                    .font(.callout)
-                                Text(sim.runtime)
-                                    .font(.caption2)
-                                    .foregroundStyle(.tertiary)
-                            }
-                            Spacer()
-                            Button {
-                                onBoot(sim)
-                            } label: {
-                                if isBooting {
-                                    ProgressView()
-                                        .scaleEffect(0.6)
-                                } else {
-                                    Text("Boot")
+                    ScrollView {
+                        VStack(spacing: 6) {
+                            ForEach(availableSimulators) { sim in
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text(sim.name)
+                                            .font(.callout)
+                                        Text(sim.runtime)
+                                            .font(.caption2)
+                                            .foregroundStyle(.tertiary)
+                                    }
+                                    Spacer()
+                                    Button {
+                                        onBoot(sim)
+                                    } label: {
+                                        if isBooting {
+                                            ProgressView()
+                                                .scaleEffect(0.6)
+                                        } else {
+                                            Text("Boot")
+                                        }
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .controlSize(.small)
+                                    .disabled(isBooting)
                                 }
                             }
-                            .buttonStyle(.bordered)
-                            .controlSize(.small)
-                            .disabled(isBooting)
                         }
                     }
+                    .frame(maxHeight: 200)
                 }
                 .font(.caption)
             }

@@ -12,109 +12,119 @@ struct SendPanelView: View {
     @State private var saveLabel = ""
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            // Simulator picker
-            GroupBox {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Target Simulator")
-                            .font(.headline)
-                        Spacer()
-                        Button {
-                            Task {
-                                await viewModel.refreshSimulators()
+        VStack(spacing: 0) {
+            // Scrollable content area
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    // Simulator picker
+                    GroupBox {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Target Simulator")
+                                    .font(.headline)
+                                Spacer()
+                                Button {
+                                    Task {
+                                        await viewModel.refreshSimulators()
+                                    }
+                                } label: {
+                                    Label("Refresh", systemImage: "arrow.clockwise")
+                                        .font(.caption)
+                                }
+                                .buttonStyle(.borderless)
+                                .disabled(viewModel.isRefreshing)
                             }
+
+                            SimulatorPickerView(
+                                bootedSimulators: viewModel.bootedSimulators,
+                                availableSimulators: viewModel.availableSimulators,
+                                selected: $viewModel.selectedSimulator,
+                                isRefreshing: viewModel.isRefreshing,
+                                isBooting: viewModel.isBooting
+                            ) { sim in
+                                Task {
+                                    await viewModel.bootSimulator(sim)
+                                }
+                            }
+                        }
+                    }
+                    .task {
+                        await viewModel.refreshSimulators()
+                    }
+
+                    // Saved devices
+                    if !savedDevices.isEmpty {
+                        GroupBox {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Saved Devices")
+                                    .font(.headline)
+
+                                ForEach(savedDevices) { device in
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            Text(device.label)
+                                                .font(.callout.weight(.medium))
+                                            Text(device.bundleIdentifier)
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        Spacer()
+                                        Button("Use") {
+                                            bundleIdentifier = device.bundleIdentifier
+                                            if let sim = viewModel.bootedSimulators.first(where: { $0.id == device.deviceIdentifier }) {
+                                                viewModel.selectedSimulator = sim
+                                            }
+                                            device.lastUsedAt = .now
+                                        }
+                                        .buttonStyle(.borderless)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Save current device button
+                    if viewModel.selectedSimulator != nil && !bundleIdentifier.isEmpty {
+                        Button {
+                            saveLabel = viewModel.selectedSimulator?.name ?? ""
+                            showSaveSheet = true
                         } label: {
-                            Label("Refresh", systemImage: "arrow.clockwise")
+                            Label("Save Current Device", systemImage: "square.and.arrow.down")
                                 .font(.caption)
                         }
                         .buttonStyle(.borderless)
-                        .disabled(viewModel.isRefreshing)
-                    }
-
-                    SimulatorPickerView(
-                        bootedSimulators: viewModel.bootedSimulators,
-                        availableSimulators: viewModel.availableSimulators,
-                        selected: $viewModel.selectedSimulator,
-                        isRefreshing: viewModel.isRefreshing,
-                        isBooting: viewModel.isBooting
-                    ) { sim in
-                        Task {
-                            await viewModel.bootSimulator(sim)
-                        }
                     }
                 }
-            }
-            .task {
-                await viewModel.refreshSimulators()
+                .padding()
             }
 
-            // Saved devices
-            if !savedDevices.isEmpty {
-                GroupBox {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Saved Devices")
-                            .font(.headline)
+            // Pinned bottom: Status + Send button
+            VStack(spacing: 10) {
+                Divider()
 
-                        ForEach(savedDevices) { device in
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text(device.label)
-                                        .font(.callout.weight(.medium))
-                                    Text(device.bundleIdentifier)
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                                Spacer()
-                                Button("Use") {
-                                    bundleIdentifier = device.bundleIdentifier
-                                    if let sim = viewModel.bootedSimulators.first(where: { $0.id == device.deviceIdentifier }) {
-                                        viewModel.selectedSimulator = sim
-                                    }
-                                    device.lastUsedAt = .now
-                                }
-                                .buttonStyle(.borderless)
-                            }
-                        }
-                    }
-                }
-            }
+                StatusBannerView(status: viewModel.lastSendStatus)
 
-            // Save current device button
-            if viewModel.selectedSimulator != nil && !bundleIdentifier.isEmpty {
                 Button {
-                    saveLabel = viewModel.selectedSimulator?.name ?? ""
-                    showSaveSheet = true
+                    Task {
+                        await viewModel.sendPush(
+                            payload: payloadText,
+                            bundleID: bundleIdentifier,
+                            modelContext: modelContext
+                        )
+                    }
                 } label: {
-                    Label("Save Current Device", systemImage: "square.and.arrow.down")
-                        .font(.caption)
+                    Label("Send Push", systemImage: "paperplane.fill")
+                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .disabled(!viewModel.canSend || bundleIdentifier.isEmpty)
+                .keyboardShortcut(.return, modifiers: .command)
             }
-
-            Spacer()
-
-            // Status + Send
-            StatusBannerView(status: viewModel.lastSendStatus)
-
-            Button {
-                Task {
-                    await viewModel.sendPush(
-                        payload: payloadText,
-                        bundleID: bundleIdentifier,
-                        modelContext: modelContext
-                    )
-                }
-            } label: {
-                Label("Send Push", systemImage: "paperplane.fill")
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .disabled(!viewModel.canSend || bundleIdentifier.isEmpty)
-            .keyboardShortcut(.return, modifiers: .command)
+            .padding(.horizontal)
+            .padding(.bottom)
+            .padding(.top, 4)
         }
-        .padding()
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             Task {
                 await viewModel.refreshSimulators()

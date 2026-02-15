@@ -6,47 +6,52 @@ struct PayloadComposerView: View {
     @State private var viewModel = PayloadComposerViewModel()
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Templates")
-                .font(.headline)
+        VStack(alignment: .leading, spacing: 0) {
+            // Top: Templates + Bundle ID (always visible)
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Templates")
+                    .font(.headline)
 
-            TemplatePickerView(
-                templates: viewModel.templates,
-                selected: viewModel.selectedTemplate
-            ) { template in
-                viewModel.selectTemplate(template)
-                payloadText = viewModel.payloadText
-            }
-
-            Divider()
-
-            HStack {
-                Text("Bundle ID")
-                    .fontWeight(.medium)
-                TextField("com.example.myapp", text: $bundleIdentifier)
-                    .textFieldStyle(.roundedBorder)
-            }
-
-            HStack {
-                Text("Payload JSON")
-                    .fontWeight(.medium)
-                Spacer()
-                Button("Format") {
-                    if let formatted = JSONFormatter.prettyPrint(payloadText) {
-                        payloadText = formatted
-                    }
+                TemplatePickerView(
+                    templates: viewModel.templates,
+                    selected: viewModel.selectedTemplate
+                ) { template in
+                    viewModel.selectTemplate(template)
+                    payloadText = viewModel.payloadText
                 }
-                .buttonStyle(.borderless)
-                .font(.caption)
-                Button("Minify") {
-                    if let minified = JSONFormatter.minify(payloadText) {
-                        payloadText = minified
-                    }
-                }
-                .buttonStyle(.borderless)
-                .font(.caption)
-            }
 
+                Divider()
+
+                HStack {
+                    Text("Bundle ID")
+                        .fontWeight(.medium)
+                    TextField("com.example.myapp", text: $bundleIdentifier)
+                        .textFieldStyle(.roundedBorder)
+                }
+
+                HStack {
+                    Text("Payload JSON")
+                        .fontWeight(.medium)
+                    Spacer()
+                    Button("Format") {
+                        if let formatted = JSONFormatter.prettyPrint(payloadText) {
+                            payloadText = formatted
+                        }
+                    }
+                    .buttonStyle(.borderless)
+                    .font(.caption)
+                    Button("Minify") {
+                        if let minified = JSONFormatter.minify(payloadText) {
+                            payloadText = minified
+                        }
+                    }
+                    .buttonStyle(.borderless)
+                    .font(.caption)
+                }
+            }
+            .padding([.top, .horizontal])
+
+            // Middle: TextEditor fills remaining space
             TextEditor(text: $payloadText)
                 .font(.system(.body, design: .monospaced))
                 .scrollContentBackground(.hidden)
@@ -57,8 +62,10 @@ struct PayloadComposerView: View {
                     RoundedRectangle(cornerRadius: 6)
                         .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
                 )
+                .padding(.horizontal)
+                .padding(.top, 8)
 
-            // Validation bar
+            // Bottom: Validation bar (always visible)
             HStack {
                 let validation = PayloadValidator.validate(payloadText)
                 Image(systemName: validation.isValid ? "checkmark.circle.fill" : "xmark.circle.fill")
@@ -72,8 +79,9 @@ struct PayloadComposerView: View {
                     .font(.caption)
                     .foregroundStyle(byteCount > 4096 ? .red : .secondary)
             }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
         }
-        .padding()
         .onAppear {
             if payloadText.isEmpty {
                 payloadText = viewModel.payloadText
