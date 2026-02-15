@@ -73,7 +73,74 @@ struct PayloadValidatorTests {
         """
         let result = PayloadValidator.validate(json, targetPlatform: .androidEmulator)
         if case .validWithWarning = result {
-            // Expected — warns about platform mismatch
+            // Expected
+        } else {
+            Issue.record("Expected validWithWarning, got \(result)")
+        }
+    }
+
+    @Test("Web payload warns when target is iOS")
+    func webPayloadOnIOS() {
+        let json = """
+        {
+          "title": "Update Available",
+          "body": "Click to learn more."
+        }
+        """
+        let result = PayloadValidator.validate(json, targetPlatform: .iOSSimulator)
+        if case .validWithWarning = result {
+            // Expected
+        } else {
+            Issue.record("Expected validWithWarning, got \(result)")
+        }
+    }
+
+    @Test("Web payload warns when target is Android")
+    func webPayloadOnAndroid() {
+        let json = """
+        {
+          "title": "Update Available",
+          "body": "Click to learn more."
+        }
+        """
+        let result = PayloadValidator.validate(json, targetPlatform: .androidEmulator)
+        if case .validWithWarning = result {
+            // Expected
+        } else {
+            Issue.record("Expected validWithWarning, got \(result)")
+        }
+    }
+
+    @Test("Android payload warns when target is Desktop/Web")
+    func androidPayloadOnDesktop() {
+        let json = """
+        {
+          "notification": {
+            "title": "Test",
+            "body": "Hello"
+          }
+        }
+        """
+        let result = PayloadValidator.validate(json, targetPlatform: .desktop)
+        if case .validWithWarning = result {
+            // Expected
+        } else {
+            Issue.record("Expected validWithWarning, got \(result)")
+        }
+    }
+
+    @Test("iOS payload warns when target is Desktop/Web")
+    func iosPayloadOnDesktop() {
+        let json = """
+        {
+          "aps": {
+            "alert": { "title": "Test", "body": "Hello" }
+          }
+        }
+        """
+        let result = PayloadValidator.validate(json, targetPlatform: .desktop)
+        if case .validWithWarning = result {
+            // Expected
         } else {
             Issue.record("Expected validWithWarning, got \(result)")
         }

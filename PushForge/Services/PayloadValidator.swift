@@ -67,18 +67,22 @@ enum PayloadValidator {
                                     fix: "Wrap your payload in { } curly braces")
             }
 
-            // Platform-aware validation
+            // Detect payload format
+            let isAPNs = dict["aps"] != nil
+            let isFCM = dict["notification"] != nil || (dict["data"] != nil && !isAPNs)
+            let isWeb = dict["title"] != nil && dict["aps"] == nil && dict["notification"] == nil
+
+            // Platform-aware validation — warn on all mismatches
             switch targetPlatform {
             case .iOSSimulator:
-                if dict["aps"] == nil {
-                    // Check if it looks like an Android or Web payload
-                    if dict["notification"] != nil || dict["data"] != nil {
+                if !isAPNs {
+                    if isFCM {
                         return .validWithWarning(
                             "This looks like an Android/FCM payload, but target is iOS Simulator",
                             fix: "Switch to Android Emulator, or use an iOS template with an \"aps\" key."
                         )
                     }
-                    if dict["title"] != nil {
+                    if isWeb {
                         return .validWithWarning(
                             "This looks like a Web Push payload, but target is iOS Simulator",
                             fix: "Switch to Desktop/Web, or use an iOS template with an \"aps\" key."
@@ -88,18 +92,30 @@ enum PayloadValidator {
                 }
 
             case .androidEmulator:
-                if dict["aps"] != nil {
+                if isAPNs {
                     return .validWithWarning(
                         "This looks like an iOS/APNs payload, but target is Android Emulator",
                         fix: "Switch to iOS Simulator, or use an Android template with \"notification\" or \"data\" keys."
                     )
                 }
+                if isWeb {
+                    return .validWithWarning(
+                        "This looks like a Web Push payload, but target is Android Emulator",
+                        fix: "Switch to Desktop/Web, or use an Android template with \"notification\" or \"data\" keys."
+                    )
+                }
 
             case .desktop:
-                if dict["aps"] != nil {
+                if isAPNs {
                     return .validWithWarning(
                         "This looks like an iOS/APNs payload, but target is Desktop/Web",
                         fix: "Switch to iOS Simulator, or use a Web template with top-level \"title\" and \"body\"."
+                    )
+                }
+                if isFCM {
+                    return .validWithWarning(
+                        "This looks like an Android/FCM payload, but target is Desktop/Web",
+                        fix: "Switch to Android Emulator, or use a Web template with top-level \"title\" and \"body\"."
                     )
                 }
             }
