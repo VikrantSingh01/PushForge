@@ -19,16 +19,48 @@
 
 ---
 
-## The Problem
+<p align="center">
+  <img src="demo.png" alt="PushForge — send push notifications to iOS Simulator with one click" width="800"/>
+  <br/>
+  <em>Craft a payload, pick a simulator, hit Send. Notification appears instantly.</em>
+</p>
 
-Testing push notifications during iOS development is painful:
+---
 
-- Crafting raw APNs JSON by hand is error-prone
-- `xcrun simctl push` requires memorizing UDIDs and file paths
-- No free, native macOS tool handles the full workflow
-- Existing tools are abandoned (Knuff), iOS-only (NWPusher), or paid
+## Why PushForge?
 
-**PushForge fixes all of this in a single, native macOS app.**
+Every iOS developer has been here: you're building a feature that depends on push notifications, and you need to test it. What should take 10 seconds turns into a 10-minute detour:
+
+1. Find the simulator UDID (`xcrun simctl list devices`... scroll... copy the UUID)
+2. Write valid APNs JSON from memory (was it `alert.title` or `aps.alert.title`?)
+3. Save it to a temp file
+4. Run `xcrun simctl push <that-uuid-you-copied> <bundle-id> /path/to/file.json`
+5. Typo in the JSON? Start over.
+
+**This workflow breaks your flow dozens of times a day.**
+
+PushForge eliminates every one of these steps. Open the app, pick a template, hit Send. The notification appears on the simulator instantly. No terminal. No UUIDs. No temp files. No broken JSON.
+
+### Who is this for?
+
+- **iOS developers** testing notification handling, deep links, or UI updates triggered by push
+- **QA engineers** verifying notification content, badge counts, and sound behavior
+- **Backend developers** validating APNs payload structure before deploying server changes
+- **Teams** that need a shared, visual way to test notification payloads without distributing `.p8` keys
+
+### How it compares
+
+| Tool | Platform | Simulator | Real Device | Free | Maintained |
+|---|---|---|---|---|---|
+| **PushForge** | macOS (native) | Yes | Roadmap | Yes | Yes |
+| Knuff | macOS | No | Yes | Yes | Abandoned (2019) |
+| NWPusher | macOS | No | Yes | Yes | Archived |
+| Pusher | macOS | Yes | Yes | No ($15) | Yes |
+| curl + terminal | Any | Yes | Yes | Yes | N/A |
+
+PushForge is the only **free, actively maintained, native macOS tool** that handles simulator push with a visual UI.
+
+---
 
 ## Features
 
