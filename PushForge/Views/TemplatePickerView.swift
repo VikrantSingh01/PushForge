@@ -32,13 +32,13 @@ struct TemplatePickerView: View {
                             selectedCategory = category
                         } label: {
                             Text(Self.categoryLabels[category] ?? category.rawValue.capitalized)
-                                .font(.caption.weight(selectedCategory == category ? .semibold : .regular))
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
+                                .font(.callout.weight(selectedCategory == category ? .semibold : .regular))
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 5)
                                 .background(
                                     selectedCategory == category
                                         ? Color.accentColor.opacity(0.15)
-                                        : Color.clear
+                                        : Color.secondary.opacity(0.06)
                                 )
                                 .cornerRadius(6)
                         }
