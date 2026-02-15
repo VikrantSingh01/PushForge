@@ -27,14 +27,16 @@ struct ContentView: View {
         .frame(minWidth: 750, minHeight: 500)
         .toolbar {
             ToolbarItem(placement: .navigation) {
-                HStack(spacing: 6) {
+                HStack(spacing: 8) {
                     Image("PushForgeLogo")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 24, height: 24)
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                        .frame(width: 26, height: 26)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                        .shadow(color: .black.opacity(0.15), radius: 1, x: 0, y: 1)
                     Text("PushForge")
-                        .font(.headline)
+                        .font(.system(.headline, design: .rounded))
+                        .fontWeight(.bold)
                 }
             }
             ToolbarItem(placement: .automatic) {

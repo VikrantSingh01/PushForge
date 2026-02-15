@@ -16,11 +16,17 @@ struct PayloadComposerView: View {
 
                 TemplatePickerView(
                     templates: viewModel.templates,
-                    selected: viewModel.selectedTemplate
-                ) { template in
-                    viewModel.selectTemplate(template)
-                    payloadText = viewModel.payloadText
-                }
+                    selected: viewModel.selectedTemplate,
+                    onSelect: { template in
+                        viewModel.selectTemplate(template)
+                        payloadText = viewModel.payloadText
+                    },
+                    onPlatformChange: {
+                        // Clear payload and selected template when switching platform/category
+                        viewModel.selectedTemplate = nil
+                        payloadText = ""
+                    }
+                )
 
                 Divider()
 
