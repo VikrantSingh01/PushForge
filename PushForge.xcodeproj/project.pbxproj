@@ -13,6 +13,7 @@
 		30F1519838D19BEFB08C1D31 /* PushForgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A734165EA33F615F524AAF5B /* PushForgeApp.swift */; };
 		3A97B4A2C54D305981E10564 /* PayloadComposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AABB2D100F856BAA6EFA02 /* PayloadComposerView.swift */; };
 		42D7E52815C1B56307C1C3BC /* NotificationRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D93EA4E1C8D8FC1E0A85D /* NotificationRecord.swift */; };
+		44BEDAD16F013CD38F8933FB /* BundleIDPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6B325C6ED108EA8E9E77E9 /* BundleIDPickerView.swift */; };
 		5388C95060B5A05977266F8B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7B6EC3589A4211CD235A69 /* ContentView.swift */; };
 		5A0FA8622BF47305A4D0AD2F /* SendPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551A528B242042331218B659 /* SendPanelView.swift */; };
 		5EEFA1384CA490269A4E8478 /* JSONFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8BE60A0E5EDEEF49D8D802 /* JSONFormatter.swift */; };
@@ -71,6 +72,7 @@
 		BBA70339A4498825D347C1F5 /* TemplateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateManager.swift; sourceTree = "<group>"; };
 		BC4D35971DF4F9C17697D096 /* PayloadValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayloadValidator.swift; sourceTree = "<group>"; };
 		C87BEDA3748D6BF56B1BCE7F /* AndroidEmulatorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AndroidEmulatorPickerView.swift; sourceTree = "<group>"; };
+		CB6B325C6ED108EA8E9E77E9 /* BundleIDPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleIDPickerView.swift; sourceTree = "<group>"; };
 		D0CFE24C17538923375BA45E /* ShellExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellExecutor.swift; sourceTree = "<group>"; };
 		E311DCD1E3F3C00AB646050F /* PushForgeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PushForgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E69105EB9211342729EA3606 /* TemplatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplatePickerView.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				C87BEDA3748D6BF56B1BCE7F /* AndroidEmulatorPickerView.swift */,
+				CB6B325C6ED108EA8E9E77E9 /* BundleIDPickerView.swift */,
 				B76CE3060BEEA105B2D2DD67 /* HistoryRowView.swift */,
 				0760059653909C206005BBB8 /* HistoryView.swift */,
 				A5AABB2D100F856BAA6EFA02 /* PayloadComposerView.swift */,
@@ -270,6 +273,7 @@
 			files = (
 				2494E35B81EEE4765C0D6CDD /* ADBBridge.swift in Sources */,
 				82B6E1AA5B11F47671991210 /* AndroidEmulatorPickerView.swift in Sources */,
+				44BEDAD16F013CD38F8933FB /* BundleIDPickerView.swift in Sources */,
 				5388C95060B5A05977266F8B /* ContentView.swift in Sources */,
 				25B18398A45427BA880E8D4F /* DeviceManagerViewModel.swift in Sources */,
 				F25BA2D7A62B9282CBB103BA /* HistoryRowView.swift in Sources */,

@@ -4,6 +4,7 @@ struct PayloadComposerView: View {
     @Binding var payloadText: String
     @Binding var bundleIdentifier: String
     @Binding var editorFontSize: Double
+    var targetPlatform: TargetPlatform = .iOSSimulator
     @State private var viewModel = PayloadComposerViewModel()
 
     var body: some View {
@@ -23,12 +24,7 @@ struct PayloadComposerView: View {
 
                 Divider()
 
-                HStack {
-                    Text("Bundle ID")
-                        .fontWeight(.medium)
-                    TextField("com.example.myapp", text: $bundleIdentifier)
-                        .textFieldStyle(.roundedBorder)
-                }
+                BundleIDPickerView(bundleIdentifier: $bundleIdentifier, targetPlatform: targetPlatform)
 
                 HStack {
                     Text("Payload JSON")

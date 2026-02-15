@@ -4,6 +4,7 @@ import SwiftData
 struct SendPanelView: View {
     @Binding var payloadText: String
     @Binding var bundleIdentifier: String
+    @Binding var targetPlatform: TargetPlatform
     @State private var viewModel = DeviceManagerViewModel()
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \SavedDevice.lastUsedAt, order: .reverse) private var savedDevices: [SavedDevice]
@@ -24,6 +25,7 @@ struct SendPanelView: View {
                     }
                     .pickerStyle(.segmented)
                     .onChange(of: viewModel.targetPlatform) {
+                        targetPlatform = viewModel.targetPlatform
                         Task { await viewModel.refreshDevices() }
                     }
 
