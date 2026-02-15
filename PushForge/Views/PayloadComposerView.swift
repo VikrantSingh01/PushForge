@@ -63,21 +63,50 @@ struct PayloadComposerView: View {
                 .padding(.top, 8)
 
             // Bottom: Validation bar (always visible)
-            HStack {
+            VStack(alignment: .leading, spacing: 4) {
                 let validation = PayloadValidator.validate(payloadText)
-                Image(systemName: validation.isValid ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .foregroundStyle(validation.isValid ? .green : .red)
-                Text(validation.message)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Spacer()
-                let byteCount = payloadText.data(using: .utf8)?.count ?? 0
-                Text("\(byteCount) / 4096 bytes")
-                    .font(.caption)
-                    .foregroundStyle(byteCount > 4096 ? .red : .secondary)
+
+                HStack {
+                    Image(systemName: validation.isValid ? "checkmark.circle.fill" : "xmark.circle.fill")
+                        .foregroundStyle(validation.isValid ? .green : .red)
+                    Text(validation.message)
+                        .font(.caption)
+                        .foregroundColor(validation.isValid ? .secondary : .red)
+                        .lineLimit(2)
+                    Spacer()
+                    let byteCount = payloadText.data(using: .utf8)?.count ?? 0
+                    Text("\(byteCount) / 4096 bytes")
+                        .font(.caption)
+                        .foregroundStyle(byteCount > 4096 ? .red : .secondary)
+                }
+
+                if let fix = validation.fixSuggestion {
+                    HStack(spacing: 6) {
+                        Image(systemName: "lightbulb.fill")
+                            .font(.caption2)
+                            .foregroundStyle(.orange)
+                        Text(fix)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                        Spacer()
+                        // Show auto-fix button if smart quotes are detected
+                        if payloadText != PayloadValidator.autoFixCommonIssues(payloadText) {
+                            Button("Auto-fix") {
+                                payloadText = PayloadValidator.autoFixCommonIssues(payloadText)
+                            }
+                            .font(.caption2)
+                            .buttonStyle(.bordered)
+                            .controlSize(.mini)
+                        }
+                    }
+                    .padding(6)
+                    .background(Color.orange.opacity(0.08))
+                    .cornerRadius(6)
+                }
             }
             .padding(.horizontal)
-            .padding(.vertical, 8)
+            .padding(.vertical, 6)
         }
         .onAppear {
             if payloadText.isEmpty {
