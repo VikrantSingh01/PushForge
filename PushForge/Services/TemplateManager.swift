@@ -250,6 +250,61 @@ enum TemplateManager {
                 }
                 """
             ),
+
+            // MARK: - Android
+
+            PayloadTemplate(
+                id: "android_basic",
+                name: "Android Basic",
+                description: "Simple notification with title and body",
+                category: .android,
+                payload: """
+                {
+                  "notification": {
+                    "title": "Hello from PushForge",
+                    "body": "This is a test notification for Android."
+                  }
+                }
+                """
+            ),
+            PayloadTemplate(
+                id: "android_data",
+                name: "Android Data",
+                description: "Data-only message for background handling",
+                category: .android,
+                payload: """
+                {
+                  "data": {
+                    "action": "sync",
+                    "content_id": "12345",
+                    "timestamp": "2026-02-14T12:00:00Z"
+                  }
+                }
+                """
+            ),
+            PayloadTemplate(
+                id: "android_rich",
+                name: "Android Rich",
+                description: "Notification + data with channel and priority",
+                category: .android,
+                payload: """
+                {
+                  "notification": {
+                    "title": "New Order Received",
+                    "body": "Order #4521 from Alex — 3 items, $42.99",
+                    "channel_id": "orders",
+                    "click_action": "OPEN_ORDER_DETAIL",
+                    "icon": "ic_notification",
+                    "color": "#FF5722"
+                  },
+                  "data": {
+                    "order_id": "4521",
+                    "customer": "Alex",
+                    "total": "42.99"
+                  }
+                }
+                """
+            ),
         ]
     }
 }

@@ -16,17 +16,26 @@ struct SendPanelView: View {
             // Scrollable content area
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    // Simulator picker
+                    // Platform picker
+                    Picker("Platform", selection: $viewModel.targetPlatform) {
+                        ForEach(TargetPlatform.allCases, id: \.self) { platform in
+                            Text(platform.rawValue).tag(platform)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: viewModel.targetPlatform) {
+                        Task { await viewModel.refreshDevices() }
+                    }
+
+                    // Device picker (platform-specific)
                     GroupBox {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
-                                Text("Target Simulator")
+                                Text(viewModel.targetPlatform == .iOSSimulator ? "Target Simulator" : "Target Emulator")
                                     .font(.headline)
                                 Spacer()
                                 Button {
-                                    Task {
-                                        await viewModel.refreshSimulators()
-                                    }
+                                    Task { await viewModel.refreshDevices() }
                                 } label: {
                                     Label("Refresh", systemImage: "arrow.clockwise")
                                         .font(.caption)
@@ -35,25 +44,34 @@ struct SendPanelView: View {
                                 .disabled(viewModel.isRefreshing)
                             }
 
-                            SimulatorPickerView(
-                                bootedSimulators: viewModel.bootedSimulators,
-                                availableSimulators: viewModel.availableSimulators,
-                                selected: $viewModel.selectedSimulator,
-                                isRefreshing: viewModel.isRefreshing,
-                                isBooting: viewModel.isBooting
-                            ) { sim in
-                                Task {
-                                    await viewModel.bootSimulator(sim)
+                            switch viewModel.targetPlatform {
+                            case .iOSSimulator:
+                                SimulatorPickerView(
+                                    bootedSimulators: viewModel.bootedSimulators,
+                                    availableSimulators: viewModel.availableSimulators,
+                                    selected: $viewModel.selectedSimulator,
+                                    isRefreshing: viewModel.isRefreshing,
+                                    isBooting: viewModel.isBooting
+                                ) { sim in
+                                    Task { await viewModel.bootSimulator(sim) }
                                 }
+
+                            case .androidEmulator:
+                                AndroidEmulatorPickerView(
+                                    emulators: viewModel.onlineAndroidEmulators,
+                                    selected: $viewModel.selectedAndroidEmulator,
+                                    isRefreshing: viewModel.isRefreshing,
+                                    adbAvailable: viewModel.adbAvailable
+                                )
                             }
                         }
                     }
                     .task {
-                        await viewModel.refreshSimulators()
+                        await viewModel.refreshDevices()
                     }
 
-                    // Saved devices
-                    if !savedDevices.isEmpty {
+                    // Saved devices (iOS only for now)
+                    if viewModel.targetPlatform == .iOSSimulator && !savedDevices.isEmpty {
                         GroupBox {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Saved Devices")
@@ -84,7 +102,8 @@ struct SendPanelView: View {
                     }
 
                     // Save current device button
-                    if viewModel.selectedSimulator != nil && !bundleIdentifier.isEmpty {
+                    if viewModel.targetPlatform == .iOSSimulator,
+                       viewModel.selectedSimulator != nil, !bundleIdentifier.isEmpty {
                         Button {
                             saveLabel = viewModel.selectedSimulator?.name ?? ""
                             showSaveSheet = true
@@ -118,7 +137,7 @@ struct SendPanelView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
-                .disabled(!viewModel.canSend || bundleIdentifier.isEmpty)
+                .disabled(!viewModel.canSend || (viewModel.targetPlatform == .iOSSimulator && bundleIdentifier.isEmpty))
                 .keyboardShortcut(.return, modifiers: .command)
             }
             .padding(.horizontal)
@@ -126,9 +145,7 @@ struct SendPanelView: View {
             .padding(.top, 4)
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-            Task {
-                await viewModel.refreshSimulators()
-            }
+            Task { await viewModel.refreshDevices() }
         }
         .sheet(isPresented: $showSaveSheet) {
             VStack(spacing: 16) {

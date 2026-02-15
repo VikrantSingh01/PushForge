@@ -1,4 +1,5 @@
 import Testing
+import Foundation
 @testable import PushForge
 
 @Suite("TemplateManager Tests")
@@ -7,7 +8,7 @@ struct TemplateManagerTests {
     @Test("Built-in templates load successfully")
     func loadTemplates() {
         let templates = TemplateManager.loadBuiltInTemplates()
-        #expect(templates.count == 11)
+        #expect(templates.count == 14)
     }
 
     @Test("Templates have unique IDs")
@@ -17,12 +18,25 @@ struct TemplateManagerTests {
         #expect(ids.count == templates.count)
     }
 
-    @Test("All templates contain valid JSON")
-    func validJSON() {
+    @Test("All APNs templates contain valid JSON with aps key")
+    func validAPNsJSON() {
         let templates = TemplateManager.loadBuiltInTemplates()
+            .filter { $0.category != .android }
         for template in templates {
             let result = PayloadValidator.validate(template.payload)
             #expect(result.isValid, "Template '\(template.name)' has invalid payload")
+        }
+    }
+
+    @Test("All Android templates contain valid JSON")
+    func validAndroidJSON() {
+        let templates = TemplateManager.loadBuiltInTemplates()
+            .filter { $0.category == .android }
+        #expect(!templates.isEmpty)
+        for template in templates {
+            let data = template.payload.data(using: .utf8)!
+            let json = try? JSONSerialization.jsonObject(with: data)
+            #expect(json != nil, "Android template '\(template.name)' has invalid JSON")
         }
     }
 

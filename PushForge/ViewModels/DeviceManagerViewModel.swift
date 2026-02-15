@@ -8,15 +8,32 @@ enum SendStatus: Equatable {
     case failure(String)
 }
 
+enum TargetPlatform: String, CaseIterable {
+    case iOSSimulator = "iOS Simulator"
+    case androidEmulator = "Android Emulator"
+}
+
 @Observable
 class DeviceManagerViewModel {
+    // Platform selection
+    var targetPlatform: TargetPlatform = .iOSSimulator
+
+    // iOS Simulator state
     var allSimulators: [SimulatorDevice] = []
     var selectedSimulator: SimulatorDevice?
+
+    // Android Emulator state
+    var androidEmulators: [AndroidEmulator] = []
+    var selectedAndroidEmulator: AndroidEmulator?
+    var adbAvailable = true
+
+    // Shared state
     var isRefreshing = false
     var isBooting = false
     var lastSendStatus: SendStatus = .idle
 
-    private let bridge = SimulatorBridge()
+    private let simulatorBridge = SimulatorBridge()
+    private let adbBridge = ADBBridge()
 
     var bootedSimulators: [SimulatorDevice] {
         allSimulators.filter(\.isBooted)
@@ -26,16 +43,37 @@ class DeviceManagerViewModel {
         allSimulators.filter { !$0.isBooted }
     }
 
-    var canSend: Bool {
-        selectedSimulator?.isBooted == true && lastSendStatus != .sending
+    var onlineAndroidEmulators: [AndroidEmulator] {
+        androidEmulators.filter(\.isOnline)
     }
 
-    func refreshSimulators() async {
+    var canSend: Bool {
+        guard lastSendStatus != .sending else { return false }
+        switch targetPlatform {
+        case .iOSSimulator:
+            return selectedSimulator?.isBooted == true
+        case .androidEmulator:
+            return selectedAndroidEmulator?.isOnline == true
+        }
+    }
+
+    // MARK: - Refresh
+
+    func refreshDevices() async {
         isRefreshing = true
         defer { isRefreshing = false }
 
+        switch targetPlatform {
+        case .iOSSimulator:
+            await refreshSimulators()
+        case .androidEmulator:
+            await refreshAndroidEmulators()
+        }
+    }
+
+    private func refreshSimulators() async {
         do {
-            let sims = try await bridge.listAvailableSimulators()
+            let sims = try await simulatorBridge.listAvailableSimulators()
             allSimulators = sims
             if selectedSimulator == nil || !sims.contains(where: { $0.id == selectedSimulator?.id }) {
                 selectedSimulator = sims.first(where: \.isBooted) ?? sims.first
@@ -46,12 +84,34 @@ class DeviceManagerViewModel {
         }
     }
 
+    private func refreshAndroidEmulators() async {
+        do {
+            let emulators = try await adbBridge.listEmulators()
+            androidEmulators = emulators
+            adbAvailable = true
+            if selectedAndroidEmulator == nil || !emulators.contains(where: { $0.id == selectedAndroidEmulator?.id }) {
+                selectedAndroidEmulator = emulators.first(where: \.isOnline)
+            }
+        } catch let adbError as ADBError {
+            androidEmulators = []
+            selectedAndroidEmulator = nil
+            if case .adbNotFound = adbError {
+                adbAvailable = false
+            }
+        } catch {
+            androidEmulators = []
+            selectedAndroidEmulator = nil
+        }
+    }
+
+    // MARK: - Boot (iOS only)
+
     func bootSimulator(_ simulator: SimulatorDevice) async {
         isBooting = true
         defer { isBooting = false }
 
         do {
-            try await bridge.bootSimulator(udid: simulator.id)
+            try await simulatorBridge.bootSimulator(udid: simulator.id)
             await refreshSimulators()
             selectedSimulator = allSimulators.first(where: { $0.id == simulator.id })
         } catch {
@@ -59,17 +119,32 @@ class DeviceManagerViewModel {
         }
     }
 
+    // MARK: - Send
+
     func sendPush(
+        payload: String,
+        bundleID: String,
+        modelContext: ModelContext
+    ) async {
+        lastSendStatus = .sending
+
+        switch targetPlatform {
+        case .iOSSimulator:
+            await sendToSimulator(payload: payload, bundleID: bundleID, modelContext: modelContext)
+        case .androidEmulator:
+            await sendToAndroid(payload: payload, bundleID: bundleID, modelContext: modelContext)
+        }
+    }
+
+    private func sendToSimulator(
         payload: String,
         bundleID: String,
         modelContext: ModelContext
     ) async {
         guard let simulator = selectedSimulator else { return }
 
-        lastSendStatus = .sending
-
         do {
-            let result = try await bridge.sendPush(
+            let result = try await simulatorBridge.sendPush(
                 udid: simulator.id,
                 bundleIdentifier: bundleID,
                 payloadJSON: payload
@@ -101,6 +176,48 @@ class DeviceManagerViewModel {
             }
         } catch {
             lastSendStatus = .failure(error.localizedDescription)
+        }
+    }
+
+    private func sendToAndroid(
+        payload: String,
+        bundleID: String,
+        modelContext: ModelContext
+    ) async {
+        guard let emulator = selectedAndroidEmulator else { return }
+
+        // Extract title/body from the JSON payload
+        let extracted = ADBBridge.extractTitleBody(from: payload)
+        let title = extracted?.title ?? "PushForge"
+        let body = extracted?.body ?? payload.prefix(200).description
+
+        do {
+            try await adbBridge.sendNotification(
+                serial: emulator.id,
+                title: title,
+                body: body,
+                tag: "pushforge-\(Int(Date().timeIntervalSince1970))"
+            )
+            lastSendStatus = .success
+            let record = NotificationRecord(
+                payload: payload,
+                bundleIdentifier: bundleID,
+                deviceLabel: "\(emulator.name) (Android)",
+                deviceIdentifier: emulator.id,
+                success: true
+            )
+            modelContext.insert(record)
+        } catch {
+            lastSendStatus = .failure(error.localizedDescription)
+            let record = NotificationRecord(
+                payload: payload,
+                bundleIdentifier: bundleID,
+                deviceLabel: "\(emulator.name) (Android)",
+                deviceIdentifier: emulator.id,
+                success: false,
+                errorMessage: error.localizedDescription
+            )
+            modelContext.insert(record)
         }
     }
 }

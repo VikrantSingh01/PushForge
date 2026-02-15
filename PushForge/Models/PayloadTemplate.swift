@@ -13,5 +13,6 @@ struct PayloadTemplate: Identifiable, Hashable {
         case silent
         case rich
         case advanced
+        case android
     }
 }
