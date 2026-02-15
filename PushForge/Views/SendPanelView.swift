@@ -13,6 +13,20 @@ struct SendPanelView: View {
     @State private var showSaveSheet = false
     @State private var saveLabel = ""
 
+    /// Computed send-ability that uses the binding's targetPlatform (always in sync)
+    /// instead of viewModel.targetPlatform (may lag behind).
+    private var canSendNow: Bool {
+        guard viewModel.lastSendStatus != .sending else { return false }
+        switch targetPlatform {
+        case .iOSSimulator:
+            return viewModel.selectedSimulator?.isBooted == true && !bundleIdentifier.isEmpty
+        case .androidEmulator:
+            return viewModel.selectedAndroidEmulator?.isOnline == true
+        case .desktop:
+            return true
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // Scrollable content area
@@ -145,11 +159,10 @@ struct SendPanelView: View {
                 await viewModel.refreshDevices()
             }
             .onChange(of: targetPlatform) {
-                // Sync viewModel when targetPlatform changes from template picker
-                if viewModel.targetPlatform != targetPlatform {
-                    viewModel.targetPlatform = targetPlatform
-                    Task { await viewModel.refreshDevices() }
-                }
+                // Sync viewModel immediately when targetPlatform changes from template picker
+                viewModel.targetPlatform = targetPlatform
+                viewModel.lastSendStatus = .idle
+                Task { await viewModel.refreshDevices() }
             }
 
             // Pinned bottom: Status + Send button
@@ -172,7 +185,7 @@ struct SendPanelView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
-                .disabled(!viewModel.canSend || (viewModel.targetPlatform == .iOSSimulator && bundleIdentifier.isEmpty))
+                .disabled(!canSendNow)
                 .keyboardShortcut(.return, modifiers: .command)
             }
             .padding(.horizontal)
