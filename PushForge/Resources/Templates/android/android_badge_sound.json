@@ -1,0 +1,15 @@
+{
+  "id": "android_badge_sound",
+  "name": "Android Badge + Sound",
+  "description": "Notification with badge count and custom sound",
+  "category": "android",
+  "payload": {
+    "notification": {
+      "title": "New Message",
+      "body": "You have a new message waiting.",
+      "sound": "default",
+      "notification_count": 3,
+      "channel_id": "messages"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "long_payload",
+  "name": "Long Payload",
+  "description": "A comprehensive notification with localization, rich sound, threading, and custom data.",
+  "category": "advanced",
+  "payload": {
+    "aps": {
+      "alert": {
+        "title": "Order #8842 Shipped",
+        "subtitle": "Arriving Thursday",
+        "body": "Your order containing 3 items has been shipped via Express Delivery. Track your package for real-time updates on the estimated delivery window.",
+        "title-loc-key": "ORDER_SHIPPED_TITLE",
+        "loc-key": "ORDER_SHIPPED_BODY",
+        "loc-args": [
+          "8842",
+          "3",
+          "Thursday"
+        ]
+      },
+      "badge": 1,
+      "sound": {
+        "name": "default",
+        "volume": 0.8
+      },
+      "thread-id": "order-8842",
+      "mutable-content": 1
+    },
+    "order-id": "8842",
+    "tracking-url": "https://example.com/track/8842",
+    "items": [
+      {
+        "name": "Wireless Earbuds",
+        "qty": 1
+      },
+      {
+        "name": "USB-C Cable",
+        "qty": 2
+      }
+    ],
+    "carrier": "Express Delivery",
+    "eta": "2026-02-20T14:00:00Z"
+  }
+}

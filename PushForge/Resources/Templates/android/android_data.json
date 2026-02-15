@@ -1,0 +1,13 @@
+{
+  "id": "android_data",
+  "name": "Android Data",
+  "description": "A data-only Android message for background processing.",
+  "category": "android",
+  "payload": {
+    "data": {
+      "action": "sync",
+      "content_id": "12345",
+      "timestamp": "2026-02-14T12:00:00Z"
+    }
+  }
+}

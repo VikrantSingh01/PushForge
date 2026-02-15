@@ -1,0 +1,24 @@
+{
+  "id": "android_long_payload",
+  "name": "Android Long Payload",
+  "description": "Large payload with notification and custom data",
+  "category": "android",
+  "payload": {
+    "notification": {
+      "title": "Order #8842 Shipped",
+      "body": "Your order containing 3 items has been shipped via Express Delivery. Track your package for real-time updates.",
+      "channel_id": "orders",
+      "notification_count": 1,
+      "sound": "default",
+      "color": "#4CAF50",
+      "icon": "ic_shipping"
+    },
+    "data": {
+      "order_id": "8842",
+      "tracking_url": "https://example.com/track/8842",
+      "items": "[{\"name\":\"Wireless Earbuds\",\"qty\":1},{\"name\":\"USB-C Cable\",\"qty\":2}]",
+      "carrier": "Express Delivery",
+      "eta": "2026-02-20T14:00:00Z"
+    }
+  }
+}

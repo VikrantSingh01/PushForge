@@ -1,0 +1,26 @@
+{
+  "id": "android_high_priority",
+  "name": "Android High Priority",
+  "description": "High-priority heads-up notification",
+  "category": "android",
+  "payload": {
+    "notification": {
+      "title": "Security Alert",
+      "body": "A new sign-in to your account was detected from San Francisco, CA.",
+      "channel_id": "security",
+      "sound": "alarm"
+    },
+    "android": {
+      "priority": "high",
+      "notification": {
+        "channel_id": "security"
+      }
+    },
+    "data": {
+      "alert_type": "security",
+      "login_location": "San Francisco, CA",
+      "login_ip": "203.0.113.42",
+      "timestamp": "2026-02-14T12:30:00Z"
+    }
+  }
+}

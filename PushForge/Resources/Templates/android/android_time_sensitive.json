@@ -1,0 +1,23 @@
+{
+  "id": "android_time_sensitive",
+  "name": "Android Time Sensitive",
+  "description": "Full-screen intent for urgent notifications",
+  "category": "android",
+  "payload": {
+    "notification": {
+      "title": "Ride Arriving",
+      "body": "Your driver is 2 minutes away. White Tesla Model 3, plate ABC-1234.",
+      "channel_id": "rides",
+      "sound": "default"
+    },
+    "android": {
+      "priority": "high"
+    },
+    "data": {
+      "ride_id": "ride-7712",
+      "driver": "Sam",
+      "vehicle": "White Tesla Model 3",
+      "eta_seconds": "120"
+    }
+  }
+}

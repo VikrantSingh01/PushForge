@@ -1,0 +1,17 @@
+{
+  "id": "actionable",
+  "name": "Actionable",
+  "description": "A notification with actionable buttons via a custom category.",
+  "category": "rich",
+  "payload": {
+    "aps": {
+      "alert": {
+        "title": "Friend Request",
+        "body": "Taylor wants to connect with you."
+      },
+      "category": "FRIEND_REQUEST",
+      "sound": "default"
+    },
+    "sender-id": "user-12345"
+  }
+}

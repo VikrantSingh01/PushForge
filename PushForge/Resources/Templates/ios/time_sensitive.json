@@ -1,0 +1,21 @@
+{
+  "id": "time_sensitive",
+  "name": "Time Sensitive",
+  "description": "A time-sensitive notification with high relevance score for immediate delivery.",
+  "category": "advanced",
+  "payload": {
+    "aps": {
+      "alert": {
+        "title": "Ride Arriving",
+        "body": "Your driver is 2 minutes away. White Tesla Model 3, plate ABC-1234."
+      },
+      "interruption-level": "time-sensitive",
+      "relevance-score": 0.95,
+      "sound": "default"
+    },
+    "ride-id": "ride-7712",
+    "driver": "Sam",
+    "vehicle": "White Tesla Model 3",
+    "eta-seconds": 120
+  }
+}

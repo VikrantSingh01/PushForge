@@ -16,9 +16,11 @@ targets:
     sources:
       - path: PushForge
         excludes:
-          - "Resources/Templates/**"
-    resources:
-      - path: PushForge/Resources
+          - "Resources/**"
+      - path: PushForge/Resources/Assets.xcassets
+        buildPhase: resources
+      - path: PushForge/Resources/Templates
+        type: folder
         buildPhase: resources
     settings:
       base:

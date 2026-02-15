@@ -1,0 +1,21 @@
+{
+  "id": "android_rich",
+  "name": "Android Rich",
+  "description": "A rich Android notification with channel, color, icon, and custom data.",
+  "category": "android",
+  "payload": {
+    "notification": {
+      "title": "New Order Received",
+      "body": "Order #4521 from Alex — 3 items, $42.99",
+      "channel_id": "orders",
+      "click_action": "OPEN_ORDER_DETAIL",
+      "icon": "ic_notification",
+      "color": "#FF5722"
+    },
+    "data": {
+      "order_id": "4521",
+      "customer": "Alex",
+      "total": "42.99"
+    }
+  }
+}

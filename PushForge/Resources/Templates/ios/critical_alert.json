@@ -1,0 +1,25 @@
+{
+  "id": "critical_alert",
+  "name": "Critical Alert",
+  "description": "A critical alert that bypasses Do Not Disturb for urgent security notifications.",
+  "category": "advanced",
+  "payload": {
+    "aps": {
+      "alert": {
+        "title": "Security Alert",
+        "subtitle": "Unusual Sign-In Detected",
+        "body": "A new sign-in to your account was detected from San Francisco, CA. If this wasn't you, secure your account immediately."
+      },
+      "sound": {
+        "critical": 1,
+        "name": "alarm.caf",
+        "volume": 1.0
+      },
+      "interruption-level": "critical"
+    },
+    "alert-type": "security",
+    "login-location": "San Francisco, CA",
+    "login-ip": "203.0.113.42",
+    "timestamp": "2026-02-14T12:30:00Z"
+  }
+}
