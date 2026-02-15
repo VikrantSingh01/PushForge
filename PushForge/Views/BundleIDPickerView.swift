@@ -19,6 +19,7 @@ struct BundleIDPickerView: View {
         ("Files", "com.apple.DocumentsApp"),
         ("Camera", "com.apple.camera"),
         ("Health", "com.apple.Health"),
+        ("Microsoft Teams", "com.microsoft.skype.teams"),
     ]
 
     private static let androidApps: [(name: String, bundleID: String)] = [
@@ -36,6 +37,7 @@ struct BundleIDPickerView: View {
         ("Play Store", "com.android.vending"),
         ("Clock", "com.google.android.deskclock"),
         ("Calculator", "com.google.android.calculator"),
+        ("Microsoft Teams", "com.microsoft.teams"),
     ]
 
     private static let desktopApps: [(name: String, bundleID: String)] = [
@@ -50,6 +52,7 @@ struct BundleIDPickerView: View {
         ("Music", "com.apple.Music"),
         ("News", "com.apple.news"),
         ("Slack", "com.tinyspeck.slackmacgap"),
+        ("Microsoft Teams", "com.microsoft.teams2"),
         ("Chrome", "com.google.Chrome"),
         ("Firefox", "org.mozilla.firefox"),
         ("VS Code", "com.microsoft.VSCode"),

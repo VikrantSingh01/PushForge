@@ -243,7 +243,8 @@ class DeviceManagerViewModel {
             try await desktopBridge.sendNotification(
                 title: title,
                 subtitle: subtitle,
-                body: body
+                body: body,
+                bundleID: bundleID
             )
             lastSendStatus = .success
             let record = NotificationRecord(

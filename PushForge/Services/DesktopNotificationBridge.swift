@@ -1,53 +1,55 @@
 import Foundation
-import UserNotifications
 
 enum DesktopNotificationError: LocalizedError {
     case sendFailed(String)
-    case permissionDenied
 
     var errorDescription: String? {
         switch self {
         case .sendFailed(let msg): "Failed to send desktop notification: \(msg)"
-        case .permissionDenied: "Notification permission denied. Enable in System Settings > Notifications > PushForge."
         }
     }
 }
 
 actor DesktopNotificationBridge {
-    private var permissionGranted = false
+    private let shell = ShellExecutor()
 
-    /// Sends a macOS desktop notification via UNUserNotificationCenter.
-    /// The notification appears with PushForge's app icon.
+    /// Sends a macOS desktop notification via osascript, using the target app's icon.
+    /// `tell application id "<bundleID>"` makes the notification appear with that app's icon.
     func sendNotification(
         title: String,
         subtitle: String?,
         body: String,
+        bundleID: String,
         soundName: String? = "default"
     ) async throws {
-        // Request permission if not yet granted
-        if !permissionGranted {
-            let center = UNUserNotificationCenter.current()
-            let granted = try await center.requestAuthorization(options: [.alert, .sound, .badge])
-            permissionGranted = granted
-            if !granted {
-                throw DesktopNotificationError.permissionDenied
-            }
-        }
-
-        let content = UNMutableNotificationContent()
-        content.title = title
+        var notification = "display notification \"\(esc(body))\""
+        notification += " with title \"\(esc(title))\""
         if let subtitle = subtitle, !subtitle.isEmpty {
-            content.subtitle = subtitle
+            notification += " subtitle \"\(esc(subtitle))\""
         }
-        content.body = body
-        if soundName != nil {
-            content.sound = .default
+        if let sound = soundName, !sound.isEmpty {
+            notification += " sound name \"\(esc(sound))\""
         }
 
-        let identifier = "pushforge-\(UUID().uuidString)"
-        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: nil)
+        // Use the target app's bundle ID so the notification shows that app's icon.
+        // Falls back to PushForge's own identifier if no bundle ID provided.
+        let appID = bundleID.isEmpty ? "com.pushforge.app" : bundleID
+        let script = "tell application id \"\(esc(appID))\" to \(notification)"
 
-        try await UNUserNotificationCenter.current().add(request)
+        let result = try await shell.run(
+            executablePath: "/usr/bin/osascript",
+            arguments: ["-e", script]
+        )
+
+        guard result.succeeded else {
+            let err = result.stderr.trimmingCharacters(in: .whitespacesAndNewlines)
+            throw DesktopNotificationError.sendFailed(err.isEmpty ? "Unknown error (exit \(result.exitCode))" : err)
+        }
+    }
+
+    private func esc(_ text: String) -> String {
+        text.replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "\"", with: "\\\"")
     }
 
     /// Extracts title, subtitle, and body from JSON payload for desktop display.
