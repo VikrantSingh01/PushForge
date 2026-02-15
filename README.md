@@ -5,8 +5,8 @@
 <h1 align="center">PushForge</h1>
 
 <p align="center">
-  <strong>The missing push notification tool for mobile developers.</strong><br/>
-  Craft, send, and test push payloads on iOS Simulators &amp; Android Emulators — zero config, zero cost.
+  <strong>The missing push notification tool for mobile &amp; web developers.</strong><br/>
+  Craft, send, and test push payloads on iOS Simulators, Android Emulators &amp; macOS Desktop — zero config, zero cost.
 </p>
 
 <p align="center">
@@ -14,22 +14,23 @@
   <a href="https://www.apple.com/macos/"><img src="https://img.shields.io/badge/macOS-14%2B-black?logo=apple&logoColor=white" alt="macOS 14+"/></a>
   <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-5.9%2B-orange?logo=swift&logoColor=white" alt="Swift 5.9+"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"/></a>
-  <img src="https://img.shields.io/badge/tests-11%20passing-brightgreen" alt="Tests"/>
+  <img src="https://img.shields.io/badge/tests-12%20passing-brightgreen" alt="Tests"/>
+  <img src="https://img.shields.io/badge/templates-16-blueviolet" alt="16 Templates"/>
 </p>
 
 ---
 
 <p align="center">
-  <img src="demo.png" alt="PushForge — send push notifications to iOS Simulator with one click" width="800"/>
+  <img src="demo.png" alt="PushForge — send push notifications to iOS Simulator, Android Emulator, and macOS Desktop" width="800"/>
   <br/>
-  <em>Craft a payload, pick a simulator, hit Send. Notification appears instantly.</em>
+  <em>Craft a payload, pick a target, hit Send. Notification appears instantly on iOS, Android, or macOS.</em>
 </p>
 
 ---
 
 ## Why PushForge?
 
-Every iOS developer has been here: you're building a feature that depends on push notifications, and you need to test it. What should take 10 seconds turns into a 10-minute detour:
+Every mobile developer has been here: you need to test a push notification, and what should take 10 seconds turns into a 10-minute detour:
 
 1. Find the simulator UDID (`xcrun simctl list devices`... scroll... copy the UUID)
 2. Write valid APNs JSON from memory (was it `alert.title` or `aps.alert.title`?)
@@ -39,62 +40,82 @@ Every iOS developer has been here: you're building a feature that depends on pus
 
 **This workflow breaks your flow dozens of times a day.**
 
-PushForge eliminates every one of these steps. Open the app, pick a template, hit Send. The notification appears on the simulator instantly. No terminal. No UUIDs. No temp files. No broken JSON.
+PushForge eliminates every one of these steps. Open the app, pick a template, hit Send. The notification appears instantly. No terminal. No UUIDs. No temp files. No broken JSON.
 
 ### Who is this for?
 
 - **iOS developers** testing notification handling, deep links, or UI updates triggered by push
+- **Android developers** testing notification behavior on emulators
+- **Web/Desktop developers** previewing how push notifications look in macOS Notification Center
 - **QA engineers** verifying notification content, badge counts, and sound behavior
-- **Backend developers** validating APNs payload structure before deploying server changes
-- **Teams** that need a shared, visual way to test notification payloads without distributing `.p8` keys
+- **Backend developers** validating push payload structure before deploying server changes
+- **Teams** that need a shared, visual way to test notification payloads
 
 ### How it compares
 
-| Tool | Platform | iOS Sim | Android Emu | Real Device | Free | Maintained |
+| Tool | Platform | iOS Sim | Android Emu | Desktop/Web | Free | Maintained |
 |---|---|---|---|---|---|---|
-| **PushForge** | macOS (native) | Yes | Yes | Roadmap | Yes | Yes |
-| Knuff | macOS | No | No | Yes | Yes | Abandoned (2019) |
-| NWPusher | macOS | No | No | Yes | Yes | Archived |
-| Pusher | macOS | Yes | No | Yes | No ($15) | Yes |
-| curl + terminal | Any | Yes | No | Yes | Yes | N/A |
+| **PushForge** | macOS (native) | Yes | Yes | Yes | Yes | Yes |
+| Knuff | macOS | No | No | No | Yes | Abandoned (2019) |
+| NWPusher | macOS | No | No | No | Yes | Archived |
+| Pusher | macOS | Yes | No | No | No ($15) | Yes |
+| curl + terminal | Any | Yes | No | No | Yes | N/A |
 
-PushForge is the only **free, cross-platform (iOS + Android) emulator push tool** with a native macOS UI.
+PushForge is the only **free, multi-platform push notification tool** with native macOS UI supporting iOS, Android, and Desktop/Web.
 
 ---
 
 ## Features
 
-**Zero Setup** — Boot simulators, pick a template, hit Send. That's it.
+### Multi-Platform Push
 
-- **Visual Payload Composer** — Edit APNs JSON with live validation, byte counter, and format/minify buttons
-- **11 Built-in Templates** — From basic alerts to Live Activities, critical alerts, and background sync
+| Target | How it works | Setup needed |
+|---|---|---|
+| **iOS Simulator** | `xcrun simctl push` | Xcode |
+| **Android Emulator** | `adb shell cmd notification post` | Android Studio |
+| **Desktop/Web** | `osascript` with target app icon | None |
+
+Switch between platforms with a single segmented picker. PushForge handles all the plumbing.
+
+### Core Features
+
+- **Visual Payload Composer** — Edit JSON with live validation, byte counter, format/minify buttons
+- **Smart JSON Diagnostics** — Detects smart quotes, trailing commas, mismatched braces with exact line:col and fix suggestions
+- **Auto-fix** — One-click repair for smart quotes and copy-paste artifacts
+- **16 Built-in Templates** — iOS (APNs), Android (FCM), and Web Push formats
 - **One-Click Simulator Boot** — Boot any iOS Simulator directly from PushForge
-- **Notification History** — Every sent notification is logged with status, timestamp, and full payload
+- **Notification History** — Every sent notification logged with status, timestamp, full payload (SwiftData)
 - **Save Devices** — Label and save simulator + bundle ID combos for quick reuse
-- **Auto-Refresh** — Simulator list updates automatically when you switch back to PushForge
-- **Keyboard Shortcuts** — `Cmd+Enter` to send, `Cmd+Shift+H` for history
+- **Bundle ID Picker** — Dropdown with 40+ pre-installed app IDs across all platforms (including Microsoft Teams)
+- **Target App Icon** — Desktop notifications show the selected app's icon (Safari, Slack, Teams, etc.)
+- **Cmd+/Cmd- Zoom** — Zoom In, Zoom Out, Reset (Cmd+0) for the JSON editor, persists across sessions
+- **Auto-Refresh** — Simulator/emulator list updates when you switch back to PushForge
+- **Keyboard Shortcuts** — `Cmd+Enter` to send
 - **Lightweight** — Native SwiftUI, no Electron, no runtime dependencies
 
 ## Templates
 
-PushForge ships with **11 ready-to-use templates** organized by category:
+PushForge ships with **16 ready-to-use templates** organized by category:
 
-| Category | Templates | Key APNs Features |
+| Category | Templates | Key Features |
 |---|---|---|
 | **Basic** | Basic Alert | `alert.title`, `alert.body`, `alert.subtitle` |
 | **Badge** | Badge + Sound | `badge`, `sound` |
-| **Silent** | Silent Push, Background Sync | `content-available`, custom sync data |
-| **Rich** | Rich Media, Actionable | `mutable-content`, `category` |
+| **Silent** | Silent Push, Background Sync | `content-available`, multi-collection sync data |
+| **Rich** | Rich Media, Actionable | `mutable-content`, `category` action buttons |
 | **Advanced** | Long Payload, Grouped Thread, Critical Alert, Live Activity, Time Sensitive | `thread-id`, `interruption-level`, `content-state`, `relevance-score` |
+| **Android** | Android Basic, Android Data, Android Rich | `notification`, `data`, `channel_id`, `click_action` |
+| **Web/Desktop** | Web Basic, Web Actions | `title`, `body`, `actions`, `requireInteraction` |
 
-Every template is valid APNs JSON — edit it or use it as-is.
+Every template is valid JSON — edit it or use it as-is.
 
 ## Quick Start
 
 ### Prerequisites
 
 - macOS 14 (Sonoma) or later
-- Xcode 16+ with iOS Simulator runtimes installed
+- Xcode 16+ with iOS Simulator runtimes (for iOS)
+- Android Studio with ADB (for Android — optional)
 
 ### Build & Run
 
@@ -120,12 +141,12 @@ xcodebuild -project PushForge.xcodeproj -scheme PushForge -destination 'platform
 ### First Push in 30 Seconds
 
 1. Launch PushForge
-2. Click **Boot** next to any simulator in the right panel
-3. Select a template (e.g., "Basic Alert")
-4. Enter a bundle ID: `com.apple.Preferences`
+2. Select a platform: **iOS Simulator**, **Android Emulator**, or **Desktop/Web**
+3. For iOS: click **Boot** next to any simulator. For Desktop: it's always ready.
+4. Pick a template and select an app from the bundle ID dropdown
 5. Press **Cmd+Enter** or click **Send Push**
 
-The notification appears on the simulator instantly.
+The notification appears instantly.
 
 ### Run Tests
 
@@ -133,14 +154,19 @@ The notification appears on the simulator instantly.
 xcodebuild -project PushForge.xcodeproj -scheme PushForgeTests -destination 'platform=macOS' test
 ```
 
-All 11 tests should pass: payload validation, template integrity, simulator bridge, and shell execution.
+12 tests covering payload validation, template integrity, simulator bridge, and shell execution.
 
 ## Architecture
 
 ```
 PushForge/
 ├── Models/          SwiftData models (SavedDevice, NotificationRecord, PayloadTemplate)
-├── Services/        Core engine (SimulatorBridge, PayloadValidator, TemplateManager)
+├── Services/
+│   ├── SimulatorBridge.swift        iOS Simulator (xcrun simctl)
+│   ├── ADBBridge.swift              Android Emulator (adb)
+│   ├── DesktopNotificationBridge.swift  macOS Desktop (osascript)
+│   ├── PayloadValidator.swift       Smart JSON diagnostics + auto-fix
+│   └── TemplateManager.swift        16 built-in templates
 ├── ViewModels/      @Observable state (PayloadComposerVM, DeviceManagerVM)
 ├── Views/           SwiftUI views (PayloadComposer, SendPanel, History, etc.)
 └── Utilities/       ShellExecutor (Process wrapper), JSONFormatter
@@ -148,41 +174,39 @@ PushForge/
 
 **Key design decisions:**
 
-- **`actor` services** — `SimulatorBridge` and `ShellExecutor` are actors, keeping `xcrun` process execution off the main thread
+- **`actor` services** — SimulatorBridge, ADBBridge, ShellExecutor are actors for thread-safe I/O
 - **SwiftData persistence** — Notification history and saved devices survive app restarts
-- **HSplitView layout** — Payload editor (left) + send controls (right), both responsive at any window size
+- **HSplitView layout** — Payload editor (left) + send controls (right), responsive at any window size
 - **Send button pinned** — Always visible regardless of scroll position
+- **Smart quote prevention** — Disabled at OS level + real-time auto-replacement
 
 ## How It Works
 
-Under the hood, PushForge wraps `xcrun simctl`:
+| Platform | Under the hood |
+|---|---|
+| **iOS Simulator** | `xcrun simctl push <UDID> <bundle-id> payload.json` |
+| **Android Emulator** | `adb -s <serial> shell cmd notification post -S bigtext -t "Title" "tag" "Body"` |
+| **Desktop/Web** | `osascript -e 'tell application id "<bundle-id>" to display notification "body" with title "title"'` |
 
-```bash
-# List available simulators
-xcrun simctl list devices available --json
-
-# Boot a simulator
-xcrun simctl boot <UDID>
-
-# Send a push notification
-xcrun simctl push <UDID> <bundle-id> payload.json
-```
-
-PushForge handles UDID lookup, JSON validation, temp file management, and error reporting — so you don't have to.
+PushForge handles device discovery, UDID/serial lookup, JSON validation, temp file management, payload parsing, and error reporting — so you don't have to.
 
 ## Roadmap
 
-- [x] **v0.1** — Simulator push with payload composer *(you are here)*
-- [ ] **v0.2** — APNs push to real devices (.p8 token-based auth)
-- [ ] **v0.3** — FCM support for Android
-- [ ] **v0.4** — Rich notification preview (mock rendering)
-- [ ] **v0.5** — Drag-and-drop .p8 / FCM service account files
-- [ ] **v0.6** — Import/export notification collections
-- [ ] **v1.0** — CLI companion (`pushforge send --template welcome.json`)
+- [x] **v0.1** — iOS Simulator push with payload composer
+- [x] **v0.2** — Android Emulator push via ADB
+- [x] **v0.3** — Desktop/Web notifications via macOS Notification Center
+- [x] **v0.4** — Smart JSON diagnostics with auto-fix
+- [x] **v0.5** — Multi-platform bundle ID picker with 40+ apps
+- [ ] **v0.6** — APNs push to real iOS devices (.p8 token-based auth)
+- [ ] **v0.7** — FCM push to real Android devices (service account)
+- [ ] **v0.8** — Rich notification preview (mock rendering)
+- [ ] **v0.9** — Import/export notification collections
+- [ ] **v1.0** — CLI companion (`pushforge send --template welcome.json`) + Homebrew cask
 
-## Common Bundle IDs for Testing
+## Common Bundle IDs
 
-These apps are pre-installed on every iOS Simulator:
+<details>
+<summary><strong>iOS Simulator</strong> (15 apps)</summary>
 
 | App | Bundle ID |
 |---|---|
@@ -191,11 +215,68 @@ These apps are pre-installed on every iOS Simulator:
 | Messages | `com.apple.MobileSMS` |
 | Maps | `com.apple.Maps` |
 | Calendar | `com.apple.mobilecal` |
+| Photos | `com.apple.mobileslideshow` |
 | Notes | `com.apple.mobilenotes` |
+| Contacts | `com.apple.MobileAddressBook` |
+| Reminders | `com.apple.reminders` |
+| Clock | `com.apple.mobiletimer` |
+| Weather | `com.apple.weather` |
+| Files | `com.apple.DocumentsApp` |
+| Camera | `com.apple.camera` |
+| Health | `com.apple.Health` |
+| Microsoft Teams | `com.microsoft.skype.teams` |
+
+</details>
+
+<details>
+<summary><strong>Android Emulator</strong> (15 apps)</summary>
+
+| App | Bundle ID |
+|---|---|
+| Settings | `com.android.settings` |
+| Contacts | `com.android.contacts` |
+| Phone | `com.android.dialer` |
+| Messages | `com.android.messaging` |
+| Calendar | `com.android.calendar` |
+| Camera | `com.android.camera2` |
+| Gallery | `com.android.gallery3d` |
+| Chrome | `com.android.chrome` |
+| Gmail | `com.google.android.gm` |
+| Google Maps | `com.google.android.apps.maps` |
+| YouTube | `com.google.android.youtube` |
+| Play Store | `com.android.vending` |
+| Clock | `com.google.android.deskclock` |
+| Calculator | `com.google.android.calculator` |
+| Microsoft Teams | `com.microsoft.teams` |
+
+</details>
+
+<details>
+<summary><strong>Desktop/Web</strong> (15 apps)</summary>
+
+| App | Bundle ID |
+|---|---|
+| Safari | `com.apple.Safari` |
+| Mail | `com.apple.mail` |
+| Messages | `com.apple.MobileSMS` |
+| Calendar | `com.apple.iCal` |
+| Notes | `com.apple.Notes` |
+| Reminders | `com.apple.reminders` |
+| Maps | `com.apple.Maps` |
+| Finder | `com.apple.finder` |
+| Music | `com.apple.Music` |
+| News | `com.apple.news` |
+| Slack | `com.tinyspeck.slackmacgap` |
+| Microsoft Teams | `com.microsoft.teams2` |
+| Chrome | `com.google.Chrome` |
+| Firefox | `org.mozilla.firefox` |
+| VS Code | `com.microsoft.VSCode` |
+
+</details>
 
 ## Contributing
 
-Contributions are welcome! PushForge is built with SwiftUI — if you're an iOS developer, you already know the stack.
+Contributions are welcome! PushForge is built with SwiftUI — if you're a mobile developer, you already know the stack.
 
 ```bash
 # Fork the repo, then:
@@ -206,10 +287,10 @@ open PushForge.xcodeproj
 ```
 
 **Good first issues:**
-- Add more built-in templates
 - Improve JSON editor with syntax highlighting
 - Add dark mode-aware notification preview
 - Homebrew cask formula
+- APNs real device support (.p8 auth)
 
 ## License
 
