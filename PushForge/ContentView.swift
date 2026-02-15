@@ -21,6 +21,17 @@ struct ContentView: View {
         }
         .frame(minWidth: 750, minHeight: 500)
         .toolbar {
+            ToolbarItem(placement: .navigation) {
+                HStack(spacing: 6) {
+                    Image("PushForgeLogo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 24, height: 24)
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                    Text("PushForge")
+                        .font(.headline)
+                }
+            }
             ToolbarItem(placement: .automatic) {
                 Button {
                     showHistory.toggle()
@@ -33,6 +44,6 @@ struct ContentView: View {
             HistoryView()
                 .frame(minWidth: 600, minHeight: 400)
         }
-        .navigationTitle("PushForge")
+        .navigationTitle("")
     }
 }

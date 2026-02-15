@@ -9,6 +9,11 @@ struct HistoryView: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
+                Image("PushForgeLogo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20)
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
                 Text("Notification History")
                     .font(.headline)
                 Spacer()
