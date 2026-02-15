@@ -26,6 +26,7 @@ struct SendPanelView: View {
                     .pickerStyle(.segmented)
                     .onChange(of: viewModel.targetPlatform) {
                         targetPlatform = viewModel.targetPlatform
+                        bundleIdentifier = ""
                         Task { await viewModel.refreshDevices() }
                     }
 
