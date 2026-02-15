@@ -29,6 +29,7 @@
 		E115ECF0BE9AB8BFEEF24CA8 /* ShellExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CFE24C17538923375BA45E /* ShellExecutor.swift */; };
 		EF39B22731E45383FA6A1208 /* StatusBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4DDE9B0F9248ECF72F3AD3 /* StatusBannerView.swift */; };
 		F25BA2D7A62B9282CBB103BA /* HistoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76CE3060BEEA105B2D2DD67 /* HistoryRowView.swift */; };
+		F31CA9B1EFA47A904E135F33 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A7CA9D3A6B829968D248854 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		4087DC13CD18CA1DF4B62A03 /* SimulatorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorPickerView.swift; sourceTree = "<group>"; };
 		551A528B242042331218B659 /* SendPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendPanelView.swift; sourceTree = "<group>"; };
 		58BCE490345B73E10BFFE77D /* SavedDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedDevice.swift; sourceTree = "<group>"; };
+		5A7CA9D3A6B829968D248854 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5CF1630FE51B98374352C90A /* SimulatorBridgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorBridgeTests.swift; sourceTree = "<group>"; };
 		7413161DEED4B7686AD1D628 /* PayloadTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayloadTemplate.swift; sourceTree = "<group>"; };
 		7BD8D1729445121FBB050E3B /* PushForge.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PushForge.entitlements; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				7BD8D1729445121FBB050E3B /* PushForge.entitlements */,
 				A734165EA33F615F524AAF5B /* PushForgeApp.swift */,
 				01F56B71E121AD15C0F91EA4 /* Models */,
+				B057B01969D579945FEE87D3 /* Resources */,
 				389F540513EEA8189C46CC5F /* Services */,
 				284BAD9D25F36A057C63FAF0 /* Utilities */,
 				FD8760C44ABABE7A1DB2130B /* ViewModels */,
@@ -158,6 +161,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		B057B01969D579945FEE87D3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5A7CA9D3A6B829968D248854 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		FD8760C44ABABE7A1DB2130B /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,13 +176,6 @@
 				8361F9E860814AB02009D7C0 /* PayloadComposerViewModel.swift */,
 			);
 			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		"TEMP_6376CC82-8597-4635-B934-5F0F3EC79374" /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -182,6 +186,7 @@
 			buildConfigurationList = 1D03FAA25A95EE5308FA4421 /* Build configuration list for PBXNativeTarget "PushForge" */;
 			buildPhases = (
 				22AEE927EC7383715D0587F0 /* Sources */,
+				5086767279E5D20F61991887 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -241,6 +246,17 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		5086767279E5D20F61991887 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F31CA9B1EFA47A904E135F33 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		22AEE927EC7383715D0587F0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -294,6 +310,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -310,6 +327,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

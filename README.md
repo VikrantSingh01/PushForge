@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://developer.apple.com/assets/elements/icons/push-notifications/push-notifications-96x96_2x.png" width="80" alt="PushForge Icon"/>
+  <img src="icon.png" width="128" alt="PushForge Icon"/>
 </p>
 
 <h1 align="center">PushForge</h1>
