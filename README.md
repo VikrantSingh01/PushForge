@@ -5,8 +5,8 @@
 <h1 align="center">PushForge</h1>
 
 <p align="center">
-  <strong>The missing push notification tool for iOS developers.</strong><br/>
-  Craft, send, and test APNs payloads on iOS Simulators — zero config, zero cost.
+  <strong>The missing push notification tool for mobile developers.</strong><br/>
+  Craft, send, and test push payloads on iOS Simulators &amp; Android Emulators — zero config, zero cost.
 </p>
 
 <p align="center">
@@ -50,15 +50,15 @@ PushForge eliminates every one of these steps. Open the app, pick a template, hi
 
 ### How it compares
 
-| Tool | Platform | Simulator | Real Device | Free | Maintained |
-|---|---|---|---|---|---|
-| **PushForge** | macOS (native) | Yes | Roadmap | Yes | Yes |
-| Knuff | macOS | No | Yes | Yes | Abandoned (2019) |
-| NWPusher | macOS | No | Yes | Yes | Archived |
-| Pusher | macOS | Yes | Yes | No ($15) | Yes |
-| curl + terminal | Any | Yes | Yes | Yes | N/A |
+| Tool | Platform | iOS Sim | Android Emu | Real Device | Free | Maintained |
+|---|---|---|---|---|---|---|
+| **PushForge** | macOS (native) | Yes | Yes | Roadmap | Yes | Yes |
+| Knuff | macOS | No | No | Yes | Yes | Abandoned (2019) |
+| NWPusher | macOS | No | No | Yes | Yes | Archived |
+| Pusher | macOS | Yes | No | Yes | No ($15) | Yes |
+| curl + terminal | Any | Yes | No | Yes | Yes | N/A |
 
-PushForge is the only **free, actively maintained, native macOS tool** that handles simulator push with a visual UI.
+PushForge is the only **free, cross-platform (iOS + Android) emulator push tool** with a native macOS UI.
 
 ---
 
