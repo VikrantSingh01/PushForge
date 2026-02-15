@@ -11,5 +11,7 @@ struct PayloadTemplate: Identifiable, Hashable {
         case alert
         case badge
         case silent
+        case rich
+        case advanced
     }
 }
