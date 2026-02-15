@@ -1,0 +1,10 @@
+{
+  "aps": {
+    "alert": {
+      "title": "New Message",
+      "body": "You have a new message waiting."
+    },
+    "badge": 3,
+    "sound": "default"
+  }
+}

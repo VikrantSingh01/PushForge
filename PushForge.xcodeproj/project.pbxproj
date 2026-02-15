@@ -1,0 +1,518 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		25B18398A45427BA880E8D4F /* DeviceManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D535A7E7D1E157282816736 /* DeviceManagerViewModel.swift */; };
+		26942D6963083B92016E9890 /* SimulatorBridgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF1630FE51B98374352C90A /* SimulatorBridgeTests.swift */; };
+		30F1519838D19BEFB08C1D31 /* PushForgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A734165EA33F615F524AAF5B /* PushForgeApp.swift */; };
+		3A97B4A2C54D305981E10564 /* PayloadComposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AABB2D100F856BAA6EFA02 /* PayloadComposerView.swift */; };
+		42D7E52815C1B56307C1C3BC /* NotificationRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7D93EA4E1C8D8FC1E0A85D /* NotificationRecord.swift */; };
+		5388C95060B5A05977266F8B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7B6EC3589A4211CD235A69 /* ContentView.swift */; };
+		5A0FA8622BF47305A4D0AD2F /* SendPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551A528B242042331218B659 /* SendPanelView.swift */; };
+		5EEFA1384CA490269A4E8478 /* JSONFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8BE60A0E5EDEEF49D8D802 /* JSONFormatter.swift */; };
+		6F8DF989580C328C0898F428 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0760059653909C206005BBB8 /* HistoryView.swift */; };
+		7207A454EF86FBA23858B81D /* PayloadTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7413161DEED4B7686AD1D628 /* PayloadTemplate.swift */; };
+		763A4F0ED4CB22BA94AAE762 /* SimulatorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4087DC13CD18CA1DF4B62A03 /* SimulatorPickerView.swift */; };
+		8126D8F347D4200A2D16ABAF /* TemplateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B4C56E153D38FE603BD156 /* TemplateManagerTests.swift */; };
+		AD899C83267D601C99521D89 /* TemplateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA70339A4498825D347C1F5 /* TemplateManager.swift */; };
+		B6FF5F204BF24F6CE4460966 /* SimulatorBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03132698A11DD5051D0DBBB6 /* SimulatorBridge.swift */; };
+		BDF0B6B7777029D49D688830 /* PayloadValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB93AE3CC534397148A179C /* PayloadValidatorTests.swift */; };
+		BF03A3A24BBE71258249F9B8 /* SavedDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BCE490345B73E10BFFE77D /* SavedDevice.swift */; };
+		C84167852346FFDFA7672914 /* TemplatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69105EB9211342729EA3606 /* TemplatePickerView.swift */; };
+		CB5922FD87FC50C770FED834 /* PayloadComposerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8361F9E860814AB02009D7C0 /* PayloadComposerViewModel.swift */; };
+		D9024176F4F47C71ED401C87 /* PayloadValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4D35971DF4F9C17697D096 /* PayloadValidator.swift */; };
+		E115ECF0BE9AB8BFEEF24CA8 /* ShellExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CFE24C17538923375BA45E /* ShellExecutor.swift */; };
+		EF39B22731E45383FA6A1208 /* StatusBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4DDE9B0F9248ECF72F3AD3 /* StatusBannerView.swift */; };
+		F25BA2D7A62B9282CBB103BA /* HistoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76CE3060BEEA105B2D2DD67 /* HistoryRowView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9674FCA8093F14E9D74F5BBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5CDC81541F812CD20211BFF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B3EC76D31B7B03B6EBAE79AD;
+			remoteInfo = PushForge;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		02FB02538E10CC7FBF154A5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		03132698A11DD5051D0DBBB6 /* SimulatorBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorBridge.swift; sourceTree = "<group>"; };
+		0760059653909C206005BBB8 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		0A7D93EA4E1C8D8FC1E0A85D /* NotificationRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRecord.swift; sourceTree = "<group>"; };
+		0C7B6EC3589A4211CD235A69 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		0C8BE60A0E5EDEEF49D8D802 /* JSONFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONFormatter.swift; sourceTree = "<group>"; };
+		2D535A7E7D1E157282816736 /* DeviceManagerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManagerViewModel.swift; sourceTree = "<group>"; };
+		3EB93AE3CC534397148A179C /* PayloadValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayloadValidatorTests.swift; sourceTree = "<group>"; };
+		4087DC13CD18CA1DF4B62A03 /* SimulatorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorPickerView.swift; sourceTree = "<group>"; };
+		551A528B242042331218B659 /* SendPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendPanelView.swift; sourceTree = "<group>"; };
+		58BCE490345B73E10BFFE77D /* SavedDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedDevice.swift; sourceTree = "<group>"; };
+		5CF1630FE51B98374352C90A /* SimulatorBridgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorBridgeTests.swift; sourceTree = "<group>"; };
+		7413161DEED4B7686AD1D628 /* PayloadTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayloadTemplate.swift; sourceTree = "<group>"; };
+		7BD8D1729445121FBB050E3B /* PushForge.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PushForge.entitlements; sourceTree = "<group>"; };
+		8361F9E860814AB02009D7C0 /* PayloadComposerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayloadComposerViewModel.swift; sourceTree = "<group>"; };
+		85B4C56E153D38FE603BD156 /* TemplateManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateManagerTests.swift; sourceTree = "<group>"; };
+		9004A5369E06AB338DC80A96 /* PushForge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PushForge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5AABB2D100F856BAA6EFA02 /* PayloadComposerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayloadComposerView.swift; sourceTree = "<group>"; };
+		A734165EA33F615F524AAF5B /* PushForgeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushForgeApp.swift; sourceTree = "<group>"; };
+		AB4DDE9B0F9248ECF72F3AD3 /* StatusBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBannerView.swift; sourceTree = "<group>"; };
+		B76CE3060BEEA105B2D2DD67 /* HistoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRowView.swift; sourceTree = "<group>"; };
+		BBA70339A4498825D347C1F5 /* TemplateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateManager.swift; sourceTree = "<group>"; };
+		BC4D35971DF4F9C17697D096 /* PayloadValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayloadValidator.swift; sourceTree = "<group>"; };
+		D0CFE24C17538923375BA45E /* ShellExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellExecutor.swift; sourceTree = "<group>"; };
+		E311DCD1E3F3C00AB646050F /* PushForgeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PushForgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E69105EB9211342729EA3606 /* TemplatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplatePickerView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		01F56B71E121AD15C0F91EA4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0A7D93EA4E1C8D8FC1E0A85D /* NotificationRecord.swift */,
+				7413161DEED4B7686AD1D628 /* PayloadTemplate.swift */,
+				58BCE490345B73E10BFFE77D /* SavedDevice.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		284BAD9D25F36A057C63FAF0 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				0C8BE60A0E5EDEEF49D8D802 /* JSONFormatter.swift */,
+				D0CFE24C17538923375BA45E /* ShellExecutor.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		2D8D228A13B02E3BEEE7F9A2 /* PushForgeTests */ = {
+			isa = PBXGroup;
+			children = (
+				3EB93AE3CC534397148A179C /* PayloadValidatorTests.swift */,
+				5CF1630FE51B98374352C90A /* SimulatorBridgeTests.swift */,
+				85B4C56E153D38FE603BD156 /* TemplateManagerTests.swift */,
+			);
+			path = PushForgeTests;
+			sourceTree = "<group>";
+		};
+		389F540513EEA8189C46CC5F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				BC4D35971DF4F9C17697D096 /* PayloadValidator.swift */,
+				03132698A11DD5051D0DBBB6 /* SimulatorBridge.swift */,
+				BBA70339A4498825D347C1F5 /* TemplateManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		53B2D7B5F888AF097237FC8E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9004A5369E06AB338DC80A96 /* PushForge.app */,
+				E311DCD1E3F3C00AB646050F /* PushForgeTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		727AA5962F75EDF5975D3BD8 = {
+			isa = PBXGroup;
+			children = (
+				977E25C6C9471DA80A317D25 /* PushForge */,
+				2D8D228A13B02E3BEEE7F9A2 /* PushForgeTests */,
+				53B2D7B5F888AF097237FC8E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		977E25C6C9471DA80A317D25 /* PushForge */ = {
+			isa = PBXGroup;
+			children = (
+				0C7B6EC3589A4211CD235A69 /* ContentView.swift */,
+				02FB02538E10CC7FBF154A5A /* Info.plist */,
+				7BD8D1729445121FBB050E3B /* PushForge.entitlements */,
+				A734165EA33F615F524AAF5B /* PushForgeApp.swift */,
+				01F56B71E121AD15C0F91EA4 /* Models */,
+				389F540513EEA8189C46CC5F /* Services */,
+				284BAD9D25F36A057C63FAF0 /* Utilities */,
+				FD8760C44ABABE7A1DB2130B /* ViewModels */,
+				AD0A2E8B6E9741228D06D738 /* Views */,
+			);
+			path = PushForge;
+			sourceTree = "<group>";
+		};
+		AD0A2E8B6E9741228D06D738 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B76CE3060BEEA105B2D2DD67 /* HistoryRowView.swift */,
+				0760059653909C206005BBB8 /* HistoryView.swift */,
+				A5AABB2D100F856BAA6EFA02 /* PayloadComposerView.swift */,
+				551A528B242042331218B659 /* SendPanelView.swift */,
+				4087DC13CD18CA1DF4B62A03 /* SimulatorPickerView.swift */,
+				AB4DDE9B0F9248ECF72F3AD3 /* StatusBannerView.swift */,
+				E69105EB9211342729EA3606 /* TemplatePickerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		FD8760C44ABABE7A1DB2130B /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				2D535A7E7D1E157282816736 /* DeviceManagerViewModel.swift */,
+				8361F9E860814AB02009D7C0 /* PayloadComposerViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		"TEMP_6376CC82-8597-4635-B934-5F0F3EC79374" /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B3EC76D31B7B03B6EBAE79AD /* PushForge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D03FAA25A95EE5308FA4421 /* Build configuration list for PBXNativeTarget "PushForge" */;
+			buildPhases = (
+				22AEE927EC7383715D0587F0 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PushForge;
+			packageProductDependencies = (
+			);
+			productName = PushForge;
+			productReference = 9004A5369E06AB338DC80A96 /* PushForge.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C244AB6C3CD8FC9B22EF59DD /* PushForgeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63312E1B6A1B693FD63FDB9F /* Build configuration list for PBXNativeTarget "PushForgeTests" */;
+			buildPhases = (
+				6C04D8B72D09BD2F71D7800C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8E099A638F22FF1F8C502D26 /* PBXTargetDependency */,
+			);
+			name = PushForgeTests;
+			packageProductDependencies = (
+			);
+			productName = PushForgeTests;
+			productReference = E311DCD1E3F3C00AB646050F /* PushForgeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E5CDC81541F812CD20211BFF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2620;
+			};
+			buildConfigurationList = 566FC315AD8A61D537A17507 /* Build configuration list for PBXProject "PushForge" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 727AA5962F75EDF5975D3BD8;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B3EC76D31B7B03B6EBAE79AD /* PushForge */,
+				C244AB6C3CD8FC9B22EF59DD /* PushForgeTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		22AEE927EC7383715D0587F0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5388C95060B5A05977266F8B /* ContentView.swift in Sources */,
+				25B18398A45427BA880E8D4F /* DeviceManagerViewModel.swift in Sources */,
+				F25BA2D7A62B9282CBB103BA /* HistoryRowView.swift in Sources */,
+				6F8DF989580C328C0898F428 /* HistoryView.swift in Sources */,
+				5EEFA1384CA490269A4E8478 /* JSONFormatter.swift in Sources */,
+				42D7E52815C1B56307C1C3BC /* NotificationRecord.swift in Sources */,
+				3A97B4A2C54D305981E10564 /* PayloadComposerView.swift in Sources */,
+				CB5922FD87FC50C770FED834 /* PayloadComposerViewModel.swift in Sources */,
+				7207A454EF86FBA23858B81D /* PayloadTemplate.swift in Sources */,
+				D9024176F4F47C71ED401C87 /* PayloadValidator.swift in Sources */,
+				30F1519838D19BEFB08C1D31 /* PushForgeApp.swift in Sources */,
+				BF03A3A24BBE71258249F9B8 /* SavedDevice.swift in Sources */,
+				5A0FA8622BF47305A4D0AD2F /* SendPanelView.swift in Sources */,
+				E115ECF0BE9AB8BFEEF24CA8 /* ShellExecutor.swift in Sources */,
+				B6FF5F204BF24F6CE4460966 /* SimulatorBridge.swift in Sources */,
+				763A4F0ED4CB22BA94AAE762 /* SimulatorPickerView.swift in Sources */,
+				EF39B22731E45383FA6A1208 /* StatusBannerView.swift in Sources */,
+				AD899C83267D601C99521D89 /* TemplateManager.swift in Sources */,
+				C84167852346FFDFA7672914 /* TemplatePickerView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C04D8B72D09BD2F71D7800C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BDF0B6B7777029D49D688830 /* PayloadValidatorTests.swift in Sources */,
+				26942D6963083B92016E9890 /* SimulatorBridgeTests.swift in Sources */,
+				8126D8F347D4200A2D16ABAF /* TemplateManagerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8E099A638F22FF1F8C502D26 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B3EC76D31B7B03B6EBAE79AD /* PushForge */;
+			targetProxy = 9674FCA8093F14E9D74F5BBF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		26104B1F10D0A4BB5EF40D37 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pushforge.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PushForge.app/Contents/MacOS/PushForge";
+			};
+			name = Release;
+		};
+		28BE00F1DFD713ECC52C01FF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pushforge.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PushForge.app/Contents/MacOS/PushForge";
+			};
+			name = Debug;
+		};
+		604C36F329531DCC4816EC91 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 5;
+			};
+			name = Debug;
+		};
+		68845707E55EA7BB0276A639 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 5;
+			};
+			name = Release;
+		};
+		84CAF9337D0C9681805E24C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = PushForge/PushForge.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PushForge/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pushforge.app;
+				PRODUCT_NAME = PushForge;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		9E07EF3A9A8B6D6322FC6602 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = PushForge/PushForge.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PushForge/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.pushforge.app;
+				PRODUCT_NAME = PushForge;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D03FAA25A95EE5308FA4421 /* Build configuration list for PBXNativeTarget "PushForge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9E07EF3A9A8B6D6322FC6602 /* Debug */,
+				84CAF9337D0C9681805E24C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		566FC315AD8A61D537A17507 /* Build configuration list for PBXProject "PushForge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				604C36F329531DCC4816EC91 /* Debug */,
+				68845707E55EA7BB0276A639 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		63312E1B6A1B693FD63FDB9F /* Build configuration list for PBXNativeTarget "PushForgeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28BE00F1DFD713ECC52C01FF /* Debug */,
+				26104B1F10D0A4BB5EF40D37 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E5CDC81541F812CD20211BFF /* Project object */;
+}

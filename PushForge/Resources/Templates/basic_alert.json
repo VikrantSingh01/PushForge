@@ -1,0 +1,9 @@
+{
+  "aps": {
+    "alert": {
+      "title": "Hello from PushForge",
+      "subtitle": "Test Notification",
+      "body": "This is a test push notification sent from PushForge."
+    }
+  }
+}
