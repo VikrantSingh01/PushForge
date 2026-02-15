@@ -1,0 +1,20 @@
+{
+  "id": "android_image",
+  "name": "Android Image",
+  "description": "Notification with large image attachment",
+  "category": "android",
+  "payload": {
+    "notification": {
+      "title": "Photo Shared",
+      "body": "Alex shared a photo with you.",
+      "image": "https://example.com/photo.jpg",
+      "channel_id": "media",
+      "sound": "default"
+    },
+    "data": {
+      "media_url": "https://example.com/photo.jpg",
+      "media_type": "image",
+      "sender": "alex"
+    }
+  }
+}

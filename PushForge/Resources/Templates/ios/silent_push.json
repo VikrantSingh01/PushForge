@@ -1,0 +1,12 @@
+{
+  "id": "silent_push",
+  "name": "Silent Push",
+  "description": "A silent push notification that triggers a background fetch.",
+  "category": "silent",
+  "payload": {
+    "aps": {
+      "content-available": 1
+    },
+    "custom-key": "background-refresh"
+  }
+}

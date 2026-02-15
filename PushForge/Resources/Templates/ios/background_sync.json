@@ -1,0 +1,22 @@
+{
+  "id": "background_sync",
+  "name": "Background Sync",
+  "description": "A silent notification that triggers an incremental data sync in the background.",
+  "category": "silent",
+  "payload": {
+    "aps": {
+      "content-available": 1
+    },
+    "sync": {
+      "type": "incremental",
+      "collections": [
+        "messages",
+        "contacts",
+        "settings"
+      ],
+      "since": "2026-02-14T00:00:00Z",
+      "priority": "high"
+    },
+    "server-timestamp": "2026-02-14T12:00:00Z"
+  }
+}

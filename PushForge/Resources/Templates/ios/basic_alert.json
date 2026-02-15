@@ -1,0 +1,15 @@
+{
+  "id": "basic_alert",
+  "name": "Basic Alert",
+  "description": "A simple alert notification with title, subtitle, and body.",
+  "category": "alert",
+  "payload": {
+    "aps": {
+      "alert": {
+        "title": "Hello from PushForge",
+        "subtitle": "Test Notification",
+        "body": "This is a test push notification sent from PushForge."
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "grouped_thread",
+  "name": "Grouped Thread",
+  "description": "A threaded notification for grouped conversation display.",
+  "category": "advanced",
+  "payload": {
+    "aps": {
+      "alert": {
+        "title": "Team Chat",
+        "subtitle": "Jordan",
+        "body": "Hey, the build is passing now! Ready for review."
+      },
+      "thread-id": "chat-team-engineering",
+      "sound": "default"
+    },
+    "chat-id": "team-engineering",
+    "sender": "jordan",
+    "message-id": "msg-99201"
+  }
+}

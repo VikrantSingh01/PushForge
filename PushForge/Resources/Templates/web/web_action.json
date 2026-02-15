@@ -1,0 +1,28 @@
+{
+  "id": "web_action",
+  "name": "Web Action",
+  "description": "A web push notification with action buttons, image, and persistent display.",
+  "category": "web",
+  "payload": {
+    "title": "Flash Sale Ending Soon",
+    "body": "50% off all items — only 2 hours left!",
+    "icon": "/icons/sale-icon.png",
+    "image": "/images/sale-banner.jpg",
+    "tag": "flash-sale",
+    "requireInteraction": true,
+    "actions": [
+      {
+        "action": "shop",
+        "title": "Shop Now"
+      },
+      {
+        "action": "dismiss",
+        "title": "Maybe Later"
+      }
+    ],
+    "data": {
+      "url": "/sale",
+      "campaign": "flash-sale-feb"
+    }
+  }
+}

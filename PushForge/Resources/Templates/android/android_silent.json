@@ -1,0 +1,13 @@
+{
+  "id": "android_silent",
+  "name": "Android Silent",
+  "description": "Data-only message for background processing",
+  "category": "android",
+  "payload": {
+    "data": {
+      "type": "background-refresh",
+      "content-available": "1",
+      "priority": "high"
+    }
+  }
+}

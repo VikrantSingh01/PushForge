@@ -1,0 +1,18 @@
+{
+  "id": "android_actionable",
+  "name": "Android Actionable",
+  "description": "Notification with click action and buttons",
+  "category": "android",
+  "payload": {
+    "notification": {
+      "title": "Friend Request",
+      "body": "Taylor wants to connect with you.",
+      "click_action": "OPEN_FRIEND_REQUEST",
+      "channel_id": "social"
+    },
+    "data": {
+      "sender_id": "user-12345",
+      "action_type": "friend_request"
+    }
+  }
+}

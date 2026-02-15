@@ -1,0 +1,18 @@
+{
+  "id": "rich_media",
+  "name": "Rich Media",
+  "description": "A notification with rich media attachment support.",
+  "category": "rich",
+  "payload": {
+    "aps": {
+      "alert": {
+        "title": "Photo Shared",
+        "body": "Alex shared a photo with you."
+      },
+      "mutable-content": 1,
+      "sound": "default"
+    },
+    "media-url": "https://example.com/photo.jpg",
+    "media-type": "image"
+  }
+}

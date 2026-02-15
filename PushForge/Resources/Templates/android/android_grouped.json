@@ -1,0 +1,20 @@
+{
+  "id": "android_grouped",
+  "name": "Android Grouped",
+  "description": "Grouped notifications in the same channel",
+  "category": "android",
+  "payload": {
+    "notification": {
+      "title": "Team Chat",
+      "body": "Hey, the build is passing now! Ready for review.",
+      "tag": "chat-team-engineering",
+      "channel_id": "team-chat",
+      "sound": "default"
+    },
+    "data": {
+      "chat_id": "team-engineering",
+      "sender": "jordan",
+      "message_id": "msg-99201"
+    }
+  }
+}

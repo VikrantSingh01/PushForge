@@ -1,0 +1,22 @@
+{
+  "id": "live_activity",
+  "name": "Live Activity",
+  "description": "A Live Activity update payload for real-time content state changes.",
+  "category": "advanced",
+  "payload": {
+    "aps": {
+      "timestamp": 1708000000,
+      "event": "update",
+      "content-state": {
+        "home-score": 3,
+        "away-score": 2,
+        "game-time": "4th Quarter",
+        "time-remaining": "2:45"
+      },
+      "alert": {
+        "title": "Score Update",
+        "body": "Home 3 - 2 Away | 4th Quarter 2:45"
+      }
+    }
+  }
+}

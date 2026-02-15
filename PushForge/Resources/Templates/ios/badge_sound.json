@@ -1,0 +1,16 @@
+{
+  "id": "badge_sound",
+  "name": "Badge & Sound",
+  "description": "A notification with badge count and default sound.",
+  "category": "badge",
+  "payload": {
+    "aps": {
+      "alert": {
+        "title": "New Message",
+        "body": "You have a new message waiting."
+      },
+      "badge": 3,
+      "sound": "default"
+    }
+  }
+}

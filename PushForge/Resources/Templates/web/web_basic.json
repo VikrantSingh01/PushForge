@@ -1,0 +1,13 @@
+{
+  "id": "web_basic",
+  "name": "Web Basic",
+  "description": "A basic web push notification with icon, badge, and tag.",
+  "category": "web",
+  "payload": {
+    "title": "New Update Available",
+    "body": "Version 2.0 is ready — click to learn more.",
+    "icon": "/icons/app-icon-192.png",
+    "badge": "/icons/badge-72.png",
+    "tag": "update-v2"
+  }
+}
