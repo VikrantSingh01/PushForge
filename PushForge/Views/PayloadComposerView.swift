@@ -4,7 +4,8 @@ struct PayloadComposerView: View {
     @Binding var payloadText: String
     @Binding var bundleIdentifier: String
     @Binding var editorFontSize: Double
-    var targetPlatform: TargetPlatform = .iOSSimulator
+    @Binding var targetPlatform: TargetPlatform
+    @Binding var templatePlatformTab: TemplatePlatformTab
     @State private var viewModel = PayloadComposerViewModel()
 
     var body: some View {
@@ -17,14 +18,18 @@ struct PayloadComposerView: View {
                 TemplatePickerView(
                     templates: viewModel.templates,
                     selected: viewModel.selectedTemplate,
+                    selectedPlatform: $templatePlatformTab,
                     onSelect: { template in
                         viewModel.selectTemplate(template)
                         payloadText = viewModel.payloadText
                     },
                     onPlatformChange: {
-                        // Clear payload and selected template when switching platform/category
+                        // Sync send panel target with template platform tab
+                        targetPlatform = templatePlatformTab.targetPlatform
+                        // Clear payload and selected template
                         viewModel.selectedTemplate = nil
                         payloadText = ""
+                        bundleIdentifier = ""
                     }
                 )
 
@@ -82,11 +87,13 @@ struct PayloadComposerView: View {
 
             // Bottom: Validation bar (always visible)
             VStack(alignment: .leading, spacing: 4) {
-                let validation = PayloadValidator.validate(payloadText)
+                let validation = PayloadValidator.validate(payloadText, targetPlatform: targetPlatform)
 
                 HStack {
-                    Image(systemName: validation.isValid ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundStyle(validation.isValid ? .green : .red)
+                    Image(systemName: validation.isWarning
+                          ? "exclamationmark.triangle.fill"
+                          : (validation.isValid ? "checkmark.circle.fill" : "xmark.circle.fill"))
+                        .foregroundStyle(validation.isWarning ? .orange : (validation.isValid ? .green : .red))
                     Text(validation.message)
                         .font(.caption)
                         .foregroundColor(validation.isValid ? .secondary : .red)

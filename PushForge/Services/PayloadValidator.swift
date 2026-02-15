@@ -3,19 +3,24 @@ import Foundation
 enum PayloadValidator {
     enum ValidationResult {
         case valid
+        case validWithWarning(String, fix: String? = nil)
         case invalidJSON(String, fix: String? = nil)
         case missingApsKey
         case payloadTooLarge(Int)
 
         var isValid: Bool {
-            if case .valid = self { return true }
-            return false
+            switch self {
+            case .valid, .validWithWarning: return true
+            default: return false
+            }
         }
 
         var message: String {
             switch self {
             case .valid:
                 "Valid payload"
+            case .validWithWarning(let warning, _):
+                warning
             case .invalidJSON(let error, _):
                 error
             case .missingApsKey:
@@ -28,14 +33,20 @@ enum PayloadValidator {
         var fixSuggestion: String? {
             switch self {
             case .invalidJSON(_, let fix): fix
+            case .validWithWarning(_, let fix): fix
             default: nil
             }
+        }
+
+        var isWarning: Bool {
+            if case .validWithWarning = self { return true }
+            return false
         }
     }
 
     static let maxPayloadSize = 4096
 
-    static func validate(_ jsonString: String) -> ValidationResult {
+    static func validate(_ jsonString: String, targetPlatform: TargetPlatform = .iOSSimulator) -> ValidationResult {
         guard let data = jsonString.data(using: .utf8) else {
             return .invalidJSON("String is not valid UTF-8")
         }
@@ -55,12 +66,46 @@ enum PayloadValidator {
                 return .invalidJSON("Top level must be a JSON object",
                                     fix: "Wrap your payload in { } curly braces")
             }
-            guard dict["aps"] != nil else {
-                return .missingApsKey
+
+            // Platform-aware validation
+            switch targetPlatform {
+            case .iOSSimulator:
+                if dict["aps"] == nil {
+                    // Check if it looks like an Android or Web payload
+                    if dict["notification"] != nil || dict["data"] != nil {
+                        return .validWithWarning(
+                            "This looks like an Android/FCM payload, but target is iOS Simulator",
+                            fix: "Switch to Android Emulator, or use an iOS template with an \"aps\" key."
+                        )
+                    }
+                    if dict["title"] != nil {
+                        return .validWithWarning(
+                            "This looks like a Web Push payload, but target is iOS Simulator",
+                            fix: "Switch to Desktop/Web, or use an iOS template with an \"aps\" key."
+                        )
+                    }
+                    return .missingApsKey
+                }
+
+            case .androidEmulator:
+                if dict["aps"] != nil {
+                    return .validWithWarning(
+                        "This looks like an iOS/APNs payload, but target is Android Emulator",
+                        fix: "Switch to iOS Simulator, or use an Android template with \"notification\" or \"data\" keys."
+                    )
+                }
+
+            case .desktop:
+                if dict["aps"] != nil {
+                    return .validWithWarning(
+                        "This looks like an iOS/APNs payload, but target is Desktop/Web",
+                        fix: "Switch to iOS Simulator, or use a Web template with top-level \"title\" and \"body\"."
+                    )
+                }
             }
+
             return .valid
         } catch {
-            // Try to extract useful info from the NSError
             let nsError = error as NSError
             let description = extractParseErrorDetail(from: nsError, json: jsonString)
             return .invalidJSON(description.message, fix: description.fix)

@@ -5,6 +5,7 @@ struct SendPanelView: View {
     @Binding var payloadText: String
     @Binding var bundleIdentifier: String
     @Binding var targetPlatform: TargetPlatform
+    @Binding var templatePlatformTab: TemplatePlatformTab
     @State private var viewModel = DeviceManagerViewModel()
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \SavedDevice.lastUsedAt, order: .reverse) private var savedDevices: [SavedDevice]
@@ -26,7 +27,10 @@ struct SendPanelView: View {
                     .pickerStyle(.segmented)
                     .onChange(of: viewModel.targetPlatform) {
                         targetPlatform = viewModel.targetPlatform
+                        // Sync template tab with send panel platform
+                        templatePlatformTab = TemplatePlatformTab(from: viewModel.targetPlatform)
                         bundleIdentifier = ""
+                        payloadText = ""
                         Task { await viewModel.refreshDevices() }
                     }
 
@@ -139,6 +143,13 @@ struct SendPanelView: View {
             }
             .task {
                 await viewModel.refreshDevices()
+            }
+            .onChange(of: targetPlatform) {
+                // Sync viewModel when targetPlatform changes from template picker
+                if viewModel.targetPlatform != targetPlatform {
+                    viewModel.targetPlatform = targetPlatform
+                    Task { await viewModel.refreshDevices() }
+                }
             }
 
             // Pinned bottom: Status + Send button

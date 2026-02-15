@@ -4,25 +4,34 @@ enum TemplatePlatformTab: String, CaseIterable {
     case ios = "iOS"
     case android = "Android"
     case web = "Web"
+
+    /// Map from send panel's TargetPlatform to template tab.
+    init(from target: TargetPlatform) {
+        switch target {
+        case .iOSSimulator: self = .ios
+        case .androidEmulator: self = .android
+        case .desktop: self = .web
+        }
+    }
+
+    /// Map from template tab to send panel's TargetPlatform.
+    var targetPlatform: TargetPlatform {
+        switch self {
+        case .ios: .iOSSimulator
+        case .android: .androidEmulator
+        case .web: .desktop
+        }
+    }
 }
 
 struct TemplatePickerView: View {
     let templates: [PayloadTemplate]
     let selected: PayloadTemplate?
+    @Binding var selectedPlatform: TemplatePlatformTab
     let onSelect: (PayloadTemplate) -> Void
     let onPlatformChange: (() -> Void)?
 
-    @State private var selectedPlatform: TemplatePlatformTab = .ios
     @State private var selectedSubCategory: PayloadTemplate.Category? = .alert
-
-    init(templates: [PayloadTemplate], selected: PayloadTemplate?,
-         onSelect: @escaping (PayloadTemplate) -> Void,
-         onPlatformChange: (() -> Void)? = nil) {
-        self.templates = templates
-        self.selected = selected
-        self.onSelect = onSelect
-        self.onPlatformChange = onPlatformChange
-    }
 
     private static let iosCategories: [PayloadTemplate.Category] = [.alert, .badge, .silent, .rich, .advanced]
     private static let categoryLabels: [PayloadTemplate.Category: String] = [

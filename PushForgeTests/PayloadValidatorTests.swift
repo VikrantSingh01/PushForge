@@ -30,8 +30,23 @@ struct PayloadValidatorTests {
         }
     }
 
-    @Test("Missing aps key fails validation")
+    @Test("Missing aps key fails validation for iOS target")
     func missingApsKey() {
+        let json = """
+        {
+          "custom": "no aps key here"
+        }
+        """
+        let result = PayloadValidator.validate(json, targetPlatform: .iOSSimulator)
+        if case .missingApsKey = result {
+            // Expected
+        } else {
+            Issue.record("Expected missingApsKey, got \(result)")
+        }
+    }
+
+    @Test("Android payload warns when target is iOS")
+    func androidPayloadOnIOS() {
         let json = """
         {
           "notification": {
@@ -39,11 +54,28 @@ struct PayloadValidatorTests {
           }
         }
         """
-        let result = PayloadValidator.validate(json)
-        if case .missingApsKey = result {
-            // Expected
+        let result = PayloadValidator.validate(json, targetPlatform: .iOSSimulator)
+        if case .validWithWarning = result {
+            // Expected — warns about platform mismatch
         } else {
-            Issue.record("Expected missingApsKey, got \(result)")
+            Issue.record("Expected validWithWarning, got \(result)")
+        }
+    }
+
+    @Test("iOS payload warns when target is Android")
+    func iosPayloadOnAndroid() {
+        let json = """
+        {
+          "aps": {
+            "alert": { "title": "Test", "body": "Hello" }
+          }
+        }
+        """
+        let result = PayloadValidator.validate(json, targetPlatform: .androidEmulator)
+        if case .validWithWarning = result {
+            // Expected — warns about platform mismatch
+        } else {
+            Issue.record("Expected validWithWarning, got \(result)")
         }
     }
 

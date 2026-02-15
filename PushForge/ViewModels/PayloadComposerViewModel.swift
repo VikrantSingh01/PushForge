@@ -12,6 +12,7 @@ class PayloadComposerViewModel {
     var validationIcon: String {
         switch validationResult {
         case .valid: "checkmark.circle.fill"
+        case .validWithWarning: "exclamationmark.triangle.fill"
         case .invalidJSON: "xmark.circle.fill"
         case .missingApsKey: "exclamationmark.triangle.fill"
         case .payloadTooLarge: "exclamationmark.triangle.fill"

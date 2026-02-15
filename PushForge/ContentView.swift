@@ -5,6 +5,7 @@ struct ContentView: View {
     @State private var bundleIdentifier: String = ""
     @State private var showHistory = false
     @State private var targetPlatform: TargetPlatform = .iOSSimulator
+    @State private var templatePlatformTab: TemplatePlatformTab = .ios
     @AppStorage("editorFontSize") private var editorFontSize: Double = 13
 
     var body: some View {
@@ -13,14 +14,16 @@ struct ContentView: View {
                 payloadText: $payloadText,
                 bundleIdentifier: $bundleIdentifier,
                 editorFontSize: $editorFontSize,
-                targetPlatform: targetPlatform
+                targetPlatform: $targetPlatform,
+                templatePlatformTab: $templatePlatformTab
             )
             .frame(minWidth: 400, idealWidth: 500)
 
             SendPanelView(
                 payloadText: $payloadText,
                 bundleIdentifier: $bundleIdentifier,
-                targetPlatform: $targetPlatform
+                targetPlatform: $targetPlatform,
+                templatePlatformTab: $templatePlatformTab
             )
             .frame(minWidth: 300, idealWidth: 400)
         }
