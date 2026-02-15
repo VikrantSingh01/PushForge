@@ -1,44 +1,53 @@
 import Foundation
+import UserNotifications
 
 enum DesktopNotificationError: LocalizedError {
     case sendFailed(String)
+    case permissionDenied
 
     var errorDescription: String? {
         switch self {
         case .sendFailed(let msg): "Failed to send desktop notification: \(msg)"
+        case .permissionDenied: "Notification permission denied. Enable in System Settings > Notifications > PushForge."
         }
     }
 }
 
 actor DesktopNotificationBridge {
-    private let shell = ShellExecutor()
+    private var permissionGranted = false
 
-    /// Sends a macOS desktop notification via osascript.
-    /// This mimics how web push notifications appear in macOS Notification Center.
+    /// Sends a macOS desktop notification via UNUserNotificationCenter.
+    /// The notification appears with PushForge's app icon.
     func sendNotification(
         title: String,
         subtitle: String?,
         body: String,
         soundName: String? = "default"
     ) async throws {
-        var script = "display notification \"\(escapeAppleScript(body))\""
-        script += " with title \"\(escapeAppleScript(title))\""
+        // Request permission if not yet granted
+        if !permissionGranted {
+            let center = UNUserNotificationCenter.current()
+            let granted = try await center.requestAuthorization(options: [.alert, .sound, .badge])
+            permissionGranted = granted
+            if !granted {
+                throw DesktopNotificationError.permissionDenied
+            }
+        }
+
+        let content = UNMutableNotificationContent()
+        content.title = title
         if let subtitle = subtitle, !subtitle.isEmpty {
-            script += " subtitle \"\(escapeAppleScript(subtitle))\""
+            content.subtitle = subtitle
         }
-        if let sound = soundName, !sound.isEmpty {
-            script += " sound name \"\(escapeAppleScript(sound))\""
+        content.body = body
+        if soundName != nil {
+            content.sound = .default
         }
 
-        let result = try await shell.run(
-            executablePath: "/usr/bin/osascript",
-            arguments: ["-e", script]
-        )
+        let identifier = "pushforge-\(UUID().uuidString)"
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: nil)
 
-        guard result.succeeded else {
-            let errorMsg = result.stderr.trimmingCharacters(in: .whitespacesAndNewlines)
-            throw DesktopNotificationError.sendFailed(errorMsg.isEmpty ? "Unknown error" : errorMsg)
-        }
+        try await UNUserNotificationCenter.current().add(request)
     }
 
     /// Extracts title, subtitle, and body from JSON payload for desktop display.
@@ -77,8 +86,4 @@ actor DesktopNotificationBridge {
         return nil
     }
 
-    private func escapeAppleScript(_ text: String) -> String {
-        text.replacingOccurrences(of: "\\", with: "\\\\")
-            .replacingOccurrences(of: "\"", with: "\\\"")
-    }
 }

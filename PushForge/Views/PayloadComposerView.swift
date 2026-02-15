@@ -61,6 +61,18 @@ struct PayloadComposerView: View {
                 )
                 .padding(.horizontal)
                 .padding(.top, 8)
+                .onAppear {
+                    // Disable smart quotes system-wide for this app
+                    UserDefaults.standard.set(false, forKey: "NSAutomaticQuoteSubstitutionEnabled")
+                    UserDefaults.standard.set(false, forKey: "NSAutomaticDashSubstitutionEnabled")
+                }
+                .onChange(of: payloadText) {
+                    // Auto-replace smart quotes as user types
+                    let fixed = PayloadValidator.autoFixCommonIssues(payloadText)
+                    if fixed != payloadText {
+                        payloadText = fixed
+                    }
+                }
 
             // Bottom: Validation bar (always visible)
             VStack(alignment: .leading, spacing: 4) {
