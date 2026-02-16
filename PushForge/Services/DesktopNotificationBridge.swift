@@ -13,8 +13,8 @@ enum DesktopNotificationError: LocalizedError {
 actor DesktopNotificationBridge {
     
 
-    /// Sends a macOS desktop notification via osascript, using the target app's icon.
-    /// `tell application id "<bundleID>"` makes the notification appear with that app's icon.
+    /// Sends a macOS desktop notification via osascript.
+    /// Shows the target app's icon if the app is running; avoids launching apps that aren't.
     func sendNotification(
         title: String,
         subtitle: String?,
@@ -31,10 +31,15 @@ actor DesktopNotificationBridge {
             notification += " sound name \"\(esc(sound))\""
         }
 
-        // Use the target app's bundle ID so the notification shows that app's icon.
-        // Falls back to PushForge's own identifier if no bundle ID provided.
-        let appID = bundleID.isEmpty ? "com.pushforge.app" : bundleID
-        let script = "tell application id \"\(esc(appID))\" to \(notification)"
+        // Only use `tell application id` if the target app is already running.
+        // This shows the app's icon without launching it.
+        // If the app isn't running, fall back to a plain notification (avoids launching random apps).
+        let script: String
+        if !bundleID.isEmpty, await isAppRunning(bundleID: bundleID) {
+            script = "tell application id \"\(esc(bundleID))\" to \(notification)"
+        } else {
+            script = notification
+        }
 
         let result = try await ShellExecutor.run(
             executablePath: "/usr/bin/osascript",
@@ -45,6 +50,15 @@ actor DesktopNotificationBridge {
             let err = result.stderr.trimmingCharacters(in: .whitespacesAndNewlines)
             throw DesktopNotificationError.sendFailed(err.isEmpty ? "Unknown error (exit \(result.exitCode))" : err)
         }
+    }
+
+    /// Check if an app is currently running (without launching it).
+    private func isAppRunning(bundleID: String) async -> Bool {
+        guard let result = try? await ShellExecutor.run(
+            executablePath: "/usr/bin/osascript",
+            arguments: ["-e", "tell application \"System Events\" to (bundle identifier of processes) contains \"\(esc(bundleID))\""]
+        ) else { return false }
+        return result.stdout.trimmingCharacters(in: .whitespacesAndNewlines) == "true"
     }
 
     private func esc(_ text: String) -> String {
