@@ -169,10 +169,11 @@ struct SendPanelView: View {
                 .padding()
             }
             .task {
+                // Ensure viewModel is synced on initial load
+                viewModel.targetPlatform = targetPlatform
                 await viewModel.refreshDevices()
             }
             .onChange(of: targetPlatform) {
-                // Sync viewModel immediately when targetPlatform changes from template picker
                 viewModel.targetPlatform = targetPlatform
                 viewModel.lastSendStatus = .idle
                 Task { await viewModel.refreshDevices() }
