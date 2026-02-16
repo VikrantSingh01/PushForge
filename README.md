@@ -5,7 +5,7 @@
 <h1 align="center">PushForge</h1>
 
 <p align="center">
-  <strong>The missing push notification tool for mobile &amp; web developers.</strong><br/>
+  <strong>The push notification playground for mobile, web &amp; AI agent developers.</strong><br/>
   Craft, send, and test push payloads on iOS Simulators, Android Emulators &amp; macOS Desktop — zero config, zero cost.
 </p>
 
@@ -14,8 +14,8 @@
   <a href="https://www.apple.com/macos/"><img src="https://img.shields.io/badge/macOS-14%2B-black?logo=apple&logoColor=white" alt="macOS 14+"/></a>
   <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-5.9%2B-orange?logo=swift&logoColor=white" alt="Swift 5.9+"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"/></a>
-  <img src="https://img.shields.io/badge/tests-12%20passing-brightgreen" alt="Tests"/>
-  <img src="https://img.shields.io/badge/templates-16-blueviolet" alt="16 Templates"/>
+  <img src="https://img.shields.io/badge/tests-20%20passing-brightgreen" alt="Tests"/>
+  <img src="https://img.shields.io/badge/templates-37-blueviolet" alt="37 Templates"/>
 </p>
 
 ---
@@ -40,16 +40,16 @@ Every mobile developer has been here: you need to test a push notification, and 
 
 **This workflow breaks your flow dozens of times a day.**
 
-PushForge eliminates every one of these steps. Open the app, pick a template, hit Send. The notification appears instantly. No terminal. No UUIDs. No temp files. No broken JSON.
+PushForge eliminates every step. Open the app, pick a template, hit Send. The notification appears instantly. No terminal. No UUIDs. No temp files. No broken JSON.
 
 ### Who is this for?
 
 - **iOS developers** testing notification handling, deep links, or UI updates triggered by push
 - **Android developers** testing notification behavior on emulators
+- **AI/Agent developers** testing task-complete, streaming-done, and approval notifications
 - **Web/Desktop developers** previewing how push notifications look in macOS Notification Center
 - **QA engineers** verifying notification content, badge counts, and sound behavior
-- **Backend developers** validating push payload structure before deploying server changes
-- **Teams** that need a shared, visual way to test notification payloads
+- **Backend developers** validating push payload structure before deploying
 
 ### How it compares
 
@@ -61,7 +61,7 @@ PushForge eliminates every one of these steps. Open the app, pick a template, hi
 | Pusher | macOS | Yes | No | No | No ($15) | Yes |
 | curl + terminal | Any | Yes | No | No | Yes | N/A |
 
-PushForge is the only **free, multi-platform push notification tool** with native macOS UI supporting iOS, Android, and Desktop/Web.
+PushForge is the only **free, multi-platform push notification tool** with a native macOS UI.
 
 ---
 
@@ -75,23 +75,28 @@ PushForge is the only **free, multi-platform push notification tool** with nativ
 | **Android Emulator** | `adb shell cmd notification post` | Android Studio |
 | **Desktop/Web** | `osascript` with target app icon | None |
 
-Switch between platforms with a single segmented picker. PushForge handles all the plumbing.
+Switch between platforms with a segmented picker. Template tabs, bundle ID dropdown, and validation all sync automatically.
 
 ### Core Features
 
-- **Visual Payload Composer** — Edit JSON with live validation, byte counter, format/minify buttons
+- **37 Built-in Templates** — iOS (APNs), Android (FCM), Web Push, and AI Agent patterns
+- **Platform-Synced UI** — iOS/Android/Web template tabs sync with send panel target; switching one switches both
+- **Visual Payload Composer** — JSON editor with live validation, byte counter, format/minify, Cmd+/Cmd- zoom
 - **Smart JSON Diagnostics** — Detects smart quotes, trailing commas, mismatched braces with exact line:col and fix suggestions
-- **Auto-fix** — One-click repair for smart quotes and copy-paste artifacts
-- **16 Built-in Templates** — iOS (APNs), Android (FCM), and Web Push formats
+- **Auto-fix** — One-click repair for smart quotes and copy-paste artifacts from docs/Slack/email
+- **Platform Mismatch Warnings** — Orange warning if iOS payload targets Android or vice versa (all 6 combos)
+- **Contextual Send Button** — Shows "Send to iPhone 16e" / "Send to Pixel 7" / "Send to Desktop"
 - **One-Click Simulator Boot** — Boot any iOS Simulator directly from PushForge
+- **Bundle ID Picker** — Dropdown with 45+ pre-installed app IDs across all platforms (including Microsoft Teams)
+- **Target App Icon** — Desktop notifications show the selected app's icon (only if the app is running — never launches apps)
 - **Notification History** — Every sent notification logged with status, timestamp, full payload (SwiftData)
 - **Save Devices** — Label and save simulator + bundle ID combos for quick reuse
-- **Bundle ID Picker** — Dropdown with 40+ pre-installed app IDs across all platforms (including Microsoft Teams)
-- **Target App Icon** — Desktop notifications show the selected app's icon (Safari, Slack, Teams, etc.)
-- **Cmd+/Cmd- Zoom** — Zoom In, Zoom Out, Reset (Cmd+0) for the JSON editor, persists across sessions
-- **Auto-Refresh** — Simulator/emulator list updates when you switch back to PushForge
-- **Keyboard Shortcuts** — `Cmd+Enter` to send
-- **Lightweight** — Native SwiftUI, no Electron, no runtime dependencies
+- **External Template Files** — Templates loaded from JSON files; drop new ones in `~/Library/Application Support/PushForge/Templates/`
+- **Async Performance** — ShellExecutor runs on background GCD threads, not the cooperative thread pool
+- **Keyboard Shortcuts** — Cmd+Enter to send, Cmd+0 to reset zoom
+- **Lightweight** — Native SwiftUI, no Electron, no external dependencies
+
+---
 
 ## Push Payload Formats — iOS vs Android vs Web
 
@@ -109,77 +114,73 @@ Push notification payloads are **fundamentally different** across platforms. Pus
 <tr><td><strong>Grouping</strong></td><td><code>thread-id</code></td><td><code>tag</code> + <code>channel_id</code></td><td><code>tag</code></td></tr>
 <tr><td><strong>Priority</strong></td><td><code>interruption-level</code></td><td><code>android.priority</code></td><td><code>requireInteraction</code></td></tr>
 <tr><td><strong>Silent/Data</strong></td><td><code>content-available: 1</code></td><td><code>data</code> (no <code>notification</code>)</td><td>N/A</td></tr>
-<tr><td><strong>Channel</strong></td><td>N/A</td><td><code>channel_id</code></td><td>N/A</td></tr>
+<tr><td><strong>Max payload</strong></td><td>4,096 bytes</td><td>4,096 bytes</td><td>~4,078 bytes</td></tr>
 </table>
 
-**Example — same notification across platforms:**
-
 <details>
-<summary><strong>iOS (APNs)</strong></summary>
+<summary><strong>Example — same notification across platforms</strong></summary>
 
+**iOS (APNs):**
 ```json
 {
   "aps": {
-    "alert": {
-      "title": "New Message",
-      "body": "You have a new message waiting."
-    },
-    "badge": 3,
-    "sound": "default"
+    "alert": { "title": "New Message", "body": "You have a new message waiting." },
+    "badge": 3, "sound": "default"
   }
 }
 ```
-</details>
 
-<details>
-<summary><strong>Android (FCM)</strong></summary>
-
+**Android (FCM):**
 ```json
 {
   "notification": {
-    "title": "New Message",
-    "body": "You have a new message waiting.",
-    "sound": "default",
-    "notification_count": 3,
-    "channel_id": "messages"
+    "title": "New Message", "body": "You have a new message waiting.",
+    "sound": "default", "notification_count": 3, "channel_id": "messages"
   }
 }
 ```
-</details>
 
-<details>
-<summary><strong>Web Push</strong></summary>
-
+**Web Push:**
 ```json
 {
-  "title": "New Message",
-  "body": "You have a new message waiting.",
-  "icon": "/icons/app-icon-192.png",
-  "badge": "/icons/badge-72.png",
-  "tag": "new-message"
+  "title": "New Message", "body": "You have a new message waiting.",
+  "icon": "/icons/app-icon-192.png", "tag": "new-message"
 }
 ```
 </details>
 
+---
+
 ## Templates
 
-PushForge ships with **24 ready-to-use templates** loaded from external JSON files:
+PushForge ships with **37 ready-to-use templates** organized by platform and sub-category:
 
-| Category | Count | Templates |
-|---|---|---|
-| **Basic** | 1 | Basic Alert |
-| **Badge** | 1 | Badge + Sound |
-| **Silent** | 2 | Silent Push, Background Sync |
-| **Rich** | 2 | Rich Media, Actionable |
-| **Advanced** | 5 | Long Payload, Grouped Thread, Critical Alert, Live Activity, Time Sensitive |
-| **Android** | 11 | Basic, Data, Rich, Badge+Sound, Silent, Actionable, Long Payload, Grouped, High Priority, Time Sensitive, Image |
-| **Web/Desktop** | 2 | Web Basic, Web Actions |
+### Standard Templates (24)
 
-**Android now has full parity with iOS** — every iOS template type has an Android equivalent.
+| Sub-Category | iOS | Android | Web |
+|---|---|---|---|
+| **Basic** | Basic Alert | Android Basic | Web Basic |
+| **Badge** | Badge + Sound | Android Badge + Sound | — |
+| **Silent** | Silent Push, Background Sync | Android Silent, Android Data | — |
+| **Rich** | Rich Media, Actionable | Android Rich, Image, Actionable | Web Actions |
+| **Advanced** | Long Payload, Grouped Thread, Critical Alert, Live Activity, Time Sensitive | Android Long Payload, Grouped, High Priority, Time Sensitive | — |
+
+### AI Agent Templates (13) — NEW
+
+Templates for modern agentic AI patterns used by ChatGPT, Claude, Copilot:
+
+| Pattern | iOS | Android | Web |
+|---|---|---|---|
+| **Task Complete** | `time-sensitive` + `thread-id` + deep link | notification + data + `click_action` | `requireInteraction` + action buttons |
+| **Streaming Done** | `content-available` + token/duration metadata | chat channel + model metadata | — |
+| **Needs Approval** | `category: AGENT_APPROVAL` | high priority + `APPROVE_ACTION` | Approve/Reject buttons |
+| **Agent Error** | `critical` sound + `interruption-level` | alarm sound + red color | — |
+| **Live Progress** | Live Activity `content-state` (75%, step 3/4) | — | — |
+| **Memory Sync** | Silent `content-available: 1` | Data-only for background | — |
 
 ### Custom Templates
 
-Drop a `.json` file into `~/Library/Application Support/PushForge/Templates/` and it appears in the app instantly:
+Drop a `.json` file into `~/Library/Application Support/PushForge/Templates/` and it appears in the app:
 
 ```json
 {
@@ -193,7 +194,9 @@ Drop a `.json` file into `~/Library/Application Support/PushForge/Templates/` an
 }
 ```
 
-User templates override bundled ones with the same ID. Organize by subdirectory (`ios/`, `android/`, `web/`) or put them loose in the root.
+User templates override bundled ones with the same ID. Organize by subdirectory (`ios/`, `android/`, `web/`).
+
+---
 
 ## Quick Start
 
@@ -206,15 +209,10 @@ User templates override bundled ones with the same ID. Organize by subdirectory 
 ### Build & Run
 
 ```bash
-# Clone the repo
 git clone https://github.com/VikrantSingh01/PushForge.git
 cd PushForge
-
-# Generate Xcode project (requires xcodegen)
 brew install xcodegen
 xcodegen generate
-
-# Open in Xcode and run
 open PushForge.xcodeproj
 ```
 
@@ -232,49 +230,61 @@ xcodebuild -project PushForge.xcodeproj -scheme PushForge -destination 'platform
 4. Pick a template and select an app from the bundle ID dropdown
 5. Press **Cmd+Enter** or click **Send Push**
 
-The notification appears instantly.
-
 ### Run Tests
 
 ```bash
 xcodebuild -project PushForge.xcodeproj -scheme PushForgeTests -destination 'platform=macOS' test
 ```
 
-12 tests covering payload validation, template integrity, simulator bridge, and shell execution.
+20 tests: payload validation (11), template integrity (7), shell execution (2).
+
+---
 
 ## Architecture
 
 ```
 PushForge/
-├── Models/          SwiftData models (SavedDevice, NotificationRecord, PayloadTemplate)
+├── Models/
+│   ├── PayloadTemplate.swift         Platform + Category + payload string
+│   ├── SavedDevice.swift             @Model — persisted device + bundle ID
+│   └── NotificationRecord.swift      @Model — sent notification history
 ├── Services/
-│   ├── SimulatorBridge.swift        iOS Simulator (xcrun simctl)
-│   ├── ADBBridge.swift              Android Emulator (adb)
-│   ├── DesktopNotificationBridge.swift  macOS Desktop (osascript)
-│   ├── PayloadValidator.swift       Smart JSON diagnostics + auto-fix
-│   └── TemplateManager.swift        16 built-in templates
-├── ViewModels/      @Observable state (PayloadComposerVM, DeviceManagerVM)
-├── Views/           SwiftUI views (PayloadComposer, SendPanel, History, etc.)
-└── Utilities/       ShellExecutor (Process wrapper), JSONFormatter
+│   ├── SimulatorBridge.swift         actor — xcrun simctl wrapper
+│   ├── ADBBridge.swift               actor — adb shell wrapper
+│   ├── DesktopNotificationBridge.swift  actor — osascript with app icon detection
+│   ├── PayloadValidator.swift        Smart JSON diagnostics + platform mismatch
+│   └── TemplateManager.swift         Loads 37 JSON templates from bundle + user dir
+├── ViewModels/
+│   ├── PayloadComposerViewModel.swift  Template selection + payload state
+│   └── DeviceManagerViewModel.swift    Device discovery + send flow + history
+├── Views/
+│   ├── ContentView.swift             HSplitView root layout
+│   ├── TemplatePickerView.swift      iOS/Android/Web tabs + sub-categories
+│   ├── PayloadComposerView.swift     JSON editor + validation bar
+│   ├── SendPanelView.swift           Device picker + contextual send button
+│   ├── BundleIDPickerView.swift      45+ apps dropdown, platform-aware
+│   ├── SimulatorPickerView.swift     Boot/select iOS simulators
+│   ├── AndroidEmulatorPickerView.swift  ADB emulator selector
+│   ├── StatusBannerView.swift        Animated success/failure/sending states
+│   ├── HistoryView.swift             SwiftData query + clear all
+│   └── HistoryRowView.swift          Expandable history entry
+├── Utilities/
+│   ├── ShellExecutor.swift           Async Process on GCD (not cooperative pool)
+│   └── JSONFormatter.swift           Pretty-print + minify
+└── Resources/
+    └── Templates/                    37 JSON files in ios/, android/, web/
 ```
 
 **Key design decisions:**
 
-- **`actor` services** — SimulatorBridge, ADBBridge, ShellExecutor are actors for thread-safe I/O
+- **Async ShellExecutor** — `DispatchQueue.global` + `withCheckedThrowingContinuation` (not actor serialization)
 - **SwiftData persistence** — Notification history and saved devices survive app restarts
-- **HSplitView layout** — Payload editor (left) + send controls (right), responsive at any window size
-- **Send button pinned** — Always visible regardless of scroll position
-- **Smart quote prevention** — Disabled at OS level + real-time auto-replacement
+- **External JSON templates** — Runtime extensible, user-overridable, organized by platform
+- **Bidirectional platform sync** — Template tabs and send panel target are always in sync
+- **Platform-aware validation** — Warns when payload format doesn't match target platform
+- **Smart quote prevention** — Disabled at OS level + real-time auto-replacement in editor
 
-## How It Works
-
-| Platform | Under the hood |
-|---|---|
-| **iOS Simulator** | `xcrun simctl push <UDID> <bundle-id> payload.json` |
-| **Android Emulator** | `adb -s <serial> shell cmd notification post -S bigtext -t "Title" "tag" "Body"` |
-| **Desktop/Web** | `osascript -e 'tell application id "<bundle-id>" to display notification "body" with title "title"'` |
-
-PushForge handles device discovery, UDID/serial lookup, JSON validation, temp file management, payload parsing, and error reporting — so you don't have to.
+---
 
 ## Roadmap
 
@@ -282,12 +292,18 @@ PushForge handles device discovery, UDID/serial lookup, JSON validation, temp fi
 - [x] **v0.2** — Android Emulator push via ADB
 - [x] **v0.3** — Desktop/Web notifications via macOS Notification Center
 - [x] **v0.4** — Smart JSON diagnostics with auto-fix
-- [x] **v0.5** — Multi-platform bundle ID picker with 40+ apps
-- [ ] **v0.6** — APNs push to real iOS devices (.p8 token-based auth)
-- [ ] **v0.7** — FCM push to real Android devices (service account)
-- [ ] **v0.8** — Rich notification preview (mock rendering)
-- [ ] **v0.9** — Import/export notification collections
-- [ ] **v1.0** — CLI companion (`pushforge send --template welcome.json`) + Homebrew cask
+- [x] **v0.5** — Multi-platform bundle ID picker (45+ apps)
+- [x] **v0.6** — External JSON templates with runtime extensibility
+- [x] **v0.7** — Platform sync, mismatch warnings, consistent sub-categories
+- [x] **v0.8** — Visual redesign (SF Symbol icons, color-coded tabs, contextual send button)
+- [x] **v0.9** — AI Agent templates (task complete, streaming done, approval, error, live progress)
+- [ ] **v1.0** — APNs push to real iOS devices (.p8 token-based auth)
+- [ ] **v1.1** — FCM push to real Android devices (service account)
+- [ ] **v1.2** — Live notification preview panel (mock rendering)
+- [ ] **v1.3** — CLI companion (`pushforge send --template agent_task_complete.json`)
+- [ ] **v1.4** — Homebrew cask distribution
+
+---
 
 ## Common Bundle IDs
 
@@ -360,12 +376,13 @@ PushForge handles device discovery, UDID/serial lookup, JSON validation, temp fi
 
 </details>
 
+---
+
 ## Contributing
 
-Contributions are welcome! PushForge is built with SwiftUI — if you're a mobile developer, you already know the stack.
+Contributions welcome! PushForge is built with SwiftUI — if you're a mobile developer, you already know the stack.
 
 ```bash
-# Fork the repo, then:
 git clone https://github.com/YOUR_USERNAME/PushForge.git
 cd PushForge
 xcodegen generate
@@ -373,10 +390,11 @@ open PushForge.xcodeproj
 ```
 
 **Good first issues:**
-- Improve JSON editor with syntax highlighting
-- Add dark mode-aware notification preview
+- JSON syntax highlighting (NSViewRepresentable + NSTextView)
+- Live notification preview panel (mock iOS/Android rendering)
 - Homebrew cask formula
 - APNs real device support (.p8 auth)
+- Import/export notification collections
 
 ## License
 
