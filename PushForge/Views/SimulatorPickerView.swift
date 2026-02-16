@@ -18,6 +18,22 @@ struct SimulatorPickerView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+            } else if bootedSimulators.isEmpty && availableSimulators.isEmpty {
+                VStack(spacing: 10) {
+                    Image(systemName: "iphone.slash")
+                        .font(.system(size: 36))
+                        .foregroundStyle(.quaternary)
+                    Text("No simulators found")
+                        .font(.callout.weight(.medium))
+                        .foregroundStyle(.secondary)
+                    Text("Install Xcode simulator runtimes")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 20)
             } else if !bootedSimulators.isEmpty {
                 Picker("Simulator", selection: $selected) {
                     ForEach(bootedSimulators) { sim in
@@ -29,9 +45,19 @@ struct SimulatorPickerView: View {
             }
 
             if bootedSimulators.isEmpty && !availableSimulators.isEmpty {
-                Text("No simulators running — pick one to boot:")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                VStack(spacing: 10) {
+                    Image(systemName: "iphone.slash")
+                        .font(.system(size: 36))
+                        .foregroundStyle(.quaternary)
+                    Text("No simulators running")
+                        .font(.callout.weight(.medium))
+                        .foregroundStyle(.secondary)
+                    Text("Pick one below to boot")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
             }
 
             if !availableSimulators.isEmpty {

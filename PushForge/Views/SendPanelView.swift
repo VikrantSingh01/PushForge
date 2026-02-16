@@ -13,6 +13,19 @@ struct SendPanelView: View {
     @State private var showSaveSheet = false
     @State private var saveLabel = ""
 
+    /// Contextual send button label showing the target device name.
+    private var sendButtonLabel: String {
+        switch targetPlatform {
+        case .iOSSimulator:
+            if let name = viewModel.selectedSimulator?.name { return "Send to \(name)" }
+        case .androidEmulator:
+            if let name = viewModel.selectedAndroidEmulator?.name { return "Send to \(name)" }
+        case .desktop:
+            return "Send to Desktop"
+        }
+        return "Send Push"
+    }
+
     /// Computed send-ability that uses the binding's targetPlatform (always in sync)
     /// instead of viewModel.targetPlatform (may lag behind).
     private var canSendNow: Bool {
@@ -180,13 +193,18 @@ struct SendPanelView: View {
                         )
                     }
                 } label: {
-                    Label("Send Push", systemImage: "paperplane.fill")
+                    Label(sendButtonLabel, systemImage: "paperplane.fill")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .disabled(!canSendNow)
                 .keyboardShortcut(.return, modifiers: .command)
+
+                Text("Cmd+Return")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .frame(maxWidth: .infinity)
             }
             .padding(.horizontal)
             .padding(.bottom)

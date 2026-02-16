@@ -5,7 +5,6 @@ enum TemplatePlatformTab: String, CaseIterable {
     case android = "Android"
     case web = "Web"
 
-    /// Map from send panel's TargetPlatform to template tab.
     init(from target: TargetPlatform) {
         switch target {
         case .iOSSimulator: self = .ios
@@ -14,12 +13,27 @@ enum TemplatePlatformTab: String, CaseIterable {
         }
     }
 
-    /// Map from template tab to send panel's TargetPlatform.
     var targetPlatform: TargetPlatform {
         switch self {
         case .ios: .iOSSimulator
         case .android: .androidEmulator
         case .web: .desktop
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .ios: "apple.logo"
+        case .android: "phone.fill"
+        case .web: "globe"
+        }
+    }
+
+    var tint: Color {
+        switch self {
+        case .ios: .blue
+        case .android: .green
+        case .web: .purple
         }
     }
 }
@@ -34,8 +48,13 @@ struct TemplatePickerView: View {
     @State private var selectedSubCategory: PayloadTemplate.Category? = .alert
 
     private static let iosCategories: [PayloadTemplate.Category] = [.alert, .badge, .silent, .rich, .advanced]
-    private static let categoryLabels: [PayloadTemplate.Category: String] = [
-        .alert: "Basic", .badge: "Badge", .silent: "Silent", .rich: "Rich", .advanced: "Advanced",
+
+    private static let categoryMeta: [PayloadTemplate.Category: (label: String, icon: String, tint: Color)] = [
+        .alert: ("Basic", "bell.fill", .blue),
+        .badge: ("Badge", "app.badge.fill", .orange),
+        .silent: ("Silent", "moon.fill", .indigo),
+        .rich: ("Rich", "photo.fill", .pink),
+        .advanced: ("Advanced", "gearshape.2.fill", .gray),
     ]
 
     private static let platformCategories: [TemplatePlatformTab: [PayloadTemplate.Category]] = [
@@ -57,51 +76,77 @@ struct TemplatePickerView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Platform tabs (iOS / Android / Web)
+        VStack(alignment: .leading, spacing: 10) {
+            // Platform tabs with icons
             HStack(spacing: 6) {
                 ForEach(TemplatePlatformTab.allCases, id: \.self) { platform in
                     Button {
-                        selectedPlatform = platform
-                        selectedSubCategory = platform == .ios ? .alert : nil
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            selectedPlatform = platform
+                            selectedSubCategory = platform == .ios ? .alert : nil
+                        }
                         onPlatformChange?()
                     } label: {
-                        Text(platform.rawValue)
-                            .font(.callout.weight(selectedPlatform == platform ? .bold : .regular))
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 6)
-                            .background(
-                                selectedPlatform == platform
-                                    ? Color.accentColor.opacity(0.2)
-                                    : Color.secondary.opacity(0.06)
-                            )
-                            .cornerRadius(8)
+                        HStack(spacing: 5) {
+                            Image(systemName: platform.icon)
+                                .font(.caption)
+                            Text(platform.rawValue)
+                                .font(.callout.weight(.medium))
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 7)
+                        .background(
+                            selectedPlatform == platform
+                                ? platform.tint.opacity(0.15)
+                                : Color.secondary.opacity(0.06)
+                        )
+                        .foregroundStyle(
+                            selectedPlatform == platform ? platform.tint : .secondary
+                        )
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(
+                                    selectedPlatform == platform ? platform.tint.opacity(0.3) : .clear,
+                                    lineWidth: 1
+                                )
+                        )
                     }
                     .buttonStyle(.plain)
                 }
             }
 
-            // iOS sub-category tabs
+            // iOS sub-category tabs with icons
             if selectedPlatform == .ios {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 4) {
+                    HStack(spacing: 6) {
                         ForEach(Self.iosCategories, id: \.self) { category in
                             let count = templates.filter { $0.category == category }.count
-                            if count > 0 {
+                            if let meta = Self.categoryMeta[category], count > 0 {
                                 Button {
-                                    selectedSubCategory = category
+                                    withAnimation(.easeInOut(duration: 0.15)) {
+                                        selectedSubCategory = category
+                                    }
                                     onPlatformChange?()
                                 } label: {
-                                    Text(Self.categoryLabels[category] ?? category.rawValue)
-                                        .font(.caption.weight(selectedSubCategory == category ? .semibold : .regular))
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 4)
-                                        .background(
-                                            selectedSubCategory == category
-                                                ? Color.accentColor.opacity(0.12)
-                                                : Color.clear
-                                        )
-                                        .cornerRadius(5)
+                                    HStack(spacing: 4) {
+                                        Image(systemName: meta.icon)
+                                            .font(.system(size: 9))
+                                        Text(meta.label)
+                                            .font(.caption.weight(
+                                                selectedSubCategory == category ? .semibold : .regular
+                                            ))
+                                    }
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(
+                                        selectedSubCategory == category
+                                            ? meta.tint.opacity(0.12) : Color.clear
+                                    )
+                                    .foregroundStyle(
+                                        selectedSubCategory == category ? meta.tint : .secondary
+                                    )
+                                    .cornerRadius(6)
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -110,14 +155,17 @@ struct TemplatePickerView: View {
                 }
             }
 
-            // Template chips
+            // Template chips — color-coded by platform
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(visibleTemplates) { template in
+                        let isSelected = selected?.id == template.id
+                        let chipTint = selectedPlatform.tint
+
                         Button {
                             onSelect(template)
                         } label: {
-                            VStack(alignment: .leading, spacing: 2) {
+                            VStack(alignment: .leading, spacing: 3) {
                                 Text(template.name)
                                     .font(.caption.weight(.semibold))
                                 Text(template.description)
@@ -126,21 +174,16 @@ struct TemplatePickerView: View {
                                     .lineLimit(1)
                             }
                             .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
+                            .padding(.vertical, 8)
                             .background(
-                                selected?.id == template.id
-                                    ? Color.accentColor.opacity(0.15)
-                                    : Color.secondary.opacity(0.08)
+                                isSelected
+                                    ? chipTint.opacity(0.12)
+                                    : Color.secondary.opacity(0.06)
                             )
                             .cornerRadius(8)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
-                                    .stroke(
-                                        selected?.id == template.id
-                                            ? Color.accentColor
-                                            : Color.clear,
-                                        lineWidth: 1.5
-                                    )
+                                    .stroke(isSelected ? chipTint : .clear, lineWidth: 1.5)
                             )
                         }
                         .buttonStyle(.plain)

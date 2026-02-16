@@ -11,9 +11,14 @@ struct PayloadComposerView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // Top: Templates + Bundle ID (always visible)
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Templates")
-                    .font(.headline)
+            VStack(alignment: .leading, spacing: 16) {
+                // Section header
+                HStack(spacing: 6) {
+                    Image(systemName: "doc.text.fill")
+                        .foregroundStyle(.secondary)
+                    Text("Templates")
+                        .font(.headline)
+                }
 
                 TemplatePickerView(
                     templates: viewModel.templates,
@@ -24,9 +29,7 @@ struct PayloadComposerView: View {
                         payloadText = viewModel.payloadText
                     },
                     onPlatformChange: {
-                        // Sync send panel target with template platform tab
                         targetPlatform = templatePlatformTab.targetPlatform
-                        // Clear payload and selected template
                         viewModel.selectedTemplate = nil
                         payloadText = ""
                         bundleIdentifier = ""
@@ -37,72 +40,99 @@ struct PayloadComposerView: View {
 
                 BundleIDPickerView(bundleIdentifier: $bundleIdentifier, targetPlatform: targetPlatform)
 
-                HStack {
+                // Payload header with format/minify
+                HStack(spacing: 6) {
+                    Image(systemName: "curlybraces")
+                        .foregroundStyle(.secondary)
                     Text("Payload JSON")
                         .fontWeight(.medium)
                     Spacer()
-                    Button("Format") {
+                    Button {
                         if let formatted = JSONFormatter.prettyPrint(payloadText) {
                             payloadText = formatted
                         }
+                    } label: {
+                        Text("Format")
+                            .font(.caption)
                     }
-                    .buttonStyle(.borderless)
-                    .font(.caption)
-                    Button("Minify") {
+                    .buttonStyle(.bordered)
+                    .controlSize(.mini)
+                    Button {
                         if let minified = JSONFormatter.minify(payloadText) {
                             payloadText = minified
                         }
+                    } label: {
+                        Text("Minify")
+                            .font(.caption)
                     }
-                    .buttonStyle(.borderless)
-                    .font(.caption)
+                    .buttonStyle(.bordered)
+                    .controlSize(.mini)
                 }
             }
             .padding([.top, .horizontal])
 
-            // Middle: TextEditor fills remaining space
+            // JSON editor with distinct styling
             TextEditor(text: $payloadText)
                 .font(.system(size: editorFontSize, design: .monospaced))
                 .scrollContentBackground(.hidden)
-                .padding(4)
-                .background(Color(nsColor: .textBackgroundColor))
-                .cornerRadius(6)
+                .padding(8)
+                .background(Color(nsColor: .textBackgroundColor).opacity(0.5))
+                .background(Color.accentColor.opacity(0.02))
+                .cornerRadius(10)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.secondary.opacity(0.15), lineWidth: 1)
                 )
                 .padding(.horizontal)
-                .padding(.top, 8)
+                .padding(.top, 10)
                 .onAppear {
-                    // Disable smart quotes system-wide for this app
                     UserDefaults.standard.set(false, forKey: "NSAutomaticQuoteSubstitutionEnabled")
                     UserDefaults.standard.set(false, forKey: "NSAutomaticDashSubstitutionEnabled")
                 }
                 .onChange(of: payloadText) {
-                    // Auto-replace smart quotes as user types
                     let fixed = PayloadValidator.autoFixCommonIssues(payloadText)
                     if fixed != payloadText {
                         payloadText = fixed
                     }
                 }
 
-            // Bottom: Validation bar (always visible)
+            // Validation bar — pill status + progress bar
             VStack(alignment: .leading, spacing: 4) {
                 let validation = PayloadValidator.validate(payloadText, targetPlatform: targetPlatform)
+                let byteCount = payloadText.data(using: .utf8)?.count ?? 0
+                let ratio = Double(byteCount) / 4096.0
+                let sizeColor: Color = ratio < 0.5 ? .green : (ratio < 0.8 ? .orange : .red)
+                let statusColor: Color = validation.isWarning ? .orange : (validation.isValid ? .green : .red)
+                let statusIcon = validation.isWarning
+                    ? "exclamationmark.triangle.fill"
+                    : (validation.isValid ? "checkmark.circle.fill" : "xmark.circle.fill")
 
                 HStack {
-                    Image(systemName: validation.isWarning
-                          ? "exclamationmark.triangle.fill"
-                          : (validation.isValid ? "checkmark.circle.fill" : "xmark.circle.fill"))
-                        .foregroundStyle(validation.isWarning ? .orange : (validation.isValid ? .green : .red))
-                    Text(validation.message)
-                        .font(.caption)
-                        .foregroundColor(validation.isValid ? .secondary : .red)
-                        .lineLimit(2)
+                    // Status pill
+                    HStack(spacing: 4) {
+                        Image(systemName: statusIcon)
+                            .font(.caption2)
+                        Text(validation.message)
+                            .font(.caption)
+                            .lineLimit(1)
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background(statusColor.opacity(0.1))
+                    .foregroundStyle(statusColor)
+                    .cornerRadius(12)
+
                     Spacer()
-                    let byteCount = payloadText.data(using: .utf8)?.count ?? 0
-                    Text("\(byteCount) / 4096 bytes")
-                        .font(.caption)
-                        .foregroundStyle(byteCount > 4096 ? .red : .secondary)
+
+                    // Payload size with progress bar
+                    HStack(spacing: 4) {
+                        ProgressView(value: min(ratio, 1.0))
+                            .tint(sizeColor)
+                            .frame(width: 50)
+                        Text("\(byteCount) / 4096")
+                            .font(.caption)
+                            .foregroundStyle(sizeColor)
+                    }
                 }
 
                 if let fix = validation.fixSuggestion {
@@ -115,7 +145,6 @@ struct PayloadComposerView: View {
                             .foregroundStyle(.secondary)
                             .lineLimit(2)
                         Spacer()
-                        // Show auto-fix button if smart quotes are detected
                         if payloadText != PayloadValidator.autoFixCommonIssues(payloadText) {
                             Button("Auto-fix") {
                                 payloadText = PayloadValidator.autoFixCommonIssues(payloadText)
@@ -126,12 +155,12 @@ struct PayloadComposerView: View {
                         }
                     }
                     .padding(6)
-                    .background(Color.orange.opacity(0.08))
-                    .cornerRadius(6)
+                    .background(Color.orange.opacity(0.06))
+                    .cornerRadius(8)
                 }
             }
             .padding(.horizontal)
-            .padding(.vertical, 6)
+            .padding(.vertical, 8)
         }
         .onAppear {
             if payloadText.isEmpty {
