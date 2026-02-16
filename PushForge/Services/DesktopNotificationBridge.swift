@@ -85,6 +85,15 @@ actor DesktopNotificationBridge {
             return (title, nil, body)
         }
 
+        // Data-only payload — summarize as notification
+        if let dataDict = json["data"] as? [String: Any] {
+            let action = dataDict["action"] as? String
+                ?? dataDict["type"] as? String
+                ?? "Data Message"
+            let fields = dataDict.keys.sorted().joined(separator: ", ")
+            return ("Data: \(action)", nil, "Fields: \(fields)")
+        }
+
         return nil
     }
 

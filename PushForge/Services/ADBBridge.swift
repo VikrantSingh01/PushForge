@@ -176,10 +176,19 @@ actor ADBBridge {
             return (title, body)
         }
 
-        // Try top-level title/body
+        // Try top-level title/body (Web Push format)
         if let title = json["title"] as? String {
             let body = json["body"] as? String ?? ""
             return (title, body)
+        }
+
+        // Data-only payload — summarize as notification
+        if let dataDict = json["data"] as? [String: Any] {
+            let action = dataDict["action"] as? String
+                ?? dataDict["type"] as? String
+                ?? "Data Message"
+            let fields = dataDict.keys.sorted().joined(separator: ", ")
+            return ("Data: \(action)", "Fields: \(fields)")
         }
 
         return nil
