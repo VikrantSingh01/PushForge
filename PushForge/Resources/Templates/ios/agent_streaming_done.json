@@ -6,17 +6,16 @@
   "payload": {
     "aps": {
       "alert": {
-        "title": "Response Ready",
-        "body": "Claude has finished generating your code review. 847 tokens generated in 3.2s."
+        "title": "Code Review Ready",
+        "body": "GitHub Copilot has finished reviewing your code review. 2 open comments to resolve."
       },
       "sound": "default",
       "content-available": 1,
-      "thread-id": "chat-sessions"
+      "thread-id": "code-reviews"
     },
-    "session_id": "sess_xyz789",
-    "model": "claude-opus-4-6",
-    "tokens": 847,
-    "duration_ms": 3200,
-    "deep_link": "myapp://chat/sess_xyz789"
+    "review_id": "pr_review_42",
+    "model": "copilot",
+    "open_comments": 2,
+    "deep_link": "myapp://reviews/pr_review_42"
   }
 }

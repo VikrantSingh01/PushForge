@@ -67,10 +67,11 @@ enum PayloadValidator {
                                     fix: "Wrap your payload in { } curly braces")
             }
 
-            // Detect payload format
+            // Detect payload format (order matters: check isWeb before isFCM
+            // because Web Push payloads can also contain a "data" key)
             let isAPNs = dict["aps"] != nil
-            let isFCM = dict["notification"] != nil || (dict["data"] != nil && !isAPNs)
-            let isWeb = dict["title"] != nil && dict["aps"] == nil && dict["notification"] == nil
+            let isWeb = dict["title"] != nil && !isAPNs && dict["notification"] == nil
+            let isFCM = (dict["notification"] != nil || (dict["data"] != nil && !isAPNs)) && !isWeb
 
             // Platform-aware validation — warn on all mismatches
             switch targetPlatform {

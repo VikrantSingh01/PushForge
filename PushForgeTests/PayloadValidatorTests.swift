@@ -111,6 +111,62 @@ struct PayloadValidatorTests {
         }
     }
 
+    @Test("Web payload with data key is valid on Desktop target")
+    func webPayloadWithDataOnDesktop() {
+        let json = """
+        {
+          "title": "Task Complete",
+          "body": "Your research is ready.",
+          "icon": "/icons/agent-complete.png",
+          "data": {
+            "task_id": "task_abc123",
+            "agent": "research",
+            "url": "/tasks/abc123"
+          },
+          "actions": [
+            {"action": "view", "title": "View Report"}
+          ]
+        }
+        """
+        let result = PayloadValidator.validate(json, targetPlatform: .desktop)
+        #expect(result.isValid)
+        #expect(!result.isWarning)
+    }
+
+    @Test("Web payload with data key warns when target is iOS")
+    func webPayloadWithDataOnIOS() {
+        let json = """
+        {
+          "title": "Task Complete",
+          "body": "Your research is ready.",
+          "data": { "task_id": "task_abc123" }
+        }
+        """
+        let result = PayloadValidator.validate(json, targetPlatform: .iOSSimulator)
+        if case .validWithWarning(let msg, _) = result {
+            #expect(msg.contains("Web Push"))
+        } else {
+            Issue.record("Expected Web Push warning, got \(result)")
+        }
+    }
+
+    @Test("Web payload with data key warns when target is Android")
+    func webPayloadWithDataOnAndroid() {
+        let json = """
+        {
+          "title": "Task Complete",
+          "body": "Your research is ready.",
+          "data": { "task_id": "task_abc123" }
+        }
+        """
+        let result = PayloadValidator.validate(json, targetPlatform: .androidEmulator)
+        if case .validWithWarning(let msg, _) = result {
+            #expect(msg.contains("Web Push"))
+        } else {
+            Issue.record("Expected Web Push warning, got \(result)")
+        }
+    }
+
     @Test("Android payload warns when target is Desktop/Web")
     func androidPayloadOnDesktop() {
         let json = """
