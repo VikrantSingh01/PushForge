@@ -2,7 +2,7 @@
   "id": "android_grouped",
   "name": "Android Grouped",
   "description": "Grouped notifications in the same channel",
-  "category": "android",
+  "category": "advanced",
   "payload": {
     "notification": {
       "title": "Team Chat",

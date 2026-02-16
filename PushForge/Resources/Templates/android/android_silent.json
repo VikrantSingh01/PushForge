@@ -2,7 +2,7 @@
   "id": "android_silent",
   "name": "Android Silent",
   "description": "Data-only message for background processing",
-  "category": "android",
+  "category": "silent",
   "payload": {
     "data": {
       "type": "background-refresh",

@@ -2,7 +2,7 @@
   "id": "web_action",
   "name": "Web Action",
   "description": "A web push notification with action buttons, image, and persistent display.",
-  "category": "web",
+  "category": "rich",
   "payload": {
     "title": "Flash Sale Ending Soon",
     "body": "50% off all items — only 2 hours left!",

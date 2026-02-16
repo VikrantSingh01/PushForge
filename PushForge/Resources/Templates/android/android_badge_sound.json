@@ -2,7 +2,7 @@
   "id": "android_badge_sound",
   "name": "Android Badge + Sound",
   "description": "Notification with badge count and custom sound",
-  "category": "android",
+  "category": "badge",
   "payload": {
     "notification": {
       "title": "New Message",

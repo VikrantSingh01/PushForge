@@ -2,7 +2,7 @@
   "id": "android_high_priority",
   "name": "Android High Priority",
   "description": "High-priority heads-up notification",
-  "category": "android",
+  "category": "advanced",
   "payload": {
     "notification": {
       "title": "Security Alert",

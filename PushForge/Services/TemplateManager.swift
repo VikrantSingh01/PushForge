@@ -113,15 +113,30 @@ enum TemplateManager {
 
             let category = PayloadTemplate.Category(rawValue: file.category) ?? .alert
 
+            // Infer platform from parent directory name
+            let platform = inferPlatform(from: url, category: file.category)
+
             return PayloadTemplate(
                 id: file.id,
                 name: file.name,
                 description: file.description,
                 category: category,
+                platform: platform,
                 payload: payloadString
             )
         } catch {
             return nil
         }
+    }
+
+    private static func inferPlatform(from url: URL, category: String) -> PayloadTemplate.Platform {
+        let pathComponents = url.pathComponents
+        if pathComponents.contains("android") { return .android }
+        if pathComponents.contains("web") { return .web }
+        if pathComponents.contains("ios") { return .ios }
+        // Fallback: legacy category-based detection
+        if category == "android" { return .android }
+        if category == "web" { return .web }
+        return .ios
     }
 }

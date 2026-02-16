@@ -2,7 +2,7 @@
   "id": "android_basic",
   "name": "Android Basic",
   "description": "A simple Android notification with title and body.",
-  "category": "android",
+  "category": "alert",
   "payload": {
     "notification": {
       "title": "Hello from PushForge",

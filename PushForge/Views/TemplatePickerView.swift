@@ -36,6 +36,15 @@ enum TemplatePlatformTab: String, CaseIterable {
         case .web: .purple
         }
     }
+
+    /// Map to PayloadTemplate.Platform for filtering
+    var templatePlatform: PayloadTemplate.Platform {
+        switch self {
+        case .ios: .ios
+        case .android: .android
+        case .web: .web
+        }
+    }
 }
 
 struct TemplatePickerView: View {
@@ -47,7 +56,7 @@ struct TemplatePickerView: View {
 
     @State private var selectedSubCategory: PayloadTemplate.Category? = .alert
 
-    private static let iosCategories: [PayloadTemplate.Category] = [.alert, .badge, .silent, .rich, .advanced]
+    private static let allCategories: [PayloadTemplate.Category] = [.alert, .badge, .silent, .rich, .advanced]
 
     private static let categoryMeta: [PayloadTemplate.Category: (label: String, icon: String, tint: Color)] = [
         .alert: ("Basic", "bell.fill", .blue),
@@ -57,19 +66,21 @@ struct TemplatePickerView: View {
         .advanced: ("Advanced", "gearshape.2.fill", .gray),
     ]
 
-    private static let platformCategories: [TemplatePlatformTab: [PayloadTemplate.Category]] = [
-        .ios: [.alert, .badge, .silent, .rich, .advanced],
-        .android: [.android],
-        .web: [.web],
-    ]
-
+    /// Templates for the selected platform
     private var platformTemplates: [PayloadTemplate] {
-        let categories = Self.platformCategories[selectedPlatform] ?? []
-        return templates.filter { categories.contains($0.category) }
+        templates.filter { $0.platform == selectedPlatform.templatePlatform }
     }
 
+    /// Sub-categories that have templates for the current platform
+    private var availableCategories: [PayloadTemplate.Category] {
+        Self.allCategories.filter { cat in
+            platformTemplates.contains { $0.category == cat }
+        }
+    }
+
+    /// Templates filtered by platform + sub-category
     private var visibleTemplates: [PayloadTemplate] {
-        if selectedPlatform == .ios, let sub = selectedSubCategory {
+        if let sub = selectedSubCategory {
             return platformTemplates.filter { $0.category == sub }
         }
         return platformTemplates
@@ -83,7 +94,12 @@ struct TemplatePickerView: View {
                     Button {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             selectedPlatform = platform
-                            selectedSubCategory = platform == .ios ? .alert : nil
+                            // Auto-select first available sub-category for the new platform
+                            let cats = Self.allCategories.filter { cat in
+                                templates.filter { $0.platform == platform.templatePlatform }
+                                    .contains { $0.category == cat }
+                            }
+                            selectedSubCategory = cats.first ?? .alert
                         }
                         onPlatformChange?()
                     } label: {
@@ -116,13 +132,12 @@ struct TemplatePickerView: View {
                 }
             }
 
-            // iOS sub-category tabs with icons
-            if selectedPlatform == .ios {
+            // Sub-category tabs — shown for ALL platforms
+            if availableCategories.count > 1 {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 6) {
-                        ForEach(Self.iosCategories, id: \.self) { category in
-                            let count = templates.filter { $0.category == category }.count
-                            if let meta = Self.categoryMeta[category], count > 0 {
+                        ForEach(availableCategories, id: \.self) { category in
+                            if let meta = Self.categoryMeta[category] {
                                 Button {
                                     withAnimation(.easeInOut(duration: 0.15)) {
                                         selectedSubCategory = category

@@ -2,7 +2,7 @@
   "id": "android_actionable",
   "name": "Android Actionable",
   "description": "Notification with click action and buttons",
-  "category": "android",
+  "category": "rich",
   "payload": {
     "notification": {
       "title": "Friend Request",

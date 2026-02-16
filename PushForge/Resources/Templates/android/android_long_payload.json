@@ -2,7 +2,7 @@
   "id": "android_long_payload",
   "name": "Android Long Payload",
   "description": "Large payload with notification and custom data",
-  "category": "android",
+  "category": "advanced",
   "payload": {
     "notification": {
       "title": "Order #8842 Shipped",

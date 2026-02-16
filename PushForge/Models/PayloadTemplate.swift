@@ -5,6 +5,7 @@ struct PayloadTemplate: Identifiable, Hashable {
     let name: String
     let description: String
     let category: Category
+    let platform: Platform
     let payload: String
 
     enum Category: String, CaseIterable {
@@ -13,6 +14,10 @@ struct PayloadTemplate: Identifiable, Hashable {
         case silent
         case rich
         case advanced
+    }
+
+    enum Platform: String, CaseIterable {
+        case ios
         case android
         case web
     }

@@ -2,7 +2,7 @@
   "id": "android_rich",
   "name": "Android Rich",
   "description": "A rich Android notification with channel, color, icon, and custom data.",
-  "category": "android",
+  "category": "rich",
   "payload": {
     "notification": {
       "title": "New Order Received",

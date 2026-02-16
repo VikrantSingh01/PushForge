@@ -2,7 +2,7 @@
   "id": "android_time_sensitive",
   "name": "Android Time Sensitive",
   "description": "Full-screen intent for urgent notifications",
-  "category": "android",
+  "category": "advanced",
   "payload": {
     "notification": {
       "title": "Ride Arriving",

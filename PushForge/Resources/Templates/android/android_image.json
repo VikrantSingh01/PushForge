@@ -2,7 +2,7 @@
   "id": "android_image",
   "name": "Android Image",
   "description": "Notification with large image attachment",
-  "category": "android",
+  "category": "rich",
   "payload": {
     "notification": {
       "title": "Photo Shared",

@@ -32,7 +32,7 @@ struct SendPanelView: View {
         guard viewModel.lastSendStatus != .sending else { return false }
         switch targetPlatform {
         case .iOSSimulator:
-            return viewModel.selectedSimulator?.isBooted == true && !bundleIdentifier.isEmpty
+            return viewModel.selectedSimulator?.isBooted == true
         case .androidEmulator:
             return viewModel.selectedAndroidEmulator?.isOnline == true
         case .desktop:
@@ -185,10 +185,11 @@ struct SendPanelView: View {
                 StatusBannerView(status: viewModel.lastSendStatus)
 
                 Button {
+                    let effectiveBundleID = bundleIdentifier.isEmpty ? "com.apple.Preferences" : bundleIdentifier
                     Task {
                         await viewModel.sendPush(
                             payload: payloadText,
-                            bundleID: bundleIdentifier,
+                            bundleID: effectiveBundleID,
                             modelContext: modelContext
                         )
                     }

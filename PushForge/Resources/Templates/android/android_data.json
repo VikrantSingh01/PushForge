@@ -2,7 +2,7 @@
   "id": "android_data",
   "name": "Android Data",
   "description": "A data-only Android message for background processing.",
-  "category": "android",
+  "category": "silent",
   "payload": {
     "data": {
       "action": "sync",
