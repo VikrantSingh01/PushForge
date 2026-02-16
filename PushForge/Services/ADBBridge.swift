@@ -126,17 +126,14 @@ actor ADBBridge {
             throw ADBError.adbNotFound
         }
 
-        // Use cmd notification post for a BigText style notification
+        // Build shell command as a single string with proper quoting.
+        // adb shell passes everything after "shell" to the device's sh,
+        // so arguments with spaces must be quoted inside the command string.
+        let shellCmd = "cmd notification post -S bigtext -t '\(shellEscape(title))' '\(shellEscape(tag))' '\(shellEscape(body))'"
+
         let result = try await ShellExecutor.run(
             executablePath: adb,
-            arguments: [
-                "-s", serial,
-                "shell", "cmd", "notification", "post",
-                "-S", "bigtext",
-                "-t", title,
-                tag,
-                body,
-            ]
+            arguments: ["-s", serial, "shell", shellCmd]
         )
 
         guard result.succeeded else {
@@ -186,5 +183,11 @@ actor ADBBridge {
         }
 
         return nil
+    }
+
+    /// Escape a string for use inside single quotes in a shell command.
+    private func shellEscape(_ text: String) -> String {
+        // Replace single quotes with '\'' (end quote, escaped quote, start quote)
+        text.replacingOccurrences(of: "'", with: "'\\''")
     }
 }
