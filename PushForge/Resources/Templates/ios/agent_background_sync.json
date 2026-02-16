@@ -1,0 +1,23 @@
+{
+  "id": "agent_background_sync",
+  "name": "Agent Memory Sync",
+  "description": "Silent push to sync agent memory and context",
+  "category": "silent",
+  "payload": {
+    "aps": {
+      "content-available": 1
+    },
+    "sync": {
+      "type": "agent_memory",
+      "agent_id": "assistant_main",
+      "collections": [
+        "conversation_history",
+        "user_preferences",
+        "tool_results"
+      ],
+      "since": "2026-02-16T00:00:00Z",
+      "priority": "high",
+      "compressed": true
+    }
+  }
+}

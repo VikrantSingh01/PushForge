@@ -1,0 +1,23 @@
+{
+  "id": "agent_action_required",
+  "name": "Agent Needs Approval",
+  "description": "AI agent waiting for user approval to proceed",
+  "category": "rich",
+  "payload": {
+    "aps": {
+      "alert": {
+        "title": "Action Required",
+        "subtitle": "Deploy Agent",
+        "body": "Ready to deploy v2.3.1 to production. 47 tests passed, 0 failed. Approve or reject."
+      },
+      "sound": "default",
+      "category": "AGENT_APPROVAL",
+      "interruption-level": "time-sensitive"
+    },
+    "agent": "deploy",
+    "action_id": "deploy_v231",
+    "environment": "production",
+    "tests_passed": 47,
+    "tests_failed": 0
+  }
+}

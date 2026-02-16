@@ -8,7 +8,7 @@ struct TemplateManagerTests {
     @Test("Built-in templates load successfully")
     func loadTemplates() {
         let templates = TemplateManager.loadBuiltInTemplates()
-        #expect(templates.count == 24)
+        #expect(templates.count == 37)
     }
 
     @Test("Templates have unique IDs")

@@ -1,0 +1,22 @@
+{
+  "id": "agent_streaming_done",
+  "name": "Streaming Complete",
+  "description": "LLM streaming response finished generating",
+  "category": "alert",
+  "payload": {
+    "aps": {
+      "alert": {
+        "title": "Response Ready",
+        "body": "Claude has finished generating your code review. 847 tokens generated in 3.2s."
+      },
+      "sound": "default",
+      "content-available": 1,
+      "thread-id": "chat-sessions"
+    },
+    "session_id": "sess_xyz789",
+    "model": "claude-opus-4-6",
+    "tokens": 847,
+    "duration_ms": 3200,
+    "deep_link": "myapp://chat/sess_xyz789"
+  }
+}

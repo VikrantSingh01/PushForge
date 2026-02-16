@@ -1,0 +1,23 @@
+{
+  "id": "agent_task_complete",
+  "name": "Agent Task Complete",
+  "description": "AI agent finished a background task",
+  "category": "alert",
+  "payload": {
+    "aps": {
+      "alert": {
+        "title": "Task Complete",
+        "subtitle": "Research Agent",
+        "body": "Your research on quantum computing trends is ready. Tap to view the full report."
+      },
+      "sound": "default",
+      "badge": 1,
+      "thread-id": "agent-tasks",
+      "interruption-level": "time-sensitive"
+    },
+    "task_id": "task_abc123",
+    "agent": "research",
+    "deep_link": "myapp://tasks/abc123",
+    "completed_at": "2026-02-16T12:00:00Z"
+  }
+}

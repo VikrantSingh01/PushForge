@@ -1,0 +1,25 @@
+{
+  "id": "android_agent_error",
+  "name": "Agent Error",
+  "description": "AI agent encountered an error during execution",
+  "category": "advanced",
+  "payload": {
+    "notification": {
+      "title": "Agent Failed — Data Pipeline",
+      "body": "ETL job failed at step 3/5: Connection timeout to database. Retry available.",
+      "channel_id": "agent_errors",
+      "sound": "alarm",
+      "color": "#FF3B30"
+    },
+    "android": {
+      "priority": "high"
+    },
+    "data": {
+      "agent": "data_pipeline",
+      "error_code": "CONN_TIMEOUT",
+      "step": "3/5",
+      "retry_available": "true",
+      "job_id": "job_etl_456"
+    }
+  }
+}

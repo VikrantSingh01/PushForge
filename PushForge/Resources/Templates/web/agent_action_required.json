@@ -1,0 +1,28 @@
+{
+  "id": "web_agent_action_required",
+  "name": "Agent Needs Approval",
+  "description": "AI agent waiting for user approval",
+  "category": "rich",
+  "payload": {
+    "title": "Action Required",
+    "body": "Deploy Agent: Ready to deploy v2.3.1 to production. 47 tests passed.",
+    "icon": "/icons/agent-approval.png",
+    "tag": "agent-approval-v231",
+    "requireInteraction": true,
+    "actions": [
+      {
+        "action": "approve",
+        "title": "Approve Deploy"
+      },
+      {
+        "action": "reject",
+        "title": "Reject"
+      }
+    ],
+    "data": {
+      "agent": "deploy",
+      "action_id": "deploy_v231",
+      "url": "/deployments/v231"
+    }
+  }
+}

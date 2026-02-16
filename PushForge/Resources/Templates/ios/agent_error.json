@@ -1,0 +1,27 @@
+{
+  "id": "agent_error",
+  "name": "Agent Error",
+  "description": "AI agent encountered an error during execution",
+  "category": "advanced",
+  "payload": {
+    "aps": {
+      "alert": {
+        "title": "Agent Failed",
+        "subtitle": "Data Pipeline",
+        "body": "ETL job failed at step 3/5: Connection timeout to database. Retry available."
+      },
+      "sound": {
+        "critical": 1,
+        "name": "alarm.caf",
+        "volume": 0.8
+      },
+      "interruption-level": "critical",
+      "thread-id": "agent-errors"
+    },
+    "agent": "data_pipeline",
+    "error_code": "CONN_TIMEOUT",
+    "step": "3/5",
+    "retry_available": true,
+    "job_id": "job_etl_456"
+  }
+}

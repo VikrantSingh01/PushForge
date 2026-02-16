@@ -1,0 +1,24 @@
+{
+  "id": "agent_live_progress",
+  "name": "Live Activity Update",
+  "description": "Real-time agent progress via Live Activity",
+  "category": "advanced",
+  "payload": {
+    "aps": {
+      "timestamp": 1708000000,
+      "event": "update",
+      "content-state": {
+        "progress": 0.75,
+        "current_step": "Analyzing code",
+        "steps_completed": 3,
+        "total_steps": 4,
+        "tokens_used": 2847,
+        "estimated_remaining_seconds": 12
+      },
+      "alert": {
+        "title": "Code Review: 75% Complete",
+        "body": "Analyzing code — 3 of 4 steps done"
+      }
+    }
+  }
+}

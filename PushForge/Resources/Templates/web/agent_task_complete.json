@@ -1,0 +1,29 @@
+{
+  "id": "web_agent_task_complete",
+  "name": "Agent Task Complete",
+  "description": "AI agent finished a background task",
+  "category": "alert",
+  "payload": {
+    "title": "Task Complete",
+    "body": "Your research on quantum computing trends is ready. Click to view the full report.",
+    "icon": "/icons/agent-complete.png",
+    "badge": "/icons/badge.png",
+    "tag": "agent-task-abc123",
+    "requireInteraction": true,
+    "data": {
+      "task_id": "task_abc123",
+      "agent": "research",
+      "url": "/tasks/abc123"
+    },
+    "actions": [
+      {
+        "action": "view",
+        "title": "View Report"
+      },
+      {
+        "action": "dismiss",
+        "title": "Later"
+      }
+    ]
+  }
+}
