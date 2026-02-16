@@ -20,6 +20,12 @@ struct BundleIDPickerView: View {
         ("Camera", "com.apple.camera"),
         ("Health", "com.apple.Health"),
         ("Microsoft Teams", "com.microsoft.skype.teams"),
+        ("Microsoft Outlook", "com.microsoft.Office.Outlook"),
+        ("Microsoft Copilot", "com.microsoft.copilot"),
+        ("OneDrive", "com.microsoft.skydrive"),
+        ("SharePoint", "com.microsoft.sharepoint"),
+        ("Word", "com.microsoft.Office.Word"),
+        ("Excel", "com.microsoft.Office.Excel"),
     ]
 
     private static let androidApps: [(name: String, bundleID: String)] = [
@@ -38,6 +44,12 @@ struct BundleIDPickerView: View {
         ("Clock", "com.google.android.deskclock"),
         ("Calculator", "com.google.android.calculator"),
         ("Microsoft Teams", "com.microsoft.teams"),
+        ("Microsoft Outlook", "com.microsoft.Office.Outlook"),
+        ("Microsoft Copilot", "com.microsoft.copilot"),
+        ("OneDrive", "com.microsoft.skydrive"),
+        ("SharePoint", "com.microsoft.sharepoint"),
+        ("Word", "com.microsoft.Office.Word"),
+        ("Excel", "com.microsoft.Office.Excel"),
     ]
 
     private static let desktopApps: [(name: String, bundleID: String)] = [
@@ -53,6 +65,12 @@ struct BundleIDPickerView: View {
         ("News", "com.apple.news"),
         ("Slack", "com.tinyspeck.slackmacgap"),
         ("Microsoft Teams", "com.microsoft.teams2"),
+        ("Microsoft Outlook", "com.microsoft.Outlook"),
+        ("Microsoft Copilot", "com.microsoft.copilot"),
+        ("OneDrive", "com.microsoft.OneDrive-mac"),
+        ("SharePoint", "com.microsoft.SharePoint-mac"),
+        ("Word", "com.microsoft.Word"),
+        ("Excel", "com.microsoft.Excel"),
         ("Chrome", "com.google.Chrome"),
         ("Firefox", "org.mozilla.firefox"),
         ("VS Code", "com.microsoft.VSCode"),
