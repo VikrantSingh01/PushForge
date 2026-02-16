@@ -31,7 +31,7 @@ enum ADBError: LocalizedError {
 }
 
 actor ADBBridge {
-    private let shell = ShellExecutor()
+    
 
     // MARK: - Find ADB Path
 
@@ -48,7 +48,7 @@ actor ADBBridge {
             }
         }
         // Try which
-        if let result = try? await shell.run(
+        if let result = try? await ShellExecutor.run(
             executablePath: "/usr/bin/which",
             arguments: ["adb"]
         ), result.succeeded {
@@ -65,7 +65,7 @@ actor ADBBridge {
             throw ADBError.adbNotFound
         }
 
-        let result = try await shell.run(
+        let result = try await ShellExecutor.run(
             executablePath: adb,
             arguments: ["devices"]
         )
@@ -101,7 +101,7 @@ actor ADBBridge {
     }
 
     private func getEmulatorName(adb: String, serial: String) async -> String? {
-        guard let result = try? await shell.run(
+        guard let result = try? await ShellExecutor.run(
             executablePath: adb,
             arguments: ["-s", serial, "emu", "avd", "name"]
         ), result.succeeded else {
@@ -127,7 +127,7 @@ actor ADBBridge {
         }
 
         // Use cmd notification post for a BigText style notification
-        let result = try await shell.run(
+        let result = try await ShellExecutor.run(
             executablePath: adb,
             arguments: [
                 "-s", serial,

@@ -32,12 +32,12 @@ enum SimulatorError: LocalizedError {
 }
 
 actor SimulatorBridge {
-    private let shell = ShellExecutor()
+    
 
     // MARK: - List All Available Simulators
 
     func listAvailableSimulators() async throws -> [SimulatorDevice] {
-        let result = try await shell.run(
+        let result = try await ShellExecutor.run(
             arguments: ["simctl", "list", "devices", "available", "--json"]
         )
 
@@ -86,7 +86,7 @@ actor SimulatorBridge {
     // MARK: - Boot Simulator
 
     func bootSimulator(udid: String) async throws {
-        let result = try await shell.run(
+        let result = try await ShellExecutor.run(
             arguments: ["simctl", "boot", udid]
         )
         guard result.succeeded else {
@@ -116,7 +116,7 @@ actor SimulatorBridge {
         try payloadJSON.write(to: tempURL, atomically: true, encoding: .utf8)
         defer { try? FileManager.default.removeItem(at: tempURL) }
 
-        let result = try await shell.run(
+        let result = try await ShellExecutor.run(
             arguments: ["simctl", "push", udid, bundleIdentifier, tempURL.path]
         )
 

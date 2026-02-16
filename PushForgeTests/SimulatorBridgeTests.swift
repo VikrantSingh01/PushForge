@@ -6,8 +6,7 @@ struct SimulatorBridgeTests {
 
     @Test("ShellExecutor can run a basic command")
     func shellExecutorBasic() async throws {
-        let shell = ShellExecutor()
-        let result = try await shell.run(
+        let result = try await ShellExecutor.run(
             executablePath: "/bin/echo",
             arguments: ["hello"]
         )

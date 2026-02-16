@@ -11,7 +11,7 @@ enum DesktopNotificationError: LocalizedError {
 }
 
 actor DesktopNotificationBridge {
-    private let shell = ShellExecutor()
+    
 
     /// Sends a macOS desktop notification via osascript, using the target app's icon.
     /// `tell application id "<bundleID>"` makes the notification appear with that app's icon.
@@ -36,7 +36,7 @@ actor DesktopNotificationBridge {
         let appID = bundleID.isEmpty ? "com.pushforge.app" : bundleID
         let script = "tell application id \"\(esc(appID))\" to \(notification)"
 
-        let result = try await shell.run(
+        let result = try await ShellExecutor.run(
             executablePath: "/usr/bin/osascript",
             arguments: ["-e", script]
         )
