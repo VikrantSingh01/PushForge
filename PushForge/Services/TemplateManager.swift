@@ -59,7 +59,9 @@ enum TemplateManager {
 
     /// User template directory. Drop .json files here to add custom templates.
     static var userTemplateDirectory: URL {
-        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        guard let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+            return FileManager.default.temporaryDirectory.appendingPathComponent("PushForge/Templates", isDirectory: true)
+        }
         let dir = appSupport.appendingPathComponent("PushForge/Templates", isDirectory: true)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         return dir

@@ -31,17 +31,13 @@ class PayloadComposerViewModel {
         payloadText.data(using: .utf8)?.count ?? 0
     }
 
-    // These are bound from ContentView
-    var payloadText: String
-    var bundleIdentifier: String
+    var payloadText: String = ""
 
-    init(payloadText: Binding<String>? = nil, bundleIdentifier: Binding<String>? = nil) {
-        self.payloadText = ""
-        self.bundleIdentifier = ""
+    init() {
         templates = TemplateManager.loadBuiltInTemplates()
         if let first = templates.first {
             selectedTemplate = first
-            self.payloadText = first.payload
+            payloadText = first.payload
         }
     }
 

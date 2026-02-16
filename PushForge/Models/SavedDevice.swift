@@ -22,5 +22,6 @@ final class SavedDevice {
         self.deviceIdentifier = deviceIdentifier
         self.deviceType = deviceType
         self.createdAt = createdAt
+        self.lastUsedAt = createdAt
     }
 }
