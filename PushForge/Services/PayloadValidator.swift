@@ -86,7 +86,7 @@ enum PayloadValidator {
                     if isWeb {
                         return .validWithWarning(
                             "This looks like a Web Push payload, but target is iOS Simulator",
-                            fix: "Switch to Desktop/Web, or use an iOS template with an \"aps\" key."
+                            fix: "Switch to Desktop, or use an iOS template with an \"aps\" key."
                         )
                     }
                     return .missingApsKey
@@ -102,20 +102,20 @@ enum PayloadValidator {
                 if isWeb {
                     return .validWithWarning(
                         "This looks like a Web Push payload, but target is Android Emulator",
-                        fix: "Switch to Desktop/Web, or use an Android template with \"notification\" or \"data\" keys."
+                        fix: "Switch to Desktop, or use an Android template with \"notification\" or \"data\" keys."
                     )
                 }
 
             case .desktop:
                 if isAPNs {
                     return .validWithWarning(
-                        "This looks like an iOS/APNs payload, but target is Desktop/Web",
+                        "This looks like an iOS/APNs payload, but target is Desktop",
                         fix: "Switch to iOS Simulator, or use a Web template with top-level \"title\" and \"body\"."
                     )
                 }
                 if isFCM {
                     return .validWithWarning(
-                        "This looks like an Android/FCM payload, but target is Desktop/Web",
+                        "This looks like an Android/FCM payload, but target is Desktop",
                         fix: "Switch to Android Emulator, or use a Web template with top-level \"title\" and \"body\"."
                     )
                 }

@@ -167,7 +167,7 @@ struct PayloadValidatorTests {
         }
     }
 
-    @Test("Android payload warns when target is Desktop/Web")
+    @Test("Android payload warns when target is Desktop")
     func androidPayloadOnDesktop() {
         let json = """
         {
@@ -185,7 +185,7 @@ struct PayloadValidatorTests {
         }
     }
 
-    @Test("iOS payload warns when target is Desktop/Web")
+    @Test("iOS payload warns when target is Desktop")
     func iosPayloadOnDesktop() {
         let json = """
         {

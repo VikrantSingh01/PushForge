@@ -53,7 +53,7 @@ PushForge eliminates every step. Open the app, pick a template, hit Send. The no
 
 ### How it compares
 
-| Tool | Platform | iOS Sim | Android Emu | Desktop/Web | Free | Maintained |
+| Tool | Platform | iOS Sim | Android Emu | Desktop | Free | Maintained |
 |---|---|---|---|---|---|---|
 | **PushForge** | macOS (native) | Yes | Yes | Yes | Yes | Yes |
 | Knuff | macOS | No | No | No | Yes | Abandoned (2019) |
@@ -73,14 +73,14 @@ PushForge is the only **free, multi-platform push notification tool** with a nat
 |---|---|---|
 | **iOS Simulator** | `xcrun simctl push` | Xcode |
 | **Android Emulator** | `adb shell cmd notification post` | Android Studio |
-| **Desktop/Web** | `osascript` with target app icon | None |
+| **Desktop** | `osascript` with target app icon | None |
 
 Switch between platforms with a segmented picker. Template tabs, bundle ID dropdown, and validation all sync automatically.
 
 ### Core Features
 
-- **37 Built-in Templates** — iOS (APNs), Android (FCM), Web Push, and AI Agent patterns
-- **Platform-Synced UI** — iOS/Android/Web template tabs sync with send panel target; switching one switches both
+- **37 Built-in Templates** — iOS (APNs), Android (FCM), Desktop (Web Push format), and AI Agent patterns
+- **Platform-Synced UI** — iOS/Android/Desktop template tabs sync with send panel target; switching one switches both
 - **Visual Payload Composer** — JSON editor with live validation, byte counter, format/minify, Cmd+/Cmd- zoom
 - **Smart JSON Diagnostics** — Detects smart quotes, trailing commas, mismatched braces with exact line:col and fix suggestions
 - **Auto-fix** — One-click repair for smart quotes and copy-paste artifacts from docs/Slack/email
@@ -98,12 +98,12 @@ Switch between platforms with a segmented picker. Template tabs, bundle ID dropd
 
 ---
 
-## Push Payload Formats — iOS vs Android vs Web
+## Push Payload Formats — iOS vs Android vs Desktop
 
-Push notification payloads are **fundamentally different** across platforms. PushForge handles all three:
+Push notification payloads are **fundamentally different** across platforms. PushForge handles all three. Desktop mode uses Web Push JSON format and delivers via macOS Notification Center (`osascript`) — it previews notification content, not the Web Push API itself.
 
 <table>
-<tr><th>Feature</th><th>iOS (APNs)</th><th>Android (FCM)</th><th>Web Push</th></tr>
+<tr><th>Feature</th><th>iOS (APNs)</th><th>Android (FCM)</th><th>Desktop (Web Push format)</th></tr>
 <tr><td><strong>Root key</strong></td><td><code>aps</code></td><td><code>notification</code> / <code>data</code></td><td>Top-level</td></tr>
 <tr><td><strong>Title</strong></td><td><code>aps.alert.title</code></td><td><code>notification.title</code></td><td><code>title</code></td></tr>
 <tr><td><strong>Body</strong></td><td><code>aps.alert.body</code></td><td><code>notification.body</code></td><td><code>body</code></td></tr>
@@ -140,7 +140,7 @@ Push notification payloads are **fundamentally different** across platforms. Pus
 }
 ```
 
-**Web Push:**
+**Desktop (Web Push format):**
 ```json
 {
   "title": "New Message", "body": "You have a new message waiting.",
@@ -225,7 +225,7 @@ xcodebuild -project PushForge.xcodeproj -scheme PushForge -destination 'platform
 ### First Push in 30 Seconds
 
 1. Launch PushForge
-2. Select a platform: **iOS Simulator**, **Android Emulator**, or **Desktop/Web**
+2. Select a platform: **iOS Simulator**, **Android Emulator**, or **Desktop**
 3. For iOS: click **Boot** next to any simulator. For Desktop: it's always ready.
 4. Pick a template and select an app from the bundle ID dropdown
 5. Press **Cmd+Enter** or click **Send Push**
@@ -290,7 +290,7 @@ PushForge/
 
 - [x] **v0.1** — iOS Simulator push with payload composer
 - [x] **v0.2** — Android Emulator push via ADB
-- [x] **v0.3** — Desktop/Web notifications via macOS Notification Center
+- [x] **v0.3** — Desktop notifications via macOS Notification Center
 - [x] **v0.4** — Smart JSON diagnostics with auto-fix
 - [x] **v0.5** — Multi-platform bundle ID picker (45+ apps)
 - [x] **v0.6** — External JSON templates with runtime extensibility
@@ -354,7 +354,7 @@ PushForge/
 </details>
 
 <details>
-<summary><strong>Desktop/Web</strong> (15 apps)</summary>
+<summary><strong>Desktop</strong> (15 apps)</summary>
 
 | App | Bundle ID |
 |---|---|

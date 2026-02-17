@@ -12,7 +12,7 @@ enum SendStatus: Equatable {
 enum TargetPlatform: String, CaseIterable {
     case iOSSimulator = "iOS Simulator"
     case androidEmulator = "Android Emulator"
-    case desktop = "Desktop/Web"
+    case desktop = "Desktop"
 }
 
 @Observable
