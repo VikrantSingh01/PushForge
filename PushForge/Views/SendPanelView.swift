@@ -290,6 +290,7 @@ private struct PlatformCardButton: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 10)
+            .contentShape(Rectangle())
             .background(isSelected ? color.opacity(0.15) : (isHovered ? Color.primary.opacity(0.05) : Color.clear))
             .foregroundStyle(isSelected ? color : (isHovered ? .primary : .secondary))
             .clipShape(RoundedRectangle(cornerRadius: 8))
