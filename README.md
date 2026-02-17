@@ -409,6 +409,10 @@ open PushForge.xcodeproj
 
 MIT License. See [LICENSE](LICENSE) for details.
 
+## Acknowledgments
+
+This project was developed with assistance from **GitHub Copilot**, an AI pair programmer.
+
 ---
 
 <p align="center">
