@@ -29,6 +29,8 @@
   <em>Craft a payload, pick a target, hit Send. Notification appears instantly on iOS, Android, or macOS.</em>
   <br/>
   <a href="https://www.youtube.com/watch?v=JeI8qKx1KkA"><strong>Watch the demo video</strong></a>
+  &nbsp;|&nbsp;
+  <a href="https://singhvikrant.substack.com/p/ai-agents-are-going-mobile-and-push"><strong>Read the detailed post</strong></a>
 </p>
 
 ---
