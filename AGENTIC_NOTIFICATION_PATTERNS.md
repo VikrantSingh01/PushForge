@@ -68,6 +68,22 @@ The most fundamental agentic notification. The user kicks off an async task, clo
 }
 ```
 
+**iOS Payload Attributes:**
+
+| Attribute | Value | Purpose |
+|---|---|---|
+| `alert.title` | `"Task Complete"` | Primary heading shown in notification banner |
+| `alert.subtitle` | `"Research Agent"` | Secondary line identifying which agent completed the work |
+| `alert.body` | *string* | Descriptive text summarizing the result |
+| `sound` | `"default"` | Plays system notification sound to alert the user |
+| `badge` | `1` | Sets the app icon badge count (red circle) |
+| `thread-id` | `"agent-tasks"` | Groups all agent task notifications together in Notification Center |
+| `interruption-level` | `"time-sensitive"` | Breaks through Focus mode and Schedule Summary — user asked for this work, they should know it's done |
+| `task_id` | *custom* | App-specific identifier to fetch the result from the backend |
+| `agent` | `"research"` | Identifies which agent type completed the task |
+| `deep_link` | `"myapp://tasks/abc123"` | URL scheme that opens the app directly to the result screen |
+| `completed_at` | *ISO 8601* | Timestamp for display and analytics |
+
 **Android** — `Android` tab → `Basic` sub-tab → **Agent Task Complete**
 
 ```json
@@ -146,6 +162,17 @@ The agent reaches a decision point that requires explicit human authorization �
   "tests_failed": 0
 }
 ```
+
+**iOS Payload Attributes:**
+
+| Attribute | Value | Purpose |
+|---|---|---|
+| `alert.subtitle` | `"Deploy Agent"` | Identifies the agent requesting approval |
+| `category` | `"AGENT_APPROVAL"` | Registers actionable buttons (Approve/Reject) defined in app's `UNNotificationCategory`. Without this, the notification is tap-only — no inline actions. |
+| `interruption-level` | `"time-sensitive"` | Ensures the approval request reaches the user even during Focus mode — the agent is blocked until they respond |
+| `action_id` | `"deploy_v231"` | Unique identifier the backend uses to match the approval/rejection response |
+| `environment` | `"production"` | Context for the user's decision — deploying to production vs staging has different risk |
+| `tests_passed` / `tests_failed` | `47` / `0` | Decision-support data — user can see test results before approving |
 
 **Android** — `Android` tab → `Rich` sub-tab → **Agent Needs Approval**
 
@@ -231,6 +258,19 @@ The agent encounters a terminal failure — API timeout, invalid data, rate limi
 }
 ```
 
+**iOS Payload Attributes:**
+
+| Attribute | Value | Purpose |
+|---|---|---|
+| `sound.critical` | `1` | Marks as critical sound — plays even when device is muted or in Do Not Disturb. Requires `com.apple.developer.usernotifications.critical-alerts` entitlement from Apple. |
+| `sound.name` | `"alarm.caf"` | Custom sound file bundled with the app — distinct from default notification sound to convey urgency |
+| `sound.volume` | `0.8` | Volume level 0.0–1.0 for critical sounds (only works with `critical: 1`) |
+| `interruption-level` | `"critical"` | Highest priority — notification appears on lock screen, plays sound regardless of Focus/DND/mute settings |
+| `thread-id` | `"agent-errors"` | Groups all agent error notifications together — prevents mixing with task completion or approval notifications |
+| `error_code` | `"CONN_TIMEOUT"` | Machine-readable error type for the app to show appropriate recovery UI |
+| `step` | `"3/5"` | Shows the user exactly where in the pipeline the failure occurred |
+| `retry_available` | `true` | Tells the app whether to show a "Retry" button or only "Cancel" |
+
 **Android** — `Android` tab → `Advanced` sub-tab → **Agent Error**
 
 ```json
@@ -310,6 +350,19 @@ Silent push — no banner, no sound, no badge. The agent syncs conversation hist
   }
 }
 ```
+
+**iOS Payload Attributes:**
+
+| Attribute | Value | Purpose |
+|---|---|---|
+| `content-available` | `1` | The **only** required `aps` field for silent push. Tells iOS to wake the app in the background for up to 30 seconds. No `alert`, `sound`, or `badge` — the user sees nothing. |
+| `sync.type` | `"agent_memory"` | Tells the app which sync handler to invoke |
+| `sync.collections` | `[...]` | Array of data collections to sync — app fetches only what's needed |
+| `sync.since` | *ISO 8601* | Incremental sync — only fetch data changed after this timestamp. Reduces bandwidth and processing. |
+| `sync.priority` | `"high"` | App-level priority (not APNs priority) — tells the sync handler to process this before other background work |
+| `sync.compressed` | `true` | Hint that the server will send gzip/brotli responses — app should set `Accept-Encoding` header |
+
+**Important:** iOS throttles silent push delivery. If you send too many in a short period, iOS will stop delivering them. Budget is roughly 2-3 per hour. Android has no such throttle for data-only messages.
 
 **Android** — `Android` tab → `Silent` sub-tab → **Agent Memory Sync**
 
@@ -447,6 +500,21 @@ For long-running tasks, the agent reports progress in real-time via iOS Live Act
   }
 }
 ```
+
+**iOS Payload Attributes:**
+
+| Attribute | Value | Purpose |
+|---|---|---|
+| `timestamp` | `1708000000` | Unix timestamp — iOS uses this to determine if the update is newer than the current state. Stale updates are discarded. |
+| `event` | `"update"` | Live Activity event type. Options: `"update"` (modify state), `"end"` (dismiss the activity). Initial start is done via `ActivityKit` in-app. |
+| `content-state.progress` | `0.75` | Decimal 0.0–1.0 — drives the progress bar in the Live Activity widget |
+| `content-state.current_step` | `"Analyzing code"` | Human-readable description of what the agent is doing right now |
+| `content-state.steps_completed` / `total_steps` | `3` / `4` | Step counter display — "3 of 4 steps done" |
+| `content-state.tokens_used` | `2847` | LLM-specific metadata — useful for cost tracking and display |
+| `content-state.estimated_remaining_seconds` | `12` | Countdown display — "~12 seconds remaining" |
+| `alert` | *object* | Fallback notification shown if the Live Activity is no longer visible (e.g., user locked their phone) |
+
+**Important:** `content-state` must exactly match the `ActivityAttributes.ContentState` struct defined in your app. Mismatched fields cause silent failures — the Live Activity simply doesn't update.
 
 *No Android equivalent — Live Activities are iOS-only. Android uses ongoing notifications with progress bars, managed client-side.*
 
