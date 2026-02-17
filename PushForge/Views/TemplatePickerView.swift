@@ -3,7 +3,7 @@ import SwiftUI
 enum TemplatePlatformTab: String, CaseIterable {
     case ios = "iOS"
     case android = "Android"
-    case web = "Web"
+    case web = "Desktop"
 
     init(from target: TargetPlatform) {
         switch target {
@@ -25,7 +25,7 @@ enum TemplatePlatformTab: String, CaseIterable {
         switch self {
         case .ios: "apple.logo"
         case .android: "phone.fill"
-        case .web: "globe"
+        case .web: "desktopcomputer"
         }
     }
 
