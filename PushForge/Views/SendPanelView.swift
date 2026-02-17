@@ -45,13 +45,29 @@ struct SendPanelView: View {
             // Scrollable content area
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    // Platform picker
-                    Picker("Platform", selection: $viewModel.targetPlatform) {
-                        ForEach(TargetPlatform.allCases, id: \.self) { platform in
-                            Text(platform.rawValue).tag(platform)
-                        }
+                    // Platform picker — icon cards
+                    HStack(spacing: 8) {
+                        PlatformCardButton(
+                            icon: "iphone",
+                            label: "iOS Sim",
+                            color: .blue,
+                            isSelected: viewModel.targetPlatform == .iOSSimulator
+                        ) { viewModel.targetPlatform = .iOSSimulator }
+
+                        PlatformCardButton(
+                            icon: "apps.iphone",
+                            label: "Android",
+                            color: .green,
+                            isSelected: viewModel.targetPlatform == .androidEmulator
+                        ) { viewModel.targetPlatform = .androidEmulator }
+
+                        PlatformCardButton(
+                            icon: "desktopcomputer",
+                            label: "Desktop",
+                            color: .purple,
+                            isSelected: viewModel.targetPlatform == .desktop
+                        ) { viewModel.targetPlatform = .desktop }
                     }
-                    .pickerStyle(.segmented)
                     .onChange(of: viewModel.targetPlatform) {
                         targetPlatform = viewModel.targetPlatform
                         // Sync template tab with send panel platform
@@ -174,6 +190,9 @@ struct SendPanelView: View {
                 await viewModel.refreshDevices()
             }
             .onChange(of: targetPlatform) {
+                // Only refresh if this change came from outside (e.g. template picker sync),
+                // not from the card buttons which already trigger refresh via their own onChange.
+                guard viewModel.targetPlatform != targetPlatform else { return }
                 viewModel.targetPlatform = targetPlatform
                 viewModel.lastSendStatus = .idle
                 Task { await viewModel.refreshDevices() }
@@ -247,5 +266,39 @@ struct SendPanelView: View {
             .padding()
             .frame(width: 300)
         }
+    }
+}
+
+// MARK: - Platform Card Button
+
+private struct PlatformCardButton: View {
+    let icon: String
+    let label: String
+    let color: Color
+    let isSelected: Bool
+    let action: () -> Void
+
+    @State private var isHovered = false
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 6) {
+                Image(systemName: icon)
+                    .font(.system(size: 20))
+                Text(label)
+                    .font(.caption.weight(.medium))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 10)
+            .background(isSelected ? color.opacity(0.15) : (isHovered ? Color.primary.opacity(0.05) : Color.clear))
+            .foregroundStyle(isSelected ? color : (isHovered ? .primary : .secondary))
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(isSelected ? color.opacity(0.4) : Color.secondary.opacity(isHovered ? 0.3 : 0.15), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .onHover { hovering in isHovered = hovering }
     }
 }
