@@ -100,26 +100,47 @@ struct BundleIDPickerView: View {
         }
     }
 
+    /// Returns true if the bundle ID looks like a valid reverse-DNS identifier.
+    private var isBundleIDValid: Bool {
+        bundleIdentifier.isEmpty || bundleIdentifier.range(
+            of: #"^[a-zA-Z][a-zA-Z0-9\-_]*(\.[a-zA-Z0-9\-_]+)+$"#,
+            options: .regularExpression
+        ) != nil
+    }
+
     var body: some View {
-        HStack(spacing: 4) {
-            Text(label)
-                .fontWeight(.medium)
-            TextField(placeholder, text: $bundleIdentifier)
-                .textFieldStyle(.roundedBorder)
-            Menu {
-                ForEach(apps, id: \.bundleID) { app in
-                    Button {
-                        bundleIdentifier = app.bundleID
-                    } label: {
-                        Text("\(app.name) — \(app.bundleID)")
-                    }
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 4) {
+                Text(label)
+                    .fontWeight(.medium)
+                TextField(placeholder, text: $bundleIdentifier)
+                    .textFieldStyle(.roundedBorder)
+                if !isBundleIDValid {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.orange)
+                        .font(.caption)
+                        .help("Bundle ID should be reverse-DNS format (e.g. com.example.app)")
                 }
-            } label: {
-                Image(systemName: "chevron.down.circle")
-                    .foregroundStyle(.secondary)
+                Menu {
+                    ForEach(apps, id: \.bundleID) { app in
+                        Button {
+                            bundleIdentifier = app.bundleID
+                        } label: {
+                            Text("\(app.name) — \(app.bundleID)")
+                        }
+                    }
+                } label: {
+                    Image(systemName: "chevron.down.circle")
+                        .foregroundStyle(.secondary)
+                }
+                .menuStyle(.borderlessButton)
+                .fixedSize()
             }
-            .menuStyle(.borderlessButton)
-            .fixedSize()
+            if !isBundleIDValid {
+                Text("Invalid format — expected reverse-DNS (e.g. com.example.app)")
+                    .font(.caption2)
+                    .foregroundStyle(.orange)
+            }
         }
     }
 }

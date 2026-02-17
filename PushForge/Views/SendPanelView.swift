@@ -215,6 +215,9 @@ struct SendPanelView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             Task { await viewModel.refreshDevices() }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .refreshDevices)) { _ in
+            Task { await viewModel.refreshDevices() }
+        }
         .sheet(isPresented: $showSaveSheet) {
             VStack(spacing: 16) {
                 Text("Save Device")

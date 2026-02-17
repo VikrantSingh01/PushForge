@@ -71,11 +71,8 @@ struct PayloadComposerView: View {
             }
             .padding([.top, .horizontal])
 
-            // JSON editor with distinct styling
-            TextEditor(text: $payloadText)
-                .font(.system(size: editorFontSize, design: .monospaced))
-                .scrollContentBackground(.hidden)
-                .padding(8)
+            // Syntax-highlighted JSON editor
+            JSONEditorView(text: $payloadText, fontSize: editorFontSize)
                 .background(Color(nsColor: .textBackgroundColor).opacity(0.5))
                 .background(Color.accentColor.opacity(0.02))
                 .cornerRadius(10)

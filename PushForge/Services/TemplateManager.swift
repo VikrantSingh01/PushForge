@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 /// JSON file structure for external template files.
 private struct TemplateFile: Decodable {
@@ -34,6 +35,7 @@ private struct AnyCodable: Decodable {
 }
 
 enum TemplateManager {
+    private static let logger = Logger(subsystem: "com.pushforge.app", category: "TemplateManager")
 
     /// Loads all templates: bundled (from app Resources) + user-added (from Application Support).
     /// User templates with the same ID override bundled ones.
@@ -100,13 +102,19 @@ enum TemplateManager {
     }
 
     private static func loadTemplate(from url: URL) -> PayloadTemplate? {
-        guard let data = try? Data(contentsOf: url) else { return nil }
+        guard let data = try? Data(contentsOf: url) else {
+            logger.error("Failed to read template file: \(url.lastPathComponent)")
+            return nil
+        }
 
         do {
             let file = try JSONDecoder().decode(TemplateFile.self, from: data)
 
             // Re-serialize payload to pretty-printed JSON string
-            guard JSONSerialization.isValidJSONObject(file.payload.value) else { return nil }
+            guard JSONSerialization.isValidJSONObject(file.payload.value) else {
+                logger.error("Invalid JSON payload in template: \(url.lastPathComponent)")
+                return nil
+            }
             let payloadData = try JSONSerialization.data(
                 withJSONObject: file.payload.value,
                 options: [.prettyPrinted, .sortedKeys]
@@ -127,6 +135,7 @@ enum TemplateManager {
                 payload: payloadString
             )
         } catch {
+            logger.error("Failed to decode template \(url.lastPathComponent): \(error.localizedDescription)")
             return nil
         }
     }
