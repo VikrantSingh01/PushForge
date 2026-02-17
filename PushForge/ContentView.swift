@@ -41,6 +41,7 @@ struct ContentView: View {
                         .font(.system(.headline, design: .rounded))
                         .fontWeight(.bold)
                 }
+                .padding(.horizontal, 12)
             }
             ToolbarItem(placement: .automatic) {
                 Button {
