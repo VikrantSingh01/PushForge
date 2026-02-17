@@ -22,9 +22,13 @@
 ---
 
 <p align="center">
-  <img src="demo.png" alt="PushForge — send push notifications to iOS Simulator, Android Emulator, and macOS Desktop" width="800"/>
+  <a href="https://www.youtube.com/watch?v=JeI8qKx1KkA">
+    <img src="demo.png" alt="PushForge — send push notifications to iOS Simulator, Android Emulator, and macOS Desktop" width="800"/>
+  </a>
   <br/>
   <em>Craft a payload, pick a target, hit Send. Notification appears instantly on iOS, Android, or macOS.</em>
+  <br/>
+  <a href="https://www.youtube.com/watch?v=JeI8qKx1KkA"><strong>Watch the demo video</strong></a>
 </p>
 
 ---
