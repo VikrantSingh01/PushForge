@@ -16,6 +16,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"/></a>
   <img src="https://img.shields.io/badge/tests-20%20passing-brightgreen" alt="Tests"/>
   <img src="https://img.shields.io/badge/templates-37-blueviolet" alt="37 Templates"/>
+  <a href="https://github.com/VikrantSingh01/PushForge/releases/latest"><img src="https://img.shields.io/badge/download-.dmg-blue?logo=apple&logoColor=white" alt="Download DMG"/></a>
 </p>
 
 ---
@@ -198,15 +199,23 @@ User templates override bundled ones with the same ID. Organize by subdirectory 
 
 ---
 
-## Quick Start
+## Download
 
-### Prerequisites
+**[Download PushForge.dmg (v0.9.0)](https://github.com/VikrantSingh01/PushForge/releases/latest/download/PushForge.dmg)** — open the DMG, drag to Applications, done.
+
+> **First launch:** PushForge is not notarized yet. Right-click the app → **Open** → **Open** to bypass Gatekeeper.
+
+### Requirements
 
 - macOS 14 (Sonoma) or later
 - Xcode 16+ with iOS Simulator runtimes (for iOS)
 - Android Studio with ADB (for Android — optional)
 
-### Build & Run
+---
+
+## Quick Start
+
+### Build from Source
 
 ```bash
 git clone https://github.com/VikrantSingh01/PushForge.git
