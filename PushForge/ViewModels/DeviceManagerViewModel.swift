@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import os
 
 enum SendStatus: Equatable {
     case idle
@@ -16,6 +17,11 @@ enum TargetPlatform: String, CaseIterable {
 
 @Observable
 class DeviceManagerViewModel {
+    private static let logger = Logger(subsystem: "com.pushforge.app", category: "DeviceManager")
+
+    /// Maximum number of history records to keep.
+    private static let maxHistoryRecords = 500
+
     // Platform selection
     var targetPlatform: TargetPlatform = .iOSSimulator
 
@@ -146,6 +152,30 @@ class DeviceManagerViewModel {
         // Safety: if status is still .sending after all paths, reset
         if lastSendStatus == .sending {
             lastSendStatus = .failure("Send did not complete")
+        }
+
+        pruneHistory(modelContext: modelContext)
+    }
+
+    /// Removes oldest history records when count exceeds the limit.
+    private func pruneHistory(modelContext: ModelContext) {
+        do {
+            let count = try modelContext.fetchCount(FetchDescriptor<NotificationRecord>())
+            guard count > Self.maxHistoryRecords else { return }
+
+            let excess = count - Self.maxHistoryRecords
+            var fetch = FetchDescriptor<NotificationRecord>(
+                sortBy: [SortDescriptor(\.sentAt, order: .forward)]
+            )
+            fetch.fetchLimit = excess
+
+            let oldRecords = try modelContext.fetch(fetch)
+            for record in oldRecords {
+                modelContext.delete(record)
+            }
+            Self.logger.info("Pruned \(excess) old history records (kept \(Self.maxHistoryRecords))")
+        } catch {
+            Self.logger.error("History pruning failed: \(error.localizedDescription)")
         }
     }
 

@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 struct SimulatorDevice: Identifiable, Hashable, Sendable {
     let id: String       // UDID
@@ -32,7 +33,7 @@ enum SimulatorError: LocalizedError {
 }
 
 actor SimulatorBridge {
-    
+    private let logger = Logger(subsystem: "com.pushforge.app", category: "SimulatorBridge")
 
     // MARK: - List All Available Simulators
 
@@ -76,6 +77,7 @@ actor SimulatorBridge {
                 ))
             }
         }
+        logger.info("Found \(simulators.count) simulators (\(simulators.filter(\.isBooted).count) booted)")
         // Booted first, then shutdown, sorted by name within each group
         return simulators.sorted { lhs, rhs in
             if lhs.isBooted != rhs.isBooted { return lhs.isBooted }
@@ -86,10 +88,12 @@ actor SimulatorBridge {
     // MARK: - Boot Simulator
 
     func bootSimulator(udid: String) async throws {
+        logger.info("Booting simulator: \(udid)")
         let result = try await ShellExecutor.run(
             arguments: ["simctl", "boot", udid]
         )
         guard result.succeeded else {
+            logger.error("Boot failed for \(udid): \(result.stderr)")
             throw SimulatorError.bootFailed(result.stderr.trimmingCharacters(in: .whitespacesAndNewlines))
         }
     }
@@ -121,9 +125,12 @@ actor SimulatorBridge {
         )
 
         if result.succeeded {
+            logger.info("Push sent to simulator \(udid) (\(bundleIdentifier))")
             return .success
         } else {
-            return .failure(result.stderr.trimmingCharacters(in: .whitespacesAndNewlines))
+            let err = result.stderr.trimmingCharacters(in: .whitespacesAndNewlines)
+            logger.error("Push failed for \(udid): \(err)")
+            return .failure(err)
         }
     }
 

@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 enum DesktopNotificationError: LocalizedError {
     case sendFailed(String)
@@ -11,7 +12,7 @@ enum DesktopNotificationError: LocalizedError {
 }
 
 actor DesktopNotificationBridge {
-    
+    private let logger = Logger(subsystem: "com.pushforge.app", category: "DesktopBridge")
 
     /// Sends a macOS desktop notification via osascript.
     /// Shows the target app's icon if the app is running; avoids launching apps that aren't.
@@ -48,8 +49,10 @@ actor DesktopNotificationBridge {
 
         guard result.succeeded else {
             let err = result.stderr.trimmingCharacters(in: .whitespacesAndNewlines)
+            logger.error("Desktop notification failed: \(err)")
             throw DesktopNotificationError.sendFailed(err.isEmpty ? "Unknown error (exit \(result.exitCode))" : err)
         }
+        logger.info("Desktop notification sent: \(title)")
     }
 
     /// Check if an app is currently running (without launching it).

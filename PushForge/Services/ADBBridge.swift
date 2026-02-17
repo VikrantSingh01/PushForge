@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 struct AndroidEmulator: Identifiable, Hashable, Sendable {
     let id: String       // e.g. "emulator-5554"
@@ -31,7 +32,7 @@ enum ADBError: LocalizedError {
 }
 
 actor ADBBridge {
-    
+    private let logger = Logger(subsystem: "com.pushforge.app", category: "ADBBridge")
 
     // MARK: - Find ADB Path
 
@@ -62,6 +63,7 @@ actor ADBBridge {
 
     func listEmulators() async throws -> [AndroidEmulator] {
         guard let adb = await adbPath() else {
+            logger.warning("ADB not found on this system")
             throw ADBError.adbNotFound
         }
 
@@ -97,6 +99,7 @@ actor ADBBridge {
             ))
         }
 
+        logger.info("Found \(emulators.count) Android emulators (\(emulators.filter(\.isOnline).count) online)")
         return emulators
     }
 
@@ -137,14 +140,17 @@ actor ADBBridge {
         )
 
         guard result.succeeded else {
-            // Fallback: try the simpler toast approach or report error
             let errorMsg = result.stderr.trimmingCharacters(in: .whitespacesAndNewlines)
             if errorMsg.isEmpty {
                 let stdoutMsg = result.stdout.trimmingCharacters(in: .whitespacesAndNewlines)
-                throw ADBError.sendFailed(stdoutMsg.isEmpty ? "Unknown error (exit code \(result.exitCode))" : stdoutMsg)
+                let msg = stdoutMsg.isEmpty ? "Unknown error (exit code \(result.exitCode))" : stdoutMsg
+                logger.error("ADB notification failed for \(serial): \(msg)")
+                throw ADBError.sendFailed(msg)
             }
+            logger.error("ADB notification failed for \(serial): \(errorMsg)")
             throw ADBError.sendFailed(errorMsg)
         }
+        logger.info("Notification sent to Android emulator \(serial)")
     }
 
     // MARK: - Parse APNs-style payload for Android
