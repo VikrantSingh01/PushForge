@@ -86,12 +86,6 @@ struct PayloadComposerView: View {
                     UserDefaults.standard.set(false, forKey: "NSAutomaticQuoteSubstitutionEnabled")
                     UserDefaults.standard.set(false, forKey: "NSAutomaticDashSubstitutionEnabled")
                 }
-                .onChange(of: payloadText) {
-                    let fixed = PayloadValidator.autoFixCommonIssues(payloadText)
-                    if fixed != payloadText {
-                        payloadText = fixed
-                    }
-                }
 
             // Validation bar — pill status + progress bar
             VStack(alignment: .leading, spacing: 4) {
