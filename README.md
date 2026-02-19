@@ -368,7 +368,7 @@ PushForge/
 | Files | `com.apple.DocumentsApp` |
 | Camera | `com.apple.camera` |
 | Health | `com.apple.Health` |
-| Microsoft Teams | `com.microsoft.skype.teams` |
+| Microsoft Teams | `com.microsoft.teams` |
 
 </details>
 

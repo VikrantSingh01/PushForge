@@ -19,7 +19,7 @@ struct BundleIDPickerView: View {
         ("Files", "com.apple.DocumentsApp"),
         ("Camera", "com.apple.camera"),
         ("Health", "com.apple.Health"),
-        ("Microsoft Teams", "com.microsoft.skype.teams"),
+        ("Microsoft Teams", "com.microsoft.teams"),
         ("Microsoft Outlook", "com.microsoft.Office.Outlook"),
         ("Microsoft Copilot", "com.microsoft.copilot"),
         ("OneDrive", "com.microsoft.skydrive"),
