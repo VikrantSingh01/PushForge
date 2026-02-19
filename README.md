@@ -14,7 +14,7 @@
   <a href="https://www.apple.com/macos/"><img src="https://img.shields.io/badge/macOS-14%2B-black?logo=apple&logoColor=white" alt="macOS 14+"/></a>
   <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-5.9%2B-orange?logo=swift&logoColor=white" alt="Swift 5.9+"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"/></a>
-  <img src="https://img.shields.io/badge/tests-20%20passing-brightgreen" alt="Tests"/>
+  <img src="https://img.shields.io/badge/tests-23%20passing-brightgreen" alt="Tests"/>
   <img src="https://img.shields.io/badge/templates-37-blueviolet" alt="37 Templates"/>
   <a href="https://github.com/VikrantSingh01/PushForge/releases/latest"><img src="https://img.shields.io/badge/download-.dmg-blue?logo=apple&logoColor=white" alt="Download DMG"/></a>
 </p>
@@ -88,7 +88,7 @@ Switch between platforms with a segmented picker. Template tabs, bundle ID dropd
 
 - **37 Built-in Templates** — iOS (APNs), Android (FCM), Desktop (Web Push format), and AI Agent patterns
 - **Platform-Synced UI** — iOS/Android/Desktop template tabs sync with send panel target; switching one switches both
-- **Visual Payload Composer** — JSON editor with live validation, byte counter, format/minify, Cmd+/Cmd- zoom
+- **Syntax-Highlighted JSON Editor** — NSTextView-backed editor with token colors, line numbers, bracket matching, format/minify, Cmd+/Cmd- zoom
 - **Smart JSON Diagnostics** — Detects smart quotes, trailing commas, mismatched braces with exact line:col and fix suggestions
 - **Auto-fix** — One-click repair for smart quotes and copy-paste artifacts from docs/Slack/email
 - **Platform Mismatch Warnings** — Orange warning if iOS payload targets Android or vice versa (all 6 combos)
@@ -185,6 +185,31 @@ Templates for modern agentic AI patterns used by ChatGPT, Claude, Copilot:
 | **Live Progress** | Live Activity `content-state` (75%, step 3/4) | — | — |
 | **Memory Sync** | Silent `content-available: 1` | Data-only for background | — |
 
+### AI Agent Notification Patterns Guide
+
+> **Building an AI-powered mobile app?** PushForge ships with a companion reference covering the 12 core push notification paradigms used by ChatGPT, Claude, Copilot, Cursor, and Devin — with exact payload examples, attribute-level annotations, and priority guidance for every pattern.
+
+**[Read the Agentic Push Notification Patterns Guide →](AGENTIC_NOTIFICATION_PATTERNS.md)**
+
+| Pattern | When to use it | iOS interruption level |
+|---|---|---|
+| **Task Completion** | Agent finished async work — user needs to see the result | `time-sensitive` |
+| **Human-in-the-Loop Approval** | Agent blocked on a consequential decision | `time-sensitive` + `category` |
+| **Agent Error & Recovery** | Automatic retries exhausted — user must intervene | `critical` |
+| **Background Memory Sync** | Agent refreshing context — user sees nothing | `content-available: 1` |
+| **Streaming Response Complete** | LLM finished generating while app was backgrounded | `active` + `content-available` |
+| **Live Progress Updates** | Step-by-step progress for long-running tasks | Live Activity `content-state` |
+| **Multi-Agent Handoff** | Triage agent transferred request to a specialist | `active` |
+| **Proactive Recommendations** | Agent noticed something useful — not user-triggered | `passive` |
+| **Scheduled Agent Reports** | Daily/weekly digest delivered on a schedule | `active` |
+| **Monitoring & Observability** | Agent performance degraded in production | `critical` |
+| **Conversational Follow-Up** | Agent has a follow-up question or new information | `active` |
+| **Autonomous Code Review** | AI-authored PR ready for human review | `active` |
+
+Each pattern includes ready-to-send iOS and Android payloads, attribute-by-attribute annotations, and a priority rationale — paired with the matching PushForge template so you can test the exact payload in one click.
+
+---
+
 ### Custom Templates
 
 Drop a `.json` file into `~/Library/Application Support/PushForge/Templates/` and it appears in the app:
@@ -251,7 +276,7 @@ xcodebuild -project PushForge.xcodeproj -scheme PushForge -destination 'platform
 xcodebuild -project PushForge.xcodeproj -scheme PushForgeTests -destination 'platform=macOS' test
 ```
 
-20 tests: payload validation (11), template integrity (7), shell execution (2).
+23 tests: payload validation (14), template integrity (7), shell execution (2).
 
 ---
 
@@ -276,6 +301,7 @@ PushForge/
 │   ├── ContentView.swift             HSplitView root layout
 │   ├── TemplatePickerView.swift      iOS/Android/Web tabs + sub-categories
 │   ├── PayloadComposerView.swift     JSON editor + validation bar
+│   ├── JSONEditorView.swift          NSViewRepresentable — syntax highlighting, line numbers, bracket matching
 │   ├── SendPanelView.swift           Device picker + contextual send button
 │   ├── BundleIDPickerView.swift      45+ apps dropdown, platform-aware
 │   ├── SimulatorPickerView.swift     Boot/select iOS simulators
@@ -298,6 +324,7 @@ PushForge/
 - **Bidirectional platform sync** — Template tabs and send panel target are always in sync
 - **Platform-aware validation** — Warns when payload format doesn't match target platform
 - **Smart quote prevention** — Disabled at OS level + real-time auto-replacement in editor
+- **NSTextView JSON editor** — `JSONEditorView` (NSViewRepresentable) delivers syntax highlighting, line numbers, and bracket matching not available in SwiftUI's `TextEditor`
 
 ---
 
@@ -405,7 +432,6 @@ open PushForge.xcodeproj
 ```
 
 **Good first issues:**
-- JSON syntax highlighting (NSViewRepresentable + NSTextView)
 - Live notification preview panel (mock iOS/Android rendering)
 - Homebrew cask formula
 - APNs real device support (.p8 auth)
