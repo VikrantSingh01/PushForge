@@ -134,6 +134,40 @@ actor SimulatorBridge {
         }
     }
 
+    // MARK: - List Installed Apps
+
+    func listInstalledApps(udid: String) async -> [DiscoveredApp] {
+        do {
+            let result = try await ShellExecutor.run(
+                arguments: ["simctl", "listapps", udid]
+            )
+            guard result.succeeded, let data = result.stdout.data(using: .utf8) else {
+                logger.warning("listapps failed for \(udid): \(result.stderr)")
+                return []
+            }
+
+            guard let plist = try PropertyListSerialization.propertyList(
+                from: data, options: [], format: nil
+            ) as? [String: [String: Any]] else {
+                logger.warning("listapps returned unexpected format for \(udid)")
+                return []
+            }
+
+            var apps: [DiscoveredApp] = []
+            for (bundleID, info) in plist {
+                let displayName = info["CFBundleDisplayName"] as? String
+                    ?? info["CFBundleName"] as? String
+                    ?? bundleID.components(separatedBy: ".").last ?? bundleID
+                apps.append(DiscoveredApp(name: displayName, bundleID: bundleID))
+            }
+            logger.info("Discovered \(apps.count) apps on simulator \(udid)")
+            return apps.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        } catch {
+            logger.warning("listInstalledApps error: \(error.localizedDescription)")
+            return []
+        }
+    }
+
     // MARK: - Helpers
 
     private static func humanReadableRuntime(_ key: String) -> String {

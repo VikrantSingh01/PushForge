@@ -115,6 +115,76 @@ actor ADBBridge {
         return name?.isEmpty == false ? name : nil
     }
 
+    // MARK: - List Installed Packages
+
+    func listInstalledPackages(serial: String) async -> [DiscoveredApp] {
+        guard let adb = await adbPath() else { return [] }
+
+        // Query packages that have a launcher activity — these are the apps
+        // visible in the app drawer, not internal overlays or framework components.
+        guard let result = try? await ShellExecutor.run(
+            executablePath: adb,
+            arguments: ["-s", serial, "shell",
+                        "cmd", "package", "query-activities",
+                        "-a", "android.intent.action.MAIN",
+                        "-c", "android.intent.category.LAUNCHER"]
+        ), result.succeeded else { return [] }
+
+        // Extract unique package names from "packageName=..." lines
+        var seen = Set<String>()
+        var apps: [DiscoveredApp] = []
+        for line in result.stdout.components(separatedBy: "\n") {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            guard trimmed.hasPrefix("packageName=") else { continue }
+            let packageID = String(trimmed.dropFirst("packageName=".count))
+            guard !packageID.isEmpty, seen.insert(packageID).inserted else { continue }
+
+            apps.append(DiscoveredApp(
+                name: Self.displayName(for: packageID),
+                bundleID: packageID
+            ))
+        }
+
+        logger.info("Discovered \(apps.count) launchable apps on Android emulator \(serial)")
+        return apps.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+
+    /// Derives a human-readable name from an Android package ID.
+    private static func displayName(for packageID: String) -> String {
+        // Well-known package names
+        let knownNames: [String: String] = [
+            "com.android.camera2": "Camera",
+            "com.android.chrome": "Chrome",
+            "com.android.settings": "Settings",
+            "com.android.vending": "Play Store",
+            "com.android.stk": "SIM Toolkit",
+            "com.google.android.gm": "Gmail",
+            "com.google.android.apps.maps": "Maps",
+            "com.google.android.apps.messaging": "Messages",
+            "com.google.android.apps.photos": "Photos",
+            "com.google.android.apps.docs": "Drive",
+            "com.google.android.apps.safetyhub": "Safety",
+            "com.google.android.apps.youtube.music": "YouTube Music",
+            "com.google.android.calendar": "Calendar",
+            "com.google.android.contacts": "Contacts",
+            "com.google.android.deskclock": "Clock",
+            "com.google.android.dialer": "Phone",
+            "com.google.android.documentsui": "Files",
+            "com.google.android.googlequicksearchbox": "Google",
+            "com.google.android.youtube": "YouTube",
+            "com.google.android.apps.accessibility.voiceaccess": "Voice Access",
+        ]
+
+        if let known = knownNames[packageID] { return known }
+
+        // Fall back to last segment, cleaned up
+        let lastSegment = packageID.components(separatedBy: ".").last ?? packageID
+        return lastSegment
+            .replacingOccurrences(of: "_", with: " ")
+            .replacingOccurrences(of: "-", with: " ")
+            .prefix(1).uppercased() + lastSegment.dropFirst()
+    }
+
     // MARK: - Send Notification
 
     /// Posts a notification to the Android emulator's notification shade.

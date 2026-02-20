@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var targetPlatform: TargetPlatform = .iOSSimulator
     @State private var templatePlatformTab: TemplatePlatformTab = .ios
     @AppStorage("editorFontSize") private var editorFontSize: Double = 13
+    @State private var discoveredApps: [DiscoveredApp] = []
 
     var body: some View {
         HSplitView {
@@ -15,7 +16,8 @@ struct ContentView: View {
                 bundleIdentifier: $bundleIdentifier,
                 editorFontSize: $editorFontSize,
                 targetPlatform: $targetPlatform,
-                templatePlatformTab: $templatePlatformTab
+                templatePlatformTab: $templatePlatformTab,
+                discoveredApps: $discoveredApps
             )
             .frame(minWidth: 400, idealWidth: 500)
 
@@ -23,7 +25,8 @@ struct ContentView: View {
                 payloadText: $payloadText,
                 bundleIdentifier: $bundleIdentifier,
                 targetPlatform: $targetPlatform,
-                templatePlatformTab: $templatePlatformTab
+                templatePlatformTab: $templatePlatformTab,
+                discoveredApps: $discoveredApps
             )
             .frame(minWidth: 300, idealWidth: 400)
         }

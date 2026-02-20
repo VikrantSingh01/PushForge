@@ -6,6 +6,7 @@ struct SendPanelView: View {
     @Binding var bundleIdentifier: String
     @Binding var targetPlatform: TargetPlatform
     @Binding var templatePlatformTab: TemplatePlatformTab
+    @Binding var discoveredApps: [DiscoveredApp]
     @State private var viewModel = DeviceManagerViewModel()
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \SavedDevice.lastUsedAt, order: .reverse) private var savedDevices: [SavedDevice]
@@ -188,6 +189,16 @@ struct SendPanelView: View {
                 // Ensure viewModel is synced on initial load
                 viewModel.targetPlatform = targetPlatform
                 await viewModel.refreshDevices()
+                discoveredApps = viewModel.discoveredApps
+            }
+            .onChange(of: viewModel.discoveredApps) {
+                discoveredApps = viewModel.discoveredApps
+            }
+            .onChange(of: viewModel.selectedSimulator) {
+                Task { await viewModel.refreshInstalledApps() }
+            }
+            .onChange(of: viewModel.selectedAndroidEmulator) {
+                Task { await viewModel.refreshInstalledApps() }
             }
             .onChange(of: targetPlatform) {
                 // Only refresh if this change came from outside (e.g. template picker sync),
