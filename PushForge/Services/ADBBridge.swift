@@ -115,6 +115,41 @@ actor ADBBridge {
         return name?.isEmpty == false ? name : nil
     }
 
+    // MARK: - List Installed Packages
+
+    func listInstalledPackages(serial: String) async -> [DiscoveredApp] {
+        guard let adb = await adbPath() else { return [] }
+
+        // Only list third-party packages — system packages (250+) are mostly
+        // internal overlays and framework components, not real apps.
+        // The curated "Common Apps" list in BundleIDPickerView covers user-facing system apps.
+        guard let result = try? await ShellExecutor.run(
+            executablePath: adb,
+            arguments: ["-s", serial, "shell", "pm", "list", "packages", "-3"]
+        ), result.succeeded else { return [] }
+
+        var apps: [DiscoveredApp] = []
+        for line in result.stdout.components(separatedBy: "\n") {
+            let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard trimmed.hasPrefix("package:") else { continue }
+            let packageID = String(trimmed.dropFirst("package:".count))
+            guard !packageID.isEmpty else { continue }
+
+            // Derive a display name from the last segment of the package ID
+            let segments = packageID.components(separatedBy: ".")
+            let lastSegment = segments.last ?? packageID
+            let displayName = lastSegment
+                .replacingOccurrences(of: "_", with: " ")
+                .replacingOccurrences(of: "-", with: " ")
+                .prefix(1).uppercased() + lastSegment.dropFirst()
+
+            apps.append(DiscoveredApp(name: displayName, bundleID: packageID))
+        }
+
+        logger.info("Discovered \(apps.count) third-party packages on Android emulator \(serial)")
+        return apps.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+
     // MARK: - Send Notification
 
     /// Posts a notification to the Android emulator's notification shade.

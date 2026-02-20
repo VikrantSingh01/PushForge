@@ -6,6 +6,7 @@ struct PayloadComposerView: View {
     @Binding var editorFontSize: Double
     @Binding var targetPlatform: TargetPlatform
     @Binding var templatePlatformTab: TemplatePlatformTab
+    @Binding var discoveredApps: [DiscoveredApp]
     @State private var viewModel = PayloadComposerViewModel()
 
     var body: some View {
@@ -38,7 +39,7 @@ struct PayloadComposerView: View {
 
                 Divider()
 
-                BundleIDPickerView(bundleIdentifier: $bundleIdentifier, targetPlatform: targetPlatform)
+                BundleIDPickerView(bundleIdentifier: $bundleIdentifier, targetPlatform: targetPlatform, discoveredApps: discoveredApps)
 
                 // Payload header with format/minify
                 HStack(spacing: 6) {

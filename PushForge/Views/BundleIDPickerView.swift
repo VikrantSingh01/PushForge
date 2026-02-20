@@ -1,8 +1,15 @@
 import SwiftUI
 
+struct DiscoveredApp: Identifiable, Hashable, Sendable {
+    var id: String { bundleID }
+    let name: String
+    let bundleID: String
+}
+
 struct BundleIDPickerView: View {
     @Binding var bundleIdentifier: String
     var targetPlatform: TargetPlatform = .iOSSimulator
+    var discoveredApps: [DiscoveredApp] = []
 
     private static let iosApps: [(name: String, bundleID: String)] = [
         ("Settings", "com.apple.Preferences"),
@@ -76,12 +83,18 @@ struct BundleIDPickerView: View {
         ("VS Code", "com.microsoft.VSCode"),
     ]
 
-    private var apps: [(name: String, bundleID: String)] {
+    private var commonApps: [(name: String, bundleID: String)] {
         switch targetPlatform {
         case .iOSSimulator: Self.iosApps
         case .androidEmulator: Self.androidApps
         case .desktop: Self.desktopApps
         }
+    }
+
+    /// Common apps that aren't already in the discovered list.
+    private var filteredCommonApps: [(name: String, bundleID: String)] {
+        let discoveredIDs = Set(discoveredApps.map(\.bundleID))
+        return commonApps.filter { !discoveredIDs.contains($0.bundleID) }
     }
 
     private var placeholder: String {
@@ -122,11 +135,28 @@ struct BundleIDPickerView: View {
                         .help("Bundle ID should be reverse-DNS format (e.g. com.example.app)")
                 }
                 Menu {
-                    ForEach(apps, id: \.bundleID) { app in
-                        Button {
-                            bundleIdentifier = app.bundleID
-                        } label: {
-                            Text("\(app.name) — \(app.bundleID)")
+                    if !discoveredApps.isEmpty {
+                        Section("Installed Apps (\(discoveredApps.count))") {
+                            ForEach(discoveredApps) { app in
+                                Button {
+                                    bundleIdentifier = app.bundleID
+                                } label: {
+                                    Text("\(app.name) — \(app.bundleID)")
+                                }
+                            }
+                        }
+                    }
+
+                    let extras = filteredCommonApps
+                    if !extras.isEmpty {
+                        Section("Common Apps") {
+                            ForEach(extras, id: \.bundleID) { app in
+                                Button {
+                                    bundleIdentifier = app.bundleID
+                                } label: {
+                                    Text("\(app.name) — \(app.bundleID)")
+                                }
+                            }
                         }
                     }
                 } label: {

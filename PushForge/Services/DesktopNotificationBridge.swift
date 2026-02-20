@@ -69,6 +69,35 @@ actor DesktopNotificationBridge {
             .replacingOccurrences(of: "\"", with: "\\\"")
     }
 
+    // MARK: - List Installed macOS Apps
+
+    static func listInstalledApps() -> [DiscoveredApp] {
+        var apps: [DiscoveredApp] = []
+        let searchPaths = ["/Applications", "/Applications/Utilities"]
+        let fm = FileManager.default
+
+        for searchPath in searchPaths {
+            guard let contents = try? fm.contentsOfDirectory(atPath: searchPath) else { continue }
+
+            for item in contents where item.hasSuffix(".app") {
+                let plistPath = "\(searchPath)/\(item)/Contents/Info.plist"
+                guard let plistData = fm.contents(atPath: plistPath),
+                      let plist = try? PropertyListSerialization.propertyList(
+                          from: plistData, options: [], format: nil
+                      ) as? [String: Any],
+                      let bundleID = plist["CFBundleIdentifier"] as? String,
+                      !bundleID.isEmpty else { continue }
+
+                let displayName = plist["CFBundleDisplayName"] as? String
+                    ?? plist["CFBundleName"] as? String
+                    ?? item.replacingOccurrences(of: ".app", with: "")
+                apps.append(DiscoveredApp(name: displayName, bundleID: bundleID))
+            }
+        }
+
+        return apps.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+
     /// Extracts title, subtitle, and body from JSON payload for desktop display.
     static func extractContent(from jsonString: String) -> (title: String, subtitle: String?, body: String)? {
         guard let data = jsonString.data(using: .utf8),

@@ -34,6 +34,9 @@ class DeviceManagerViewModel {
     var selectedAndroidEmulator: AndroidEmulator?
     var adbAvailable = true
 
+    // Discovered apps from the active device/OS
+    var discoveredApps: [DiscoveredApp] = []
+
     // Shared state
     var isRefreshing = false
     var isBooting = false
@@ -81,6 +84,8 @@ class DeviceManagerViewModel {
         case .desktop:
             break // No devices to refresh — always available
         }
+
+        await refreshInstalledApps()
     }
 
     private func refreshSimulators() async {
@@ -116,6 +121,29 @@ class DeviceManagerViewModel {
         }
     }
 
+    // MARK: - Installed App Discovery
+
+    func refreshInstalledApps() async {
+        switch targetPlatform {
+        case .iOSSimulator:
+            guard let sim = selectedSimulator, sim.isBooted else {
+                discoveredApps = []
+                return
+            }
+            discoveredApps = await simulatorBridge.listInstalledApps(udid: sim.id)
+
+        case .androidEmulator:
+            guard let emu = selectedAndroidEmulator, emu.isOnline else {
+                discoveredApps = []
+                return
+            }
+            discoveredApps = await adbBridge.listInstalledPackages(serial: emu.id)
+
+        case .desktop:
+            discoveredApps = DesktopNotificationBridge.listInstalledApps()
+        }
+    }
+
     // MARK: - Boot (iOS only)
 
     func bootSimulator(_ simulator: SimulatorDevice) async {
@@ -126,6 +154,7 @@ class DeviceManagerViewModel {
             try await simulatorBridge.bootSimulator(udid: simulator.id)
             await refreshSimulators()
             selectedSimulator = allSimulators.first(where: { $0.id == simulator.id })
+            await refreshInstalledApps()
         } catch {
             lastSendStatus = .failure(error.localizedDescription)
         }
