@@ -57,6 +57,9 @@ PushForge eliminates every step. Open the app, pick a template, hit Send. The no
 - **Web/Desktop developers** previewing how push notifications look in macOS Notification Center
 - **QA engineers** verifying notification content, badge counts, and sound behavior
 - **Backend developers** validating push payload structure before deploying
+- **CI/CD pipelines** — CLI companion coming soon (see [Roadmap](#roadmap))
+
+> **Coming soon:** `pushforge send --template agent_task_complete.json --sim "iPhone 17 Pro"` — a headless CLI for scripting push notifications in CI pipelines, shell scripts, and agent toolchains. Follow the repo or check the [Roadmap](#roadmap) for updates.
 
 ### How it compares
 
@@ -342,8 +345,8 @@ PushForge/
 - [ ] **v1.0** — APNs push to real iOS devices (.p8 token-based auth)
 - [ ] **v1.1** — FCM push to real Android devices (service account)
 - [ ] **v1.2** — Live notification preview panel (mock rendering)
-- [ ] **v1.3** — CLI companion (`pushforge send --template agent_task_complete.json`)
-- [ ] **v1.4** — Homebrew cask distribution
+- [ ] **v1.3** — **CLI companion** (`pushforge send --template agent_task_complete.json --sim "iPhone 17 Pro"`) — headless mode for CI pipelines, shell scripts, and agent toolchains
+- [ ] **v1.4** — Homebrew cask + Homebrew formula (GUI app + CLI tool)
 
 ---
 
